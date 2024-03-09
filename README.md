@@ -21,4 +21,7 @@ As principais funções do sistema são:
 
 - Flutter
 - Dart
-- Outras
+- Typescript
+- Node.js
+- Express.js
+- Jest
