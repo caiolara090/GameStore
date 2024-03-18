@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -8,22 +9,22 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  bool isButtonEnabled = false;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'Cadastro',
-          style: TextStyle(fontSize: 30.0)),
-        centerTitle: true,
-        backgroundColor:  Colors.cyan.shade400,
+          style: TextStyle(fontSize: 40.0),
+        ),
+        backgroundColor: Colors.cyan.shade400,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -36,26 +37,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade400, Colors.blue.shade900,],
+            colors: [Colors.cyan.shade400, Colors.blue.shade900],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(30.0),
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTextField(
-                controller: nameController,
-                labelText: 'Nome',
+                controller: _nameController,
+                labelText: 'Nome do Usuário',
                 validator: (value) {
                   return value!.isEmpty || !RegExp(r'^[a-zA-Z ]+$').hasMatch(value)
                       ? 'Digite apenas letras'
                       : null;
                 },
+                icon: Icons.person,
               ),
-              const SizedBox(height: 10),  // Adicionado espaço entre os campos
+              const SizedBox(height: 10),
               _buildTextField(
-                controller: ageController,
+                controller: _ageController,
                 labelText: 'Idade',
                 inputType: TextInputType.number,
                 validator: (value) {
@@ -63,41 +66,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ? 'Digite apenas números'
                       : null;
                 },
+                icon: Icons.calendar_today,
               ),
-              const SizedBox(height: 10),  // Adicionado espaço entre os campos
+              const SizedBox(height: 10),
               _buildTextField(
-                controller: emailController,
+                controller: _emailController,
                 labelText: 'E-mail',
                 validator: (value) {
                   return value!.isEmpty || !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)
                       ? 'Digite um e-mail válido'
                       : null;
                 },
+                icon: Icons.email,
               ),
-              const SizedBox(height: 10),  // Adicionado espaço entre os campos
+              const SizedBox(height: 10),
               _buildTextField(
-                controller: passwordController,
+                controller: _passwordController,
                 labelText: 'Senha',
                 isPassword: true,
                 validator: (value) {
                   return value!.isEmpty ? 'Digite a senha' : null;
                 },
+                icon: Icons.lock,
               ),
-            const SizedBox(height: 20),
-            Container(
-              height: 50,  // Ajuste a altura conforme necessário
-              width: double.infinity,  // Ocupar a largura total disponível
-              child: ElevatedButton(
-                onPressed: isButtonEnabled ? _confirmRegistration : null,
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _register,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
                 ),
                 child: const Text(
-                  'Confirmar',
-                  style: TextStyle(fontSize: 20, color: Colors.black),  // Ajuste o tamanho do texto conforme necessário
+                  'Registrar',
+                  style: TextStyle(fontSize: 20.0, color: Colors.black),
                 ),
               ),
-            ),
             ],
           ),
         ),
@@ -105,51 +107,70 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-Widget _buildTextField({
-  required TextEditingController controller,
-  required String labelText,
-  TextInputType? inputType,
-  bool isPassword = false,
-  String? Function(String?)? validator,
-}) {
-  return TextFormField(
-    controller: controller,
-    keyboardType: inputType,
-    obscureText: isPassword,
-    decoration: InputDecoration(
-      labelText: labelText,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0), // Definindo os cantos arredondados
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    bool isPassword = false,
+    TextInputType? inputType,
+    String? Function(String?)? validator,
+    IconData? icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: icon != null ? Icon(icon) : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        filled: true,
+        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
       ),
-      errorText: validator != null ? validator(controller.text) : null,
-      filled: true,
-      fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
-    ),
-    onChanged: (_) => _updateButtonState(),
-  );
+      obscureText: isPassword,
+      validator: validator,
+    );
+  }
+
+  void _register() {
+  if (_formKey.currentState!.validate()) {
+    final String name = _nameController.text.trim();
+    final String age = _ageController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    // Criando um mapa com os dados do formulário
+    final Map<String, dynamic> formData = {
+      'name': name,
+      'age': age,
+      'email': email,
+      'password': password,
+    };
+
+    // Convertendo o mapa em uma string JSON
+    final String jsonData = jsonEncode(formData);
+
+    // Aqui você pode fazer o que quiser com o JSON gerado
+    print(jsonData);
+
+    // Lógica adicional de registro, como enviar para um servidor, etc.
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Registro bem-sucedido para $name!'),
+      ),
+    );
+  }
 }
-
-
-  void _updateButtonState() {
-    final bool isNameValid = RegExp(r'^[a-zA-Z ]+$').hasMatch(nameController.text);
-    final bool isAgeValid = RegExp(r'^[0-9]+$').hasMatch(ageController.text);
-    final bool isEmailValid = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(emailController.text);
-    final bool isPasswordValid = passwordController.text.isNotEmpty;
-
-    setState(() {
-      isButtonEnabled = isNameValid && isAgeValid && isEmailValid && isPasswordValid;
-    });
-  }
-
-  // Medida provisória!
-  void _confirmRegistration() {
-    // Adicione aqui a lógica para processar o cadastro
-    // Você pode acessar os valores dos campos usando as variáveis do controlador
-    print('Nome: ${nameController.text}');
-    print('Idade: ${ageController.text}');
-    print('E-mail: ${emailController.text}');
-    print('Senha: ${passwordController.text}');
-
-    // Aqui você pode navegar para a próxima tela ou realizar outras ações necessárias
-  }
 }
