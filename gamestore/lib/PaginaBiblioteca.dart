@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gamestore/PaginaLoja.dart';
 
+
 class PaginaBiblioteca extends StatefulWidget {
   @override
   _PaginaBibliotecaState createState() => _PaginaBibliotecaState();
@@ -9,7 +10,53 @@ class PaginaBiblioteca extends StatefulWidget {
 class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
   int _currentIndex = 1;
   List<Jogo> jogos2 = [
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +83,72 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
           SizedBox(width: 16),
         ],
       ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.cyan.shade400, Colors.blue.shade900],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 20),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 2,
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: 20);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    // Seção para jogos favoritos
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Favoritos',
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 233, 219, 24),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    );
+                  } else {
+                    // Seção para jogos não favoritos
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Jogos',
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 233, 219, 24),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        
+                      ],
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(162, 38, 197, 218),
         selectedItemColor: Color.fromARGB(255, 0, 0, 0),
@@ -56,18 +169,21 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
           ),
         ],
         onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
           switch (index) {
             case 0:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina1');
+              // Navegar para alguma página
+              // Navigator.pushReplacementNamed(context, '/pagina1');
               break;
             case 1:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina2');
+              // Navegar para alguma página
+              // Navigator.pushReplacementNamed(context, '/pagina2');
               break;
             case 2:
-              //Navegue para alguma página
-              //Navigator.pushNamed(context, '/pagina3');
+              // Navegar para alguma página
+              // Navigator.pushNamed(context, '/pagina3');
               break;
           }
         },
