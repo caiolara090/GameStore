@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class Jogo {
   String nome;
   String descricao;
@@ -19,9 +20,53 @@ class PaginaLoja extends StatefulWidget {
 }
 
 class _PaginaLojaState extends State<PaginaLoja> {
-  int _currentIndex = 0;
+  // Lista de Jogos
   List<Jogo> jogos = [
-    
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
+    Jogo(
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99),
+    Jogo(
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99),
+    Jogo(
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99),
   ];
 
   @override
@@ -36,6 +81,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
           ),
         ),
         actions: [
+          
+          
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -53,12 +100,85 @@ class _PaginaLojaState extends State<PaginaLoja> {
           SizedBox(width: 16),
         ],
       ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.cyan.shade400, Colors.blue.shade900],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 20),
+              Center(
+                child: Text(
+                  'Bem-vindo à Loja',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 0, 0, 0), fontSize: 20),
+                ),
+              ),
+              SizedBox(height: 20),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: jogos.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () {
+                      // Navegar para a página JogoPagina com o jogo correspondente
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                JogoPagina(jogo: jogos[index])),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(jogos[index].nome,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                          subtitle: Text(jogos[index].descricao,
+                              style: TextStyle(color: Colors.black)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset('assets/image_$index.png',
+                                  height:
+                                      200), // Adicionar a imagem acima do preço
+                              SizedBox(width: 8),
+                              Text(
+                                  'R\$${jogos[index].preco.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                            height: 1,
+                            color: Colors
+                                .grey),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(162, 38, 197, 218),
         selectedItemColor: Color.fromARGB(255, 0, 0, 0),
-        currentIndex: _currentIndex,
         unselectedItemColor:
-            Colors.white, 
+            Colors.white,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.videogame_asset),
@@ -76,16 +196,13 @@ class _PaginaLojaState extends State<PaginaLoja> {
         onTap: (index) {
           switch (index) {
             case 0:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina1');
+              //Navigator.pushReplacementNamed(context, '/home');
               break;
             case 1:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina2');
+              //Navigator.pushReplacementNamed(context, '/third');
               break;
             case 2:
-              //Navegue para alguma página
-              //Navigator.pushNamed(context, '/pagina3');
+              //Navigator.pushNamed(context, '/login');
               break;
           }
         },
