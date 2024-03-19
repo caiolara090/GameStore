@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gamestore/PaginaLoja.dart';
 
-
 class PaginaBiblioteca extends StatefulWidget {
   @override
   _PaginaBibliotecaState createState() => _PaginaBibliotecaState();
@@ -57,6 +56,14 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
         preco: 39.99),
   ];
 
+  TextEditingController _searchController = TextEditingController();
+  List<Jogo> _filteredJogos2 = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredJogos2 = jogos2;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +71,15 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
       appBar: AppBar(
         backgroundColor: Colors.cyan.shade400,
         title: TextField(
+          controller: _searchController,
+          onChanged: (value) {
+            setState(() {
+              _filteredJogos2 = jogos2
+                  .where((jogo) =>
+                      jogo.nome.toLowerCase().contains(value.toLowerCase()))
+                  .toList();
+            });
+          },
           decoration: InputDecoration(
             hintText: 'Pesquisar...',
             border: InputBorder.none,
@@ -121,6 +137,31 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
                           ),
                         ),
                         SizedBox(height: 10),
+                        ..._filteredJogos2.map((jogo) {
+                          return ListTile(
+                            title: Text(
+                              jogo.nome,
+                              style: TextStyle(fontSize: 20,
+                                  fontWeight: FontWeight.bold,color: Colors.black),
+                            ),
+                            subtitle: Text(
+                              jogo.descricao,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            trailing: Image.asset(
+                              'assets/image_${_filteredJogos2.indexOf(jogo)}.png',
+                              height: 200,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => JogoPagina(jogo: jogo),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       ],
                     );
                   } else {
@@ -139,7 +180,31 @@ class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        
+                        ..._filteredJogos2.map((jogo) {
+                          return ListTile(
+                            title: Text(
+                              jogo.nome,
+                              style: TextStyle(fontSize: 20,
+                                  fontWeight: FontWeight.bold,color: Colors.black),
+                            ),
+                            subtitle: Text(
+                              jogo.descricao,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            trailing: Image.asset(
+                              'assets/image_${_filteredJogos2.indexOf(jogo)}.png',
+                              height: 200,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => JogoPagina(jogo: jogo),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       ],
                     );
                   }
