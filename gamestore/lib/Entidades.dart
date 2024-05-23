@@ -16,3 +16,17 @@ class User {
     this.link,
   });
 }
+
+class Jogo {
+  String nome;
+  double preco;
+  String link;
+  String descricao;
+
+  Jogo({
+    required this.nome,
+    required this.preco,
+    required this.link,
+    required this.descricao,
+  });
+}
