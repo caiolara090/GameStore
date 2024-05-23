@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Entidades.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,12 +25,45 @@ class FriendPage extends StatefulWidget {
 }
 
 class _FriendPageState extends State<FriendPage> {
-  List<String> friends = ['Amigo 1', 'Amigo 2', 'Amigo 3'];
-  List<String> pendingRequests = ['Bisnago', 'Gerônimo'];
+  List<User> users = [
+    User(
+      name: 'Amigo 1',
+      dob: '01/01/1990',
+      email: 'amigo1@example.com',
+      password: 'senha123',
+    ),
+    User(
+      name: 'Amigo 2',
+      dob: '02/02/1991',
+      email: 'amigo2@example.com',
+      password: 'senha123',
+    ),
+    User(
+      name: 'Amigo 3',
+      dob: '03/03/1992',
+      email: 'amigo3@example.com',
+      password: 'senha123',
+    ),
+  ];
+
+  List<User> pendingRequests = [
+    User(
+      name: 'Bisnago',
+      dob: '04/04/1993',
+      email: 'bisnago@example.com',
+      password: 'senha123',
+    ),
+    User(
+      name: 'Gerônimo',
+      dob: '05/05/1994',
+      email: 'geronimo@example.com',
+      password: 'senha123',
+    ),
+  ];
 
   void acceptRequest(int index) {
     setState(() {
-      friends.add(pendingRequests[index]);
+      users.add(pendingRequests[index]);
       pendingRequests.removeAt(index);
     });
   }
@@ -40,29 +74,38 @@ class _FriendPageState extends State<FriendPage> {
     });
   }
 
+  void removeFriend(int index) {
+    setState(() {
+      users.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 96, 187, 252),
+        backgroundColor: Color.fromARGB(168, 41, 223, 255),
         title: Text(
           'Página de Amigos',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
       ),
-      body: Container(
-        color: Color.fromARGB(255, 181, 181, 181),
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Amigos',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: friends.length,
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Amigos',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: users.length,
                 itemBuilder: (context, index) {
                   return Card(
                     shape: RoundedRectangleBorder(
@@ -70,19 +113,34 @@ class _FriendPageState extends State<FriendPage> {
                     ),
                     margin: EdgeInsets.symmetric(vertical: 5),
                     child: ListTile(
-                      title: Text(friends[index]),
+                      title: Text(users[index].name),
+                      trailing: PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Container(
+                            width: 130, // Defina o tamanho desejado
+                            child: Text(
+                              "Desfazer amizade",
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          value: index,
+                        ),
+                      ],
+                      onSelected: (value) => removeFriend(value),
+                    ),
                     ),
                   );
                 },
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Pedidos Pendentes',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView.builder(
+              SizedBox(height: 20),
+              Text(
+                'Pedidos',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: pendingRequests.length,
                 itemBuilder: (context, index) {
                   return Card(
@@ -91,7 +149,7 @@ class _FriendPageState extends State<FriendPage> {
                     ),
                     margin: EdgeInsets.symmetric(vertical: 5),
                     child: ListTile(
-                      title: Text(pendingRequests[index]),
+                      title: Text(pendingRequests[index].name),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -109,8 +167,8 @@ class _FriendPageState extends State<FriendPage> {
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
