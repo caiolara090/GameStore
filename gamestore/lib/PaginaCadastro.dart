@@ -10,7 +10,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -57,14 +57,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 icon: Icons.person,
               ),
               const SizedBox(height: 10),
-              _buildTextField(
-                controller: _ageController,
-                labelText: 'Idade',
-                inputType: TextInputType.number,
+              _buildDateField(
+                context: context,
+                controller: _dobController,
+                labelText: 'Data de Nascimento',
                 validator: (value) {
-                  return value!.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(value)
-                      ? 'Digite apenas números'
-                      : null;
+                  return value!.isEmpty ? 'Selecione uma data' : null;
                 },
                 icon: Icons.calendar_today,
               ),
@@ -144,33 +142,80 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _register() {
-  if (_formKey.currentState!.validate()) {
-    final String name = _nameController.text.trim();
-    final String age = _ageController.text.trim();
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-
-    // Criando um mapa com os dados do formulário
-    final Map<String, dynamic> formData = {
-      'name': name,
-      'age': age,
-      'email': email,
-      'password': password,
-    };
-
-    // Convertendo o mapa em uma string JSON
-    final String jsonData = jsonEncode(formData);
-
-    // Aqui você pode fazer o que quiser com o JSON gerado
-    print(jsonData);
-
-    // Lógica adicional de registro, como enviar para um servidor, etc.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Registro bem-sucedido para $name!'),
+  Widget _buildDateField({
+    required BuildContext context,
+    required TextEditingController controller,
+    required String labelText,
+    String? Function(String?)? validator,
+    IconData? icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: icon != null ? Icon(icon) : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        filled: true,
+        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
       ),
+      validator: validator,
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+        );
+        if (pickedDate != null) {
+          String formattedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+          controller.text = formattedDate;
+        }
+      },
     );
   }
-}
+
+  void _register() {
+    if (_formKey.currentState!.validate()) {
+      final String name = _nameController.text.trim();
+      final String dob = _dobController.text.trim();
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+
+      // Criando um mapa com os dados do formulário
+      final Map<String, dynamic> formData = {
+        'name': name,
+        'dob': dob,
+        'email': email,
+        'password': password,
+      };
+
+      // Convertendo o mapa em uma string JSON
+      final String jsonData = jsonEncode(formData);
+
+      // Aqui você pode fazer o que quiser com o JSON gerado
+      print(jsonData);
+
+      // Lógica adicional de registro, como enviar para um servidor, etc.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Registro bem-sucedido para $name!'),
+        ),
+      );
+    }
+  }
 }
