@@ -61,6 +61,15 @@ class _FriendPageState extends State<FriendPage> {
     ),
   ];
 
+  final TextEditingController _friendNameController = TextEditingController();
+
+  void sendFriendRequest(String name) {
+    setState(() {
+      pendingRequests.add(User(name: name, dob: '', email: '', password: ''));
+    });
+    _friendNameController.clear();
+  }
+
   void acceptRequest(int index) {
     setState(() {
       users.add(pendingRequests[index]);
@@ -84,88 +93,150 @@ class _FriendPageState extends State<FriendPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(168, 41, 223, 255),
-        title: Text(
+        backgroundColor: Color.fromARGB(255, 0, 0, 100).withOpacity(0.9),
+        title: const Text(
           'Página de Amigos',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Amigos',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      title: Text(users[index].name),
-                      trailing: PopupMenuButton(
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Container(
-                            width: 130, // Defina o tamanho desejado
-                            child: Text(
-                              "Desfazer amizade",
-                              textAlign: TextAlign.right,
-                            ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center, // Alinha os elementos verticalmente
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 55,
+                      child: TextField(
+                        controller: _friendNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome do Usuário',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
-                          value: index,
                         ),
-                      ],
-                      onSelected: (value) => removeFriend(value),
+                      ),
                     ),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Pedidos',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: pendingRequests.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      title: Text(pendingRequests[index].name),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_friendNameController.text.isNotEmpty) {
+                          sendFriendRequest(_friendNameController.text);
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // Para ajustar o tamanho do Row ao conteúdo
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.check, color: Colors.green),
-                            onPressed: () => acceptRequest(index),
+                          Icon(
+                            Icons.person_add,
+                            color: Colors.white, // Define a cor do ícone como branco
                           ),
-                          IconButton(
-                            icon: Icon(Icons.close, color: Colors.red),
-                            onPressed: () => rejectRequest(index),
+                          const SizedBox(width: 8), // Espaço entre o ícone e o texto
+                          const Text(
+                            'Adicionar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Theme(
+                data: ThemeData().copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: const Text(
+                    'Amigos',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  initiallyExpanded: true,
+                  childrenPadding: EdgeInsets.zero,
+                  children: users.map((user) {
+                    int index = users.indexOf(user);
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Text(user.name),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Container(
+                                width: 130, // Defina o tamanho desejado
+                                child: const Text(
+                                  "Desfazer amizade",
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                              value: index,
+                            ),
+                          ],
+                          onSelected: (value) => removeFriend(value),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Theme(
+                data: ThemeData().copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: const Text(
+                    'Pedidos',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  initiallyExpanded: true,
+                  childrenPadding: EdgeInsets.zero,
+                  children: pendingRequests.map((request) {
+                    int index = pendingRequests.indexOf(request);
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Text(request.name),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.check, color: Colors.green),
+                              onPressed: () => acceptRequest(index),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close, color: Colors.red),
+                              onPressed: () => rejectRequest(index), 
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ],
           ),
