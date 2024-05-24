@@ -160,7 +160,7 @@ class _FriendPageState extends State<FriendPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
               Theme(
                 data: ThemeData().copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
@@ -172,31 +172,53 @@ class _FriendPageState extends State<FriendPage> {
                   childrenPadding: EdgeInsets.zero,
                   children: users.map((user) {
                     int index = users.indexOf(user);
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
-                        title: Text(user.name),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              child: Container(
-                                width: 130, // Defina o tamanho desejado
-                                child: const Text(
-                                  "Desfazer amizade",
-                                  textAlign: TextAlign.right,
-                                ),
+                  return Card(
+                    color: Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          Container(
+                            width: 40, // Define a largura do quadrado da imagem
+                            height: 40, // Define a altura do quadrado da imagem
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/teste.png'), // Caminho da imagem
+                                fit: BoxFit.cover,
                               ),
-                              value: index,
+                              shape: BoxShape.rectangle,
                             ),
-                          ],
-                          onSelected: (value) => removeFriend(value),
-                        ),
+                          ),
+                          SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                          Text(
+                            user.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold, // Torna o texto em negrito
+                            ),
+                          ),
+                        ],
                       ),
-                    );
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Container(
+                              width: 130, // Defina o tamanho desejado
+                              child: const Text(
+                                "Desfazer amizade",
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            value: index,
+                          ),
+                        ],
+                        onSelected: (value) => removeFriend(value),
+                      ),
+                    ),
+                  );
                   }).toList(),
                 ),
               ),
@@ -213,12 +235,34 @@ class _FriendPageState extends State<FriendPage> {
                   children: pendingRequests.map((request) {
                     int index = pendingRequests.indexOf(request);
                     return Card(
+                      color: Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
-                        title: Text(request.name),
+                        title: Row(
+                          children: [
+                            Container(
+                              width: 40, // Define a largura do quadrado da imagem
+                              height: 40, // Define a altura do quadrado da imagem
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/teste.png'), // Caminho da imagem
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: BoxShape.rectangle,
+                              ),
+                            ),
+                            SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                            Text(
+                              request.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold, // Torna o texto em negrito
+                              ),
+                            ),
+                          ],
+                        ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -229,7 +273,7 @@ class _FriendPageState extends State<FriendPage> {
                             ),
                             IconButton(
                               icon: const Icon(Icons.close, color: Colors.red),
-                              onPressed: () => rejectRequest(index), 
+                              onPressed: () => rejectRequest(index),
                             ),
                           ],
                         ),
