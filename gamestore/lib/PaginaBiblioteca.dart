@@ -1,257 +1,186 @@
 import 'package:flutter/material.dart';
-import 'package:gamestore/PaginaLoja.dart';
 
-class PaginaBiblioteca extends StatefulWidget {
-  @override
-  _PaginaBibliotecaState createState() => _PaginaBibliotecaState();
+void main() {
+  runApp(MyApp());
 }
 
-class _PaginaBibliotecaState extends State<PaginaBiblioteca> {
-  int _currentIndex = 1;
-  List<Jogo> jogos2 = [
-    Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
-    Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
-    Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
-    Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
-    Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
-    Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
-    Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
-    Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
-    Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Biblioteca de Jogos',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: GameLibraryPage(),
+    );
+  }
+}
+
+class Game {
+  String name;
+  bool isFavorite;
+
+  Game({required this.name, this.isFavorite = false});
+}
+
+class GameLibraryPage extends StatefulWidget {
+  @override
+  _GameLibraryPageState createState() => _GameLibraryPageState();
+}
+
+class _GameLibraryPageState extends State<GameLibraryPage> {
+  List<Game> allGames = [
+    Game(name: 'Jogo 1', isFavorite: true),
+    Game(name: 'Jogo 2'),
+    Game(name: 'Jogo 3', isFavorite: true),
+    Game(name: 'Jogo 4'),
   ];
 
-  TextEditingController _searchController = TextEditingController();
-  List<Jogo> _filteredJogos2 = [];
+  TextEditingController _gameSearchController = TextEditingController();
+  List<Game> filteredGames = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredJogos2 = jogos2;
+    filteredGames = allGames;
+  }
+
+  void filterGames(String query) {
+    setState(() {
+      filteredGames = allGames.where((game) => game.name.toLowerCase().contains(query.toLowerCase())).toList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Game> favoriteGames = filteredGames.where((game) => game.isFavorite).toList();
+    List<Game> otherGames = filteredGames.where((game) => !game.isFavorite).toList();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan.shade400,
-        title: TextField(
-          controller: _searchController,
-          onChanged: (value) {
-            setState(() {
-              _filteredJogos2 = jogos2
-                  .where((jogo) =>
-                      jogo.nome.toLowerCase().contains(value.toLowerCase()))
-                  .toList();
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Pesquisar...',
-            border: InputBorder.none,
-          ),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 100).withOpacity(0.9),
+        title: const Text(
+          'Biblioteca de Jogos',
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Nome',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
-          ),
-          SizedBox(width: 16),
-        ],
+        centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade400, Colors.blue.shade900],
-          ),
-        ),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.zero,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 2,
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 20);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    // Seção para jogos favoritos
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Favoritos',
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 233, 219, 24),
-                            ),
+              SizedBox(
+                height: 55,
+                child: TextField(
+                  controller: _gameSearchController,
+                  onChanged: filterGames,
+                  decoration: const InputDecoration(
+                    labelText: 'Pesquisar Jogos',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Theme(
+                data: ThemeData().copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: const Text(
+                    'Favoritos',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  initiallyExpanded: true,
+                  childrenPadding: EdgeInsets.zero,
+                  children: favoriteGames.map((game) {
+                    return Card(
+                      color: const Color.fromARGB(255, 169, 214, 254),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Text(
+                          game.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        ..._filteredJogos2.map((jogo) {
-                          return ListTile(
-                            title: Text(
-                              jogo.nome,
-                              style: TextStyle(fontSize: 20,
-                                  fontWeight: FontWeight.bold,color: Colors.black),
-                            ),
-                            subtitle: Text(
-                              jogo.descricao,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            trailing: Image.asset(
-                              'assets/image_${_filteredJogos2.indexOf(jogo)}.png',
-                              height: 200,
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => JogoPagina(jogo: jogo),
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.star, color: Colors.yellow),
+                          onPressed: () {
+                            setState(() {
+                              game.isFavorite = !game.isFavorite;
+                            });
+                          },
+                        ),
+                      ),
                     );
-                  } else {
-                    // Seção para jogos não favoritos
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Jogos',
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 233, 219, 24),
-                            ),
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Theme(
+                data: ThemeData().copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: const Text(
+                    'Todos os Jogos',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  initiallyExpanded: true,
+                  childrenPadding: EdgeInsets.zero,
+                  children: otherGames.map((game) {
+                    return Card(
+                      color: const Color.fromARGB(255, 169, 214, 254),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Text(
+                          game.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        ..._filteredJogos2.map((jogo) {
-                          return ListTile(
-                            title: Text(
-                              jogo.nome,
-                              style: TextStyle(fontSize: 20,
-                                  fontWeight: FontWeight.bold,color: Colors.black),
-                            ),
-                            subtitle: Text(
-                              jogo.descricao,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            trailing: Image.asset(
-                              'assets/image_${_filteredJogos2.indexOf(jogo)}.png',
-                              height: 200,
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => JogoPagina(jogo: jogo),
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.star_border, color: Colors.black),
+                          onPressed: () {
+                            setState(() {
+                              game.isFavorite = !game.isFavorite;
+                            });
+                          },
+                        ),
+                      ),
                     );
-                  }
-                },
+                  }).toList(),
+                ),
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(162, 38, 197, 218),
-        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
-        currentIndex: _currentIndex,
-        unselectedItemColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.videogame_asset),
-            label: 'Loja',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.layers),
-            label: 'Biblioteca',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.format_align_justify),
-            label: 'Dados',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          switch (index) {
-            case 0:
-              // Navegar para alguma página
-              // Navigator.pushReplacementNamed(context, '/pagina1');
-              break;
-            case 1:
-              // Navegar para alguma página
-              // Navigator.pushReplacementNamed(context, '/pagina2');
-              break;
-            case 2:
-              // Navegar para alguma página
-              // Navigator.pushNamed(context, '/pagina3');
-              break;
-          }
-        },
       ),
     );
   }

@@ -93,10 +93,10 @@ class _FriendPageState extends State<FriendPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 0, 100).withOpacity(0.9),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 100).withOpacity(0.9),
         title: const Text(
           'Página de Amigos',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -117,14 +117,29 @@ class _FriendPageState extends State<FriendPage> {
                         controller: _friendNameController,
                         decoration: const InputDecoration(
                           labelText: 'Nome do Usuário',
-                          border: OutlineInputBorder(
+                          labelStyle: TextStyle(
+                            color: Colors.black, // Define a cor do texto do rótulo
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey, // Define a cor da borda quando o campo não está focado
+                            ),
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue, // Define a cor da borda quando o campo está focado
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                        ),
+                        style: const TextStyle(
+                          color: Colors.black, // Define a cor do texto digitado
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -132,15 +147,15 @@ class _FriendPageState extends State<FriendPage> {
                           sendFriendRequest(_friendNameController.text);
                         }
                       },
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min, // Para ajustar o tamanho do Row ao conteúdo
                         children: [
                           Icon(
                             Icons.person_add,
                             color: Colors.white, // Define a cor do ícone como branco
                           ),
-                          const SizedBox(width: 8), // Espaço entre o ícone e o texto
-                          const Text(
+                          SizedBox(width: 8), // Espaço entre o ícone e o texto
+                          Text(
                             'Adicionar',
                             style: TextStyle(
                               color: Colors.white,
@@ -173,7 +188,7 @@ class _FriendPageState extends State<FriendPage> {
                   children: users.map((user) {
                     int index = users.indexOf(user);
                   return Card(
-                    color: Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
+                    color: const Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -184,7 +199,7 @@ class _FriendPageState extends State<FriendPage> {
                           Container(
                             width: 40, // Define a largura do quadrado da imagem
                             height: 40, // Define a altura do quadrado da imagem
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage('assets/teste.png'), // Caminho da imagem
                                 fit: BoxFit.cover,
@@ -192,10 +207,10 @@ class _FriendPageState extends State<FriendPage> {
                               shape: BoxShape.rectangle,
                             ),
                           ),
-                          SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                          const SizedBox(width: 10), // Espaçamento entre a imagem e o texto
                           Text(
                             user.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold, // Torna o texto em negrito
                             ),
                           ),
@@ -227,7 +242,7 @@ class _FriendPageState extends State<FriendPage> {
                 data: ThemeData().copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   title: const Text(
-                    'Pedidos',
+                    'Solicitações',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   initiallyExpanded: true,
@@ -235,7 +250,7 @@ class _FriendPageState extends State<FriendPage> {
                   children: pendingRequests.map((request) {
                     int index = pendingRequests.indexOf(request);
                     return Card(
-                      color: Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
+                      color: const Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -246,7 +261,7 @@ class _FriendPageState extends State<FriendPage> {
                             Container(
                               width: 40, // Define a largura do quadrado da imagem
                               height: 40, // Define a altura do quadrado da imagem
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage('assets/teste.png'), // Caminho da imagem
                                   fit: BoxFit.cover,
@@ -254,10 +269,10 @@ class _FriendPageState extends State<FriendPage> {
                                 shape: BoxShape.rectangle,
                               ),
                             ),
-                            SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                            const SizedBox(width: 10), // Espaçamento entre a imagem e o texto
                             Text(
                               request.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold, // Torna o texto em negrito
                               ),
                             ),
