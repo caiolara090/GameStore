@@ -1,17 +1,12 @@
-import express, { Request, Response } from 'express';
+import { server } from './Server';
+import 'dotenv/config';
+import { connectToDatabase } from './config/DatabaseConnection';
 
-const app = express();
-const port = process.env.PORT || 3000;
+// Try to connect to the database
+connectToDatabase();
 
-// Middleware para parsear JSON
-app.use(express.json());
+const port = process.env.PORT;
 
-// Rota principal
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, world!');
-});
-
-// Iniciar o servidor
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
