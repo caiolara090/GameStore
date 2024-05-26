@@ -1,11 +1,11 @@
 {
   "name": "gamestore",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/server.ts",
     "build": "tsc",
-    "serve": "node dist/index.js"
+    "serve": "node dist/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

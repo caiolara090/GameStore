@@ -1,8 +1,11 @@
-import express from 'express';
+import app from './app';
+import 'dotenv/config';
+import { connectToDatabase } from './config/db.config';
 
-const server = express();
+const port = process.env.PORT;
 
-server
-  .use(express.json());
-
-export { server };
+connectToDatabase().then(() => {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+});
