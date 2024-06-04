@@ -61,11 +61,46 @@ class _FriendPageState extends State<FriendPage> {
     ),
   ];
 
+  List<User> allUsers = [
+    User(name: 'John Doe', dob: '01-01-1990', email: 'john.doe@example.com', password: 'password123'),
+    User(name: 'Jane Smith', dob: '05-10-1985', email: 'jane.smith@example.com', password: 'password456'),
+    User(name: 'Bob Johnson', dob: '12-12-1975', email: 'bob.johnson@example.com', password: 'password789'),
+    User(
+      name: 'Amigo 1',
+      dob: '01/01/1990',
+      email: 'amigo1@example.com',
+      password: 'senha123',
+    ),
+    User(
+      name: 'Amigo 2',
+      dob: '02/02/1991',
+      email: 'amigo2@example.com',
+      password: 'senha123',
+    ),
+    User(
+      name: 'Amigo 3',
+      dob: '03/03/1992',
+      email: 'amigo3@example.com',
+      password: 'senha123',
+    ),
+  ];
+
+  final ValueNotifier<List<User>> _filteredUsers = ValueNotifier<List<User>>([]);
+
   final TextEditingController _friendNameController = TextEditingController();
+  bool _showUserList = false;
+
+  void _filterUsers(String query) {
+  List<User> filtered = allUsers.where((user) {
+    return user.name.toLowerCase().contains(query.toLowerCase());
+  }).toList();
+  _filteredUsers.value = filtered;
+}
 
   void sendFriendRequest(String name) {
     setState(() {
       pendingRequests.add(User(name: name, dob: '', email: '', password: ''));
+      _showUserList = false; // Hide the user list after sending the request
     });
     _friendNameController.clear();
   }
@@ -108,73 +143,133 @@ class _FriendPageState extends State<FriendPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center, // Alinha os elementos verticalmente
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: SizedBox(
                       height: 55,
                       child: TextField(
                         controller: _friendNameController,
+                        onChanged: (text) {
+                          setState(() {
+                            _showUserList = text.isNotEmpty;
+                          });
+                          _filterUsers(text);
+                        },
                         decoration: const InputDecoration(
-                          labelText: 'Nome do Usuário',
+                          labelText: 'Enviar Pedido de Amizade',
                           labelStyle: TextStyle(
-                            color: Colors.black, // Define a cor do texto do rótulo
+                            color: Colors.black,
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.grey, // Define a cor da borda quando o campo não está focado
+                              color: Colors.grey,
                             ),
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.blue, // Define a cor da borda quando o campo está focado
+                              color: Colors.blue,
                             ),
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
                         style: const TextStyle(
-                          color: Colors.black, // Define a cor do texto digitado
+                          color: Colors.black,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_friendNameController.text.isNotEmpty) {
-                          sendFriendRequest(_friendNameController.text);
-                        }
-                      },
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min, // Para ajustar o tamanho do Row ao conteúdo
-                        children: [
-                          Icon(
-                            Icons.person_add,
-                            color: Colors.white, // Define a cor do ícone como branco
-                          ),
-                          SizedBox(width: 8), // Espaço entre o ícone e o texto
-                          Text(
-                            'Adicionar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      ),
-                    ),
-                  ),
+                  // const SizedBox(width: 8),
+                  // Expanded(
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       if (_friendNameController.text.isNotEmpty) {
+                  //         sendFriendRequest(_friendNameController.text);
+                  //       }
+                  //     },
+                  //     child: const Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Icon(
+                  //           Icons.person_add,
+                  //           color: Colors.white,
+                  //         ),
+                  //         SizedBox(width: 8),
+                  //         Text(
+                  //           'Adicionar',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 16,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.green,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(4),
+                  //       ),
+                  //       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
+              if (_showUserList)
+  Container(
+    height: 200,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border.all(color: Colors.grey),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: ValueListenableBuilder<List<User>>(
+      valueListenable: _filteredUsers,
+      builder: (context, filteredUsers, child) {
+        return ListView.builder(
+          itemCount: filteredUsers.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(filteredUsers[index].name),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  sendFriendRequest(filteredUsers[index].name);
+                  setState(() {
+                    _showUserList = false;
+                  });
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min, // Para ajustar o tamanho do Row ao conteúdo
+                  children: [
+                    Icon(
+                      Icons.person_add,
+                      color: Colors.white, // Define a cor do ícone como branco
+                    ),
+                    SizedBox(width: 8), // Espaço entre o ícone e o texto
+                    Text(
+                      'Enviar Pedido',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ),
+  ),
               const SizedBox(height: 8),
               Theme(
                 data: ThemeData().copyWith(dividerColor: Colors.transparent),
@@ -187,53 +282,53 @@ class _FriendPageState extends State<FriendPage> {
                   childrenPadding: EdgeInsets.zero,
                   children: users.map((user) {
                     int index = users.indexOf(user);
-                  return Card(
-                    color: const Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          Container(
-                            width: 40, // Define a largura do quadrado da imagem
-                            height: 40, // Define a altura do quadrado da imagem
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/teste.png'), // Caminho da imagem
-                                fit: BoxFit.cover,
-                              ),
-                              shape: BoxShape.rectangle,
-                            ),
-                          ),
-                          const SizedBox(width: 10), // Espaçamento entre a imagem e o texto
-                          Text(
-                            user.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold, // Torna o texto em negrito
-                            ),
-                          ),
-                        ],
+                    return Card(
+                      color: const Color.fromARGB(255, 169, 214, 254),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
-                      trailing: PopupMenuButton(
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: Container(
-                              width: 130, // Defina o tamanho desejado
-                              child: const Text(
-                                "Desfazer amizade",
-                                textAlign: TextAlign.right,
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/teste.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: BoxShape.rectangle,
                               ),
                             ),
-                            value: index,
-                          ),
-                        ],
-                        onSelected: (value) => removeFriend(value),
+                            const SizedBox(width: 10),
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Container(
+                                width: 130,
+                                child: const Text(
+                                  "Desfazer amizade",
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                              value: index,
+                            ),
+                          ],
+                          onSelected: (value) => removeFriend(value),
+                        ),
                       ),
-                    ),
-                  );
+                    );
                   }).toList(),
                 ),
               ),
@@ -250,7 +345,7 @@ class _FriendPageState extends State<FriendPage> {
                   children: pendingRequests.map((request) {
                     int index = pendingRequests.indexOf(request);
                     return Card(
-                      color: const Color.fromARGB(255, 169, 214, 254), // Define a cor de fundo do card
+                      color: const Color.fromARGB(255, 169, 214, 254),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -259,21 +354,21 @@ class _FriendPageState extends State<FriendPage> {
                         title: Row(
                           children: [
                             Container(
-                              width: 40, // Define a largura do quadrado da imagem
-                              height: 40, // Define a altura do quadrado da imagem
+                              width: 40,
+                              height: 40,
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage('assets/teste.png'), // Caminho da imagem
+                                  image: AssetImage('assets/teste.png'),
                                   fit: BoxFit.cover,
                                 ),
                                 shape: BoxShape.rectangle,
                               ),
                             ),
-                            const SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                            const SizedBox(width: 10),
                             Text(
                               request.name,
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold, // Torna o texto em negrito
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
