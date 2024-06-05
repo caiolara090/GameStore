@@ -190,6 +190,45 @@ class _PaginaLojaState extends State<PaginaLoja> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(162, 38, 197, 218),
+        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+        currentIndex: _currentIndex,
+        unselectedItemColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.videogame_asset),
+            label: 'Loja',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.layers),
+            label: 'Biblioteca',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_align_justify),
+            label: 'Dados',
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          switch (index) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/loja');
+              break;
+            case 1:
+              // Navegação para a biblioteca
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaginaDados()),
+              );
+              break;
+          }
+        },
+      ),
     );
   }
 }
