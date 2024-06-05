@@ -72,6 +72,27 @@ class _PaginaDadosState extends State<PaginaDados> {
     );
   }
 
+  Widget _buildInfoTextField(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: TextField(
+        enabled: false,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(
+            fontSize: 25,
+            color: Colors.cyan.shade400,
+          ),
+          prefixText: ' ',
+        ).applyDefaults(Theme.of(context).inputDecorationTheme),
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.black,
+        ),
+        controller: TextEditingController(text: value),
+      ),
+    );
+  }
 }
 
 
