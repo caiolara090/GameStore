@@ -218,6 +218,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
               break;
             case 1:
               // Navegação para a biblioteca
+              Navigator.pushReplacementNamed(context, '/biblioteca');
               break;
             case 2:
               Navigator.push(
