@@ -97,6 +97,15 @@ class _PaginaLojaState extends State<PaginaLoja> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.cyan.shade400,
+        title: Center(
+          child: Text('GameStore',
+              style: TextStyle(
+                  fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold)),
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
