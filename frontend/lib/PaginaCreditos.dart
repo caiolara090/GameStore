@@ -106,7 +106,40 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
     );
   }
 
-  
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    bool isPassword = false,
+    String? Function(String?)? validator,
+    IconData? icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: icon != null ? Icon(icon) : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        filled: true,
+        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+      ),
+      obscureText: isPassword,
+      validator: validator,
+    );
+  }
 
   
 }
