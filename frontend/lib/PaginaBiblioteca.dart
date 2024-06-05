@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "Entidades.dart";
 
 void main() {
   runApp(MyApp());
@@ -18,45 +19,103 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Game {
-  String name;
-  bool isFavorite;
-
-  Game({required this.name, this.isFavorite = false});
-}
-
 class GameLibraryPage extends StatefulWidget {
   @override
   _GameLibraryPageState createState() => _GameLibraryPageState();
 }
 
 class _GameLibraryPageState extends State<GameLibraryPage> {
-  List<Game> allGames = [
-    Game(name: 'Jogo 1', isFavorite: true),
-    Game(name: 'Jogo 2'),
-    Game(name: 'Jogo 3', isFavorite: true),
-    Game(name: 'Jogo 4'),
+  List<Jogo> allGames = [
+    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
+    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 2'),
+    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
+    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 4'),
   ];
 
   TextEditingController _gameSearchController = TextEditingController();
-  List<Game> filteredGames = [];
+  List<Jogo> filteredGames = [];
+  final FocusNode _focusNode = FocusNode();
+  OverlayEntry? _overlayEntry;
 
   @override
   void initState() {
     super.initState();
     filteredGames = allGames;
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _showOverlay();
+      } else {
+        _removeOverlay();
+      }
+    });
   }
 
   void filterGames(String query) {
     setState(() {
-      filteredGames = allGames.where((game) => game.name.toLowerCase().contains(query.toLowerCase())).toList();
+      filteredGames = allGames.where((game) => game.nome.toLowerCase().contains(query.toLowerCase())).toList();
+      _overlayEntry?.markNeedsBuild();
     });
+  }
+
+  void _showOverlay() {
+    final overlay = Overlay.of(context);
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: 10.0,
+        right: 10.0,
+        top: 130.0,
+        child: Material(
+          elevation: 4.0,
+          child: Container(
+            constraints: const BoxConstraints(
+              maxHeight: 200,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(0), // Borda quadrada
+            ),
+            child: ListView.separated(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: filteredGames.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: filteredGames[index].link.startsWith('http')
+                      ? Image.network(filteredGames[index].link, width: 50, height: 50, fit: BoxFit.cover)
+                      : Image.asset(filteredGames[index].link, width: 50, height: 50, fit: BoxFit.cover),
+                  title: Text(filteredGames[index].nome),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    overlay.insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _gameSearchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Game> favoriteGames = filteredGames.where((game) => game.isFavorite).toList();
-    List<Game> otherGames = filteredGames.where((game) => !game.isFavorite).toList();
+    List<Jogo> favoriteGames = allGames.where((game) => game.isFavorite).toList();
+    List<Jogo> otherGames = allGames.where((game) => !game.isFavorite).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +128,6 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
       ),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
-        child: Container(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,6 +136,7 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
                 height: 55,
                 child: TextField(
                   controller: _gameSearchController,
+                  focusNode: _focusNode,
                   onChanged: filterGames,
                   decoration: const InputDecoration(
                     labelText: 'Pesquisar Jogos',
@@ -88,13 +147,13 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
                       borderSide: BorderSide(
                         color: Colors.grey,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(0)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.blue,
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(0)),
                     ),
                   ),
                   style: const TextStyle(
@@ -120,8 +179,11 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
                       ),
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
+                        leading: game.link.startsWith('http')
+                            ? Image.network(game.link, width: 50, height: 50, fit: BoxFit.cover)
+                            : Image.asset(game.link, width: 50, height: 50, fit: BoxFit.cover),
                         title: Text(
-                          game.name,
+                          game.nome,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -158,8 +220,11 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
                       ),
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
+                        leading: game.link.startsWith('http')
+                            ? Image.network(game.link, width: 50, height: 50, fit: BoxFit.cover)
+                            : Image.asset(game.link, width: 50, height: 50, fit: BoxFit.cover),
                         title: Text(
-                          game.name,
+                          game.nome,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -181,7 +246,6 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

@@ -180,40 +180,6 @@ class _FriendPageState extends State<FriendPage> {
                       ),
                     ),
                   ),
-                  // const SizedBox(width: 8),
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       if (_friendNameController.text.isNotEmpty) {
-                  //         sendFriendRequest(_friendNameController.text);
-                  //       }
-                  //     },
-                  //     child: const Row(
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       children: [
-                  //         Icon(
-                  //           Icons.person_add,
-                  //           color: Colors.white,
-                  //         ),
-                  //         SizedBox(width: 8),
-                  //         Text(
-                  //           'Adicionar',
-                  //           style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 16,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.green,
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(4),
-                  //       ),
-                  //       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               if (_showUserList)
@@ -240,15 +206,15 @@ class _FriendPageState extends State<FriendPage> {
                   });
                 },
                 child: const Row(
-                  mainAxisSize: MainAxisSize.min, // Para ajustar o tamanho do Row ao conteúdo
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.person_add,
-                      color: Colors.white, // Define a cor do ícone como branco
+                      color: Colors.white,
                     ),
-                    SizedBox(width: 8), // Espaço entre o ícone e o texto
+                    SizedBox(width: 8),
                     Text(
-                      'Enviar Pedido',
+                      'Enviar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,

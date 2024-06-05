@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste3/JogoPagina.dart';
+// import 'package:teste3/PaginaJogo.dart';
 
 class Jogo {
   String nome;
@@ -145,12 +145,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                JogoPagina(jogo: _filteredJogos[index])),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) =>
+                      //           JogoPagina(jogo: _filteredJogos[index])),
+                      // );
                     },
                     child: Column(
                       children: [

@@ -22,11 +22,13 @@ class Jogo {
   double preco;
   String link;
   String descricao;
+  bool isFavorite;
 
   Jogo({
     required this.nome,
     required this.preco,
     required this.link,
     required this.descricao,
+    this.isFavorite = false
   });
 }
