@@ -18,7 +18,15 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: const Text(
+          'Colocar Créditos',
+          style: TextStyle(fontSize: 35.0),
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
