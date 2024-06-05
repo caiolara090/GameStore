@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gamestore/Entidades.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
-class Jogo {
-  String nome;
-  double preco;
-  String link;
-  String descricao;
-
-  Jogo({
-    required this.nome,
-    required this.preco,
-    required this.link,
-    required this.descricao,
-  });
-}
 
 class PaginaLoja extends StatefulWidget {
   @override
