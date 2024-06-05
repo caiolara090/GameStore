@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gamestore/Entidades.dart';
+import 'package:gamestore/PaginaDados.dart';
+import 'package:gamestore/PaginaJogo.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
 
