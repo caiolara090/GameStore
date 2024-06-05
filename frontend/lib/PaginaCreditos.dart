@@ -141,5 +141,30 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
     );
   }
 
-  
+  void _addCredits() {
+    if (_formKey.currentState!.validate()) {
+      final String name = _nameController.text.trim();
+      final String value = _valueController.text.trim();
+      final String cardNumber = _cardNumberController.text.trim();
+      final String expiryDate = _expiryDateController.text.trim();
+      final String cvv = _cvvController.text.trim();
+
+      // Adicione aqui a lógica para adicionar créditos
+      // Exemplo básico: verificar se os campos são válidos
+
+      if (name.isNotEmpty && value.isNotEmpty && cardNumber.isNotEmpty && expiryDate.isNotEmpty && cvv.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Créditos adicionados com sucesso para $name!'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, preencha todos os campos.'),
+          ),
+        );
+      }
+    }
+  }
 }
