@@ -1,0 +1,1 @@
+ C:\\Users\\thale\\Documents\\TP_PDS\\Trabalho-de-Pratica-de-Software\\gamestore\\.dart_tool\\flutter_build\\6c55babd11be7103558f959ab1097e7d\\native_assets.yaml: 

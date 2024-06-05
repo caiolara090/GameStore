@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 
 class Jogo {
   String nome;
-  String descricao;
   double preco;
-  bool favorito;
+  String link;
+  String descricao;
 
-  Jogo(
-      {required this.nome,
-      required this.descricao,
-      required this.preco,
-      this.favorito = false});
+  Jogo({
+    required this.nome,
+    required this.preco,
+    required this.link,
+    required this.descricao,
+  });
 }
 
 class PaginaLoja extends StatefulWidget {
@@ -23,50 +24,65 @@ class _PaginaLojaState extends State<PaginaLoja> {
   int _currentIndex = 0;
   List<Jogo> jogos = [
     Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+      nome: "The Witcher 3",
+      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      preco: 59.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
+    ),
     Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+      nome: "Minecraft",
+      descricao: "Construa e explore mundos infinitos",
+      preco: 29.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
+    ),
     Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+      nome: "GTA V",
+      descricao: "Um jogo de ação em mundo aberto",
+      preco: 39.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
+    ),
     Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+      nome: "The Witcher 3",
+      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      preco: 59.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
+    ),
     Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+      nome: "Minecraft",
+      descricao: "Construa e explore mundos infinitos",
+      preco: 29.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
+    ),
     Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+      nome: "GTA V",
+      descricao: "Um jogo de ação em mundo aberto",
+      preco: 39.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
+    ),
     Jogo(
-        nome: "The Witcher 3",
-        descricao:
-            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+      nome: "The Witcher 3",
+      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      preco: 59.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
+    ),
     Jogo(
-        nome: "Minecraft",
-        descricao:
-            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+      nome: "Minecraft",
+      descricao: "Construa e explore mundos infinitos",
+      preco: 29.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
+    ),
     Jogo(
-        nome: "GTA V",
-        descricao:
-            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+      nome: "GTA V",
+      descricao: "Um jogo de ação em mundo aberto",
+      preco: 39.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
+    ),
+    Jogo(
+      nome: "The Witcher 3",
+      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      preco: 59.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
+    ),
   ];
 
   TextEditingController _searchController = TextEditingController();
@@ -81,47 +97,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.cyan.shade400,
-        title: TextField(
-          controller: _searchController,
-          onChanged: (value) {
-            setState(() {
-              _filteredJogos = jogos
-                  .where((jogo) =>
-                      jogo.nome.toLowerCase().contains(value.toLowerCase()))
-                  .toList();
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Pesquisar...',
-            border: InputBorder.none,
-          ),
-        ),
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Nome',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              Text(
-                'R\$00,00',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-            ],
-          ),
-          SizedBox(width: 16),
-        ],
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade400, Colors.blue.shade900],
+            colors: [Colors.white, Colors.white],
           ),
         ),
         child: SingleChildScrollView(
@@ -129,15 +110,27 @@ class _PaginaLojaState extends State<PaginaLoja> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 20),
-              Center(
-                child: Text(
-                  'Bem-vindo à Loja',
-                  style: TextStyle(
-                      color: const Color.fromARGB(255, 0, 0, 0), fontSize: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _filteredJogos = jogos
+                          .where((jogo) => jogo.nome
+                          .toLowerCase()
+                          .contains(value.toLowerCase()))
+                          .toList();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    hintText: 'Pesquisar...',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -145,42 +138,50 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) =>
-                      //           JogoPagina(jogo: _filteredJogos[index])),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                JogoPagina(jogo: _filteredJogos[index])),
+                      );
                     },
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(_filteredJogos[index].nome,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                          subtitle: Text(_filteredJogos[index].descricao,
-                              style: TextStyle(color: Colors.black)),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset('assets/image_$index.png',
-                                  height:
-                                      200), 
-                              SizedBox(width: 8),
-                              Text(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(
+                            _filteredJogos[index].link,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(_filteredJogos[index].nome,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                                SizedBox(height: 5),
+                                Text(_filteredJogos[index].descricao,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.black)),
+                                SizedBox(height: 5),
+                                Text(
                                   'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.black)),
-                            ],
+                                      fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(
-                            height: 1,
-                            color: Colors
-                                .grey), 
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -188,43 +189,6 @@ class _PaginaLojaState extends State<PaginaLoja> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(162, 38, 197, 218),
-        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
-        currentIndex: _currentIndex,
-        unselectedItemColor:
-            Colors.white, 
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.videogame_asset),
-            label: 'Loja',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.layers),
-            label: 'Biblioteca',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.format_align_justify),
-            label: 'Dados',
-          ),
-        ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina1');
-              break;
-            case 1:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina2');
-              break;
-            case 2:
-              //Navegue para alguma página
-              //Navigator.pushNamed(context, '/pagina3');
-              break;
-          }
-        },
       ),
     );
   }
