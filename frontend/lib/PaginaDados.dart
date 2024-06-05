@@ -69,6 +69,42 @@ class _PaginaDadosState extends State<PaginaDados> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.cyan.shade400,
+        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+        currentIndex: _currentIndex,
+        unselectedItemColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.videogame_asset),
+            label: 'Loja',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.layers),
+            label: 'Biblioteca',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_align_justify),
+            label: 'Dados',
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          switch (index) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/loja');
+              break;
+            case 1:
+              
+              break;
+            case 2:
+              // Não faça nada, pois já está na página atual
+              break;
+          }
+        },
+      ),
     );
   }
 
