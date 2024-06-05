@@ -9,6 +9,28 @@ class JogoPagina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true, // Mostra automaticamente o botão de voltar
+        flexibleSpace: Padding(
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top +
+                  5.0), // Ajusta o padding superior
+          child: Center(
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                jogo.nome,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0), // Adiciona espaço ao redor do conteúdo
