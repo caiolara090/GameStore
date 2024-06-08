@@ -16,7 +16,7 @@ export const login = async (_req: Request, res: Response) => {
             res.cookie('access_token', accessToken, { httpOnly: true });
     
             return res.status(StatusCodes.OK).json({ 
-                message: 'Login successful', info: user
+                message: 'Login successful', info: user 
             });
         } catch (error: any) {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error.message);

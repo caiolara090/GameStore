@@ -19,6 +19,7 @@ export const loginValidation: RequestHandler = async (req: Request<{}, {}, IUser
 
         else if (!(user instanceof Array)) {
             if (!bcrypt.compareSync(req.body.password, user.password)) {
+                console.log(req.body.password, user.password);
                 return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Invalid email or password' });
             }
         }
