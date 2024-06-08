@@ -9,4 +9,4 @@ const ReviewSchema = new mongoose.Schema<IReview>({
   game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game' },
 });
 
-export const Review = mongoose.model<IReview>('Review', ReviewSchema);
+export const ReviewModel = mongoose.model<IReview>('Review', ReviewSchema);

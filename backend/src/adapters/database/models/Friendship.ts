@@ -6,4 +6,4 @@ const FriendshipSchema = new mongoose.Schema<IFriendship>({
   friend: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-export const Friendship = mongoose.model<IFriendship>('Friendship', FriendshipSchema);
+export const FriendshipModel = mongoose.model<IFriendship>('Friendship', FriendshipSchema);
