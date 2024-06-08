@@ -1,9 +1,9 @@
 import { IUserRepository } from "../../../domain/ports/User";
 import { UserModel } from "../models/User";
-import { User } from "../../../domain/entities/User";
+import { IUser } from "../../../domain/entities/User";
 
 export class UserRepository implements IUserRepository {
-  async create(user: User): Promise<User> {
+  async create(user: IUser): Promise<IUser> {
     try {
       const createdUser = await UserModel.create(user);
       return createdUser;
@@ -12,7 +12,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async update(_id: string, user: Partial<User>): Promise<User> {
+  async update(_id: string, user: Partial<IUser>): Promise<IUser> {
     try {
       const updatedUser = await UserModel.findByIdAndUpdate(_id, user, { new: true });
       return updatedUser!; // todo dar uma olhada nisso depois
@@ -29,9 +29,11 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async find(user: Partial<User>): Promise<User | User[] | null> {
+  async find(user: Partial<IUser>): Promise<IUser | IUser[] | null> {
     try {
       const foundUser = await UserModel.find(user);
+      // Se não encontrar nenhum usuário, retorna null
+      if (foundUser.length === 0) return null;
       // Se a lista tiver só um elemento, retorna apenas ele
       if (foundUser.length === 1) return foundUser[0];
       // Caso contrário, retorna a lista
