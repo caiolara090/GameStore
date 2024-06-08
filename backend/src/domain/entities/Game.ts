@@ -3,19 +3,19 @@ import { Types } from 'mongoose';
 export interface IGame {
   name: string;
   description: string;
-  image: string;
   price: number;
-  id?: Types.ObjectId;
-  reviews?: Types.ObjectId[];
+  image: string;
+  reviews?: string[];
+  _id?: string;
 }
 
 export class Game implements IGame {
   constructor(
     public name: string,
     public description: string,
-    public image: string,
     public price: number,
-    public id?: Types.ObjectId,
-    public reviews?: Types.ObjectId[],
+    public image: string,
+    public reviews?: string[],
+    public _id?: string,
   ) {}
 }

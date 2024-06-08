@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface IUserGame {
-  game: Types.ObjectId,
+  game: string,
   favorite: boolean,
 }
 
@@ -10,7 +10,7 @@ export interface IUser {
   email: string;
   password: string;
   games: IUserGame[];
-  id?: Types.ObjectId;
+  _id?: string;
 }
 
 export class User implements IUser {
@@ -19,6 +19,6 @@ export class User implements IUser {
     public email: string,
     public password: string,
     public games: IUserGame[],
-    public id?: Types.ObjectId,
+    public _id?: string,
   ) {}
 }

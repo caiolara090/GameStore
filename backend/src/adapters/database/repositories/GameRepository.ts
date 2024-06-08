@@ -1,23 +1,43 @@
 import { IGameRepository } from "../../../domain/ports/Game";
 import { Game } from "../../../domain/entities/Game";
+import { GameModel } from "../models/Game";
 
 export class GameRepository implements IGameRepository {
-  create(game: Game): Promise<Game> {
-    throw new Error("Method not implemented.");
+  async create(game: Game): Promise<Game> {
+    try {
+      const createdGame = await GameModel.create(game);
+      return createdGame;
+    } catch (error: any) {
+      throw new Error("Error creating game: " + error.message);
+    }
   }
-  update(game: Game): Promise<Game> {
-    throw new Error("Method not implemented.");
+
+  async update(id: string, game: Partial<Game>): Promise<Game> {
+    try {
+      const updatedGame = await GameModel.findByIdAndUpdate(id, game, { new: true });
+      return updatedGame!; 
+    } catch (error: any) {
+      throw new Error("Error updating game: " + error.message);
+    }
   }
-  delete(id: import("mongoose").Types.ObjectId): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async delete(id: string): Promise<void> {
+    try {
+      await GameModel.findByIdAndDelete(id);
+    } catch (error: any) {
+      throw new Error("Error deleting game: " + error.message);
+    }
   }
-  findById(id: import("mongoose").Types.ObjectId): Promise<Game | null> {
-    throw new Error("Method not implemented.");
-  }
-  findByName(name: string): Promise<Game[] | null> {
-    throw new Error("Method not implemented.");
-  }
-  findAll(): Promise<Game[]> {
-    throw new Error("Method not implemented.");
+
+  async find(game: Partial<Game>): Promise<Game | Game[] | null> {
+    try {
+      const foundGame = await GameModel.find(game);
+      // Se a lista tiver só um elemento, retorna apenas ele
+      if (foundGame.length === 1) return foundGame[0];
+      // Caso contrário, retorna a lista
+      return foundGame;
+    } catch (error: any) {
+      throw new Error("Error finding game: " + error.message);
+    }
   }
 }

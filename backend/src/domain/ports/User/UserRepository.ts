@@ -1,11 +1,8 @@
 import { User } from "../../entities/User";
-import { Types } from 'mongoose';
 
 export interface IUserRepository {
-  create(username: string, email: string, password: string): Promise<void>;
-  update(id: Types.ObjectId, username: string, email: string, password: string): Promise<void>;
-  delete(id: Types.ObjectId): Promise<void>;
-  findById(id: Types.ObjectId): Promise<User | null>;
-  findByEmail(email: string): Promise<User | null>;
-  findAll(): Promise<User[]>;
+  create(user: User): Promise<User>;
+  update(_id: string, user: Partial<User>): Promise<User>;
+  delete(_id: string): Promise<void>;
+  find(user: Partial<User>): Promise<User | User[] | null>;
 };

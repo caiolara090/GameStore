@@ -1,15 +1,15 @@
 import { Types } from 'mongoose';
 
 export interface IFriendship {
-  user: Types.ObjectId;
-  friend: Types.ObjectId;
-  id?: Types.ObjectId;
+  user: string;
+  friend: string;
+  _id?: string;
 }
 
 export class Friendship implements IFriendship {
   constructor(
-    public user: Types.ObjectId,
-    public friend: Types.ObjectId,
-    public id?: Types.ObjectId,
+    public user: string,
+    public friend: string,
+    public _id?: string,
   ) {}
 }

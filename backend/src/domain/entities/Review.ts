@@ -4,9 +4,9 @@ export interface IReview {
   title: string;
   description: string;
   rating: number;
-  user: Types.ObjectId;
-  game: Types.ObjectId;
-  id?: Types.ObjectId;
+  user: string;
+  game: string;
+  _id?: string;
 }
 
 export class Review implements IReview {
@@ -14,8 +14,8 @@ export class Review implements IReview {
     public title: string,
     public description: string,
     public rating: number,
-    public user: Types.ObjectId,
-    public game: Types.ObjectId,
-    public id?: Types.ObjectId,
+    public user: string,
+    public game: string,
+    public _id?: string,
   ) {}
 }

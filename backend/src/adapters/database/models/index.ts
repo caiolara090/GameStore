@@ -1,4 +1,4 @@
-export { Friendship } from './Friendship';
-export { Game } from './Game';
-export { User } from './User';
-export { Review } from './Review';
+export { FriendshipModel } from './Friendship';
+export { GameModel } from './Game';
+export { UserModel } from './User';
+export { ReviewModel } from './Review';

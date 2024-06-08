@@ -1,0 +1,1 @@
+export { IReviewRepository } from './ReviewRepository';
