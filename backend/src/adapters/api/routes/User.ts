@@ -9,3 +9,5 @@ const router = Router();
 router.post('/login', loginValidation, login);
 
 router.post('/signup', checkDuplicateEmail, checkDuplicateUsername, signUp);
+
+export { router as userRouter };
