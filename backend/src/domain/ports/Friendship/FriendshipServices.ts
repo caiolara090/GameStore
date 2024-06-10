@@ -1,4 +1,5 @@
 import { IFriendship } from "../../entities/Friendship";
+import { IFriendshipRepository } from "./FriendshipRepository";
 
 export interface IFriendshipServices {
   create(friendship: IFriendship): Promise<void>;
@@ -6,8 +7,8 @@ export interface IFriendshipServices {
   find(friendship: Partial<IFriendship>): Promise<IFriendship | IFriendship[] | null>;
 }
 
-export class FrienshipServices implements IFriendshipServices {
-  constructor(private readonly friendshipRepository: IFriendshipServices) {}
+export class FriendshipServices implements IFriendshipServices {
+  constructor(private readonly friendshipRepository: IFriendshipRepository) {}
 
   async create(friendship: IFriendship): Promise<void> {
     return this.friendshipRepository.create(friendship);
