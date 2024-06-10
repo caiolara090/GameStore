@@ -1,8 +1,8 @@
-import { Review } from "../../entities/Review";
+import { IReview } from "../../entities/Review";
 
 export interface IReviewRepository {
-  create(review: Review): Promise<Review>;
-  update(_id: string, review: Partial<Review>): Promise<Review>;
+  create(review: IReview): Promise<IReview>;
+  update(_id: string, review: Partial<IReview>): Promise<IReview>;
   delete(_id: string): Promise<void>;
-  find(review: Partial<Review>): Promise<Review | Review[] | null>;
+  find(review: Partial<IReview>): Promise<IReview | IReview[] | null>;
 }
