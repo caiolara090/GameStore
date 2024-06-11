@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'token_manager.dart';
 import '/PaginaCadastro.dart';
+import 'PaginaLoja.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -73,22 +76,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 10), // Espaçamento adicional
-TextButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-    );
-  },
-  style: TextButton.styleFrom(
-    textStyle: const TextStyle(fontSize: 20),
-  ),
-  child: const Text(
-    'Não tem uma conta? Registre-se',
-    style: TextStyle(color: Colors.white),
-  ),
-),
-
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                child: const Text(
+                  'Não tem uma conta? Registre-se',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
@@ -96,43 +98,42 @@ TextButton(
     );
   }
 
-Widget _buildTextField({
-  required TextEditingController controller,
-  required String labelText,
-  bool isPassword = false,
-  String? Function(String?)? validator,
-  IconData? icon,
-}) {
-  return TextFormField(
-    controller: controller,
-    decoration: InputDecoration(
-      labelText: labelText,
-      prefixIcon: icon != null ? Icon(icon) : null,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    bool isPassword = false,
+    String? Function(String?)? validator,
+    IconData? icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: icon != null ? Icon(icon) : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        filled: true,
+        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7), // Define a cor clara para o fundo
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
       ),
-      filled: true,
-      fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7), // Define a cor clara para o fundo
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        borderSide: const BorderSide(color: Colors.red, width: 2.0),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        borderSide: const BorderSide(color: Colors.red, width: 2.0),
-      ),
-    ),
-    obscureText: isPassword,
-    validator: validator,
-  );
-}
+      obscureText: isPassword,
+      validator: validator,
+    );
+  }
 
-
-  void _login() {
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
@@ -141,6 +142,13 @@ Widget _buildTextField({
       // Exemplo básico: verificar se o e-mail e a senha são válidos
 
       if (email.isNotEmpty && password.isNotEmpty) {
+        // Gerar um token fictício (normalmente isso vem do servidor)
+        String token = 'token1234567890';
+
+        // Armazenar o token usando shared_preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_token', token);
+
         // Lógica de autenticação bem-sucedida
         // Você pode navegar para outra tela ou executar ações necessárias aqui
         ScaffoldMessenger.of(context).showSnackBar(
@@ -148,6 +156,12 @@ Widget _buildTextField({
             content: Text('Login bem-sucedido para $email!'),
           ),
         );
+
+        // Exemplo: Navegar para outra tela após login bem-sucedido
+        Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => PaginaLoja()),
+      );
       } else {
         // Lógica de autenticação falhou
         ScaffoldMessenger.of(context).showSnackBar(

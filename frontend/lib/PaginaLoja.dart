@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'token_manager.dart'; 
+import 'PaginaBiblioteca.dart';
+import 'Entidades.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
-class Jogo {
-  String nome;
-  String descricao;
-  double preco;
-  bool favorito;
+// class Jogo {
+//   String nome;
+//   String descricao;
+//   double preco;
+//   bool favorito;
 
-  Jogo(
-      {required this.nome,
-      required this.descricao,
-      required this.preco,
-      this.favorito = false});
-}
+//   Jogo(
+//       {required this.nome,
+//       required this.descricao,
+//       required this.preco,
+//       this.favorito = false});
+// }
 
 class PaginaLoja extends StatefulWidget {
   @override
@@ -26,56 +29,84 @@ class _PaginaLojaState extends State<PaginaLoja> {
         nome: "The Witcher 3",
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+        preco: 59.99,
+        link: "assets/teste.png",
+        isFavorite: true),
+        
     Jogo(
         nome: "Minecraft",
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+        preco: 29.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+        preco: 39.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "The Witcher 3",
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+        preco: 59.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "Minecraft",
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+        preco: 29.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+        preco: 39.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "The Witcher 3",
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        preco: 59.99),
+        preco: 59.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "Minecraft",
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-        preco: 29.99),
+        preco: 29.99,
+        link: "assets/teste.png",
+        isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-        preco: 39.99),
+        preco: 39.99,
+        link: "assets/teste.png",
+        isFavorite: true),
   ];
 
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
+  String? _token;
 
   @override
   void initState() {
     super.initState();
     _filteredJogos = jogos;
+    _loadToken();
+  }
+
+    Future<void> _loadToken() async {
+    String? token = await TokenManager.getToken();
+    setState(() {
+      _token = token;
+    });
   }
 
   @override
@@ -165,7 +196,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Image.asset('assets/image_$index.png',
+                              Image.asset(_filteredJogos[index].link,
                                   height:
                                       200), 
                               SizedBox(width: 8),
@@ -217,11 +248,17 @@ class _PaginaLojaState extends State<PaginaLoja> {
               break;
             case 1:
               //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina2');
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GameLibraryPage()),
+            );
               break;
             case 2:
               //Navegue para alguma página
-              //Navigator.pushNamed(context, '/pagina3');
+            //   Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => GameLibraryPage()),
+            // );
               break;
           }
         },
