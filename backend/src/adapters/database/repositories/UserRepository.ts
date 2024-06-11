@@ -42,4 +42,31 @@ export class UserRepository implements IUserRepository {
       throw new Error("Error finding user: " + error.message);
     }
   }
+
+  async findByEmail(email: string): Promise<IUser | null> {
+    try {
+      const foundUser = await UserModel.findOne({email});
+      return foundUser;
+    } catch (error: any) {
+      throw new Error("Error finding user by email: " + error.message);
+    }
+  }
+
+  async findByUsername(username: string): Promise<IUser | null> {
+    try {
+      const foundUser = await UserModel.findOne({username});
+      return foundUser;
+    } catch (error: any) {
+      throw new Error("Error finding user by username: " + error.message);
+    }
+  }
+
+  async findById(_id: string): Promise<IUser | null> {
+    try {
+      const foundUser = await UserModel.findById(_id);
+      return foundUser;
+    } catch (error: any) {
+      throw new Error("Error finding user by id: " + error.message);
+    }
+  }
 }
