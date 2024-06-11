@@ -239,17 +239,11 @@ class _PaginaLojaState extends State<PaginaLoja> {
               break;
             case 1:
               //Navegue para alguma página
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => GameLibraryPage()),
-            );
+              Navigator.pushReplacementNamed(context, '/biblioteca');
               break;
             case 2:
               //Navegue para alguma página
-            //   Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => GameLibraryPage()),
-            // );
+              Navigator.pushReplacementNamed(context, '/dados');
               break;
           }
         },

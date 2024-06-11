@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'token_manager.dart';
 import '/PaginaCadastro.dart';
@@ -20,21 +21,22 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: const Text(
-                'GameStore',
-                style: TextStyle(fontSize: 40.0)
-                ),
-              backgroundColor:  Colors.cyan.shade400
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromARGB(162, 38, 197, 218),
+        title: Column(
+          children: [
+            SizedBox(height: 20),
+            const Text(
+              'GameStore',
+              style: TextStyle(fontSize: 40.0),
+            ),
+          ],
+        ),
+        centerTitle: true,
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [ Colors.cyan.shade400, Colors.indigo.shade900,],
-          ),
+          color: Color.fromARGB(162, 38, 197, 218),
         ),
         padding: const EdgeInsets.all(30.0),
         child: Form(
@@ -46,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _emailController,
                 labelText: 'E-mail',
                 validator: (value) {
-                  return value!.isEmpty || !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)
+                  return value!.isEmpty ||
+                          !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                              .hasMatch(value)
                       ? 'Digite um e-mail válido'
                       : null;
                 },
@@ -64,23 +68,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {
-                  _login();
-                },
+                onPressed: _login,
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50), // Ajuste do tamanho vertical
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 50),
                 ),
                 child: const Text(
                   'Login',
                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                 ),
               ),
-              const SizedBox(height: 10), // Espaçamento adicional
+              const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const RegistrationScreen()),
                   );
                 },
                 style: TextButton.styleFrom(
@@ -114,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(12.0),
         ),
         filled: true,
-        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7), // Define a cor clara para o fundo
+        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: const BorderSide(color: Colors.blue, width: 2.0),
@@ -138,32 +142,20 @@ class _LoginScreenState extends State<LoginScreen> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      // Adicione aqui a lógica de autenticação com e-mail e senha
-      // Exemplo básico: verificar se o e-mail e a senha são válidos
-
       if (email.isNotEmpty && password.isNotEmpty) {
-        // Gerar um token fictício (normalmente isso vem do servidor)
         String token = 'token1234567890';
 
-        // Armazenar o token usando shared_preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_token', token);
 
-        // Lógica de autenticação bem-sucedida
-        // Você pode navegar para outra tela ou executar ações necessárias aqui
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login bem-sucedido para $email!'),
           ),
         );
 
-        // Exemplo: Navegar para outra tela após login bem-sucedido
-        Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => PaginaLoja()),
-      );
+        Navigator.pushReplacementNamed(context, '/loja');
       } else {
-        // Lógica de autenticação falhou
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Por favor, insira um e-mail e senha válidos.'),

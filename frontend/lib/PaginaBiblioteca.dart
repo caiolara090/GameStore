@@ -29,10 +29,10 @@ class GameLibraryPage extends StatefulWidget {
 class _GameLibraryPageState extends State<GameLibraryPage> {
   int _currentIndex = 1;
   List<Jogo> allGames = [
-    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
-    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 2'),
-    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
-    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 4'),
+    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
+    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 2'),
+    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
+    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 4'),
   ];
 
   TextEditingController _gameSearchController = TextEditingController();
@@ -272,25 +272,15 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
         onTap: (index) {
           switch (index) {
             case 0:
-              //Navegue para alguma página
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PaginaLoja()),
-            );
+              Navigator.pushReplacementNamed(context, '/loja');
               break;
             case 1:
               //Navegue para alguma página
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => GameLibraryPage()),
-            );
+              Navigator.pushReplacementNamed(context, '/biblioteca');
               break;
             case 2:
               //Navegue para alguma página
-            //   Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => GameLibraryPage()),
-            // );
+              Navigator.pushReplacementNamed(context, '/dados');
               break;
           }
         },
