@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'token_manager.dart'; 
 import 'PaginaBiblioteca.dart';
 import 'Entidades.dart';
+import 'package:gamestore/Entidades.dart';
+import 'package:gamestore/PaginaDados.dart';
+import 'package:gamestore/PaginaJogo.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
 // class Jogo {
@@ -30,7 +33,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         preco: 59.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
         
     Jogo(
@@ -38,56 +41,56 @@ class _PaginaLojaState extends State<PaginaLoja> {
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
         preco: 29.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
         preco: 39.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "The Witcher 3",
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         preco: 59.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "Minecraft",
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
         preco: 29.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
         preco: 39.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "The Witcher 3",
         descricao:
             "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         preco: 59.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "Minecraft",
         descricao:
             "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
         preco: 29.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
     Jogo(
         nome: "GTA V",
         descricao:
             "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
         preco: 39.99,
-        link: "assets/teste.png",
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
         isFavorite: true),
   ];
 
@@ -113,46 +116,20 @@ class _PaginaLojaState extends State<PaginaLoja> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.cyan.shade400,
-        title: TextField(
-          controller: _searchController,
-          onChanged: (value) {
-            setState(() {
-              _filteredJogos = jogos
-                  .where((jogo) =>
-                      jogo.nome.toLowerCase().contains(value.toLowerCase()))
-                  .toList();
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Pesquisar...',
-            border: InputBorder.none,
-          ),
+        title: Center(
+          child: Text('GameStore',
+              style: TextStyle(
+                  fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold)),
         ),
-        actions: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Nome',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              Text(
-                'R\$00,00',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-            ],
-          ),
-          SizedBox(width: 16),
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade400, Colors.blue.shade900],
+            colors: [Colors.white, Colors.white],
           ),
         ),
         child: SingleChildScrollView(
@@ -160,15 +137,27 @@ class _PaginaLojaState extends State<PaginaLoja> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 20),
-              Center(
-                child: Text(
-                  'Bem-vindo à Loja',
-                  style: TextStyle(
-                      color: const Color.fromARGB(255, 0, 0, 0), fontSize: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _filteredJogos = jogos
+                          .where((jogo) => jogo.nome
+                          .toLowerCase()
+                          .contains(value.toLowerCase()))
+                          .toList();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    hintText: 'Pesquisar...',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -176,12 +165,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) =>
-                      //           JogoPagina(jogo: _filteredJogos[index])),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                JogoPagina(jogo: _filteredJogos[index])),
+                      );
                     },
                     child: Column(
                       children: [
@@ -196,24 +185,25 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Image.asset(_filteredJogos[index].link,
-                                  height:
-                                      200), 
+                              Image.network(
+                              _filteredJogos[index].link, // Placeholder image URL
+                              fit: BoxFit.cover,
+                            ),
+                              // Image.asset(_filteredJogos[index].link,
+                              //     height:
+                              //         200), 
                               SizedBox(width: 8),
                               Text(
                                   'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.black)),
-                            ],
+                                      fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(
-                            height: 1,
-                            color: Colors
-                                .grey), 
-                      ],
-                    ),
-                  );
+                        ],
+                      ),
+                    );
                 },
               ),
             ],
@@ -224,8 +214,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         backgroundColor: Color.fromARGB(162, 38, 197, 218),
         selectedItemColor: Color.fromARGB(255, 0, 0, 0),
         currentIndex: _currentIndex,
-        unselectedItemColor:
-            Colors.white, 
+        unselectedItemColor: Colors.white,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.videogame_asset),
@@ -241,10 +230,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
           ),
         ],
         onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
           switch (index) {
             case 0:
-              //Navegue para alguma página
-              //Navigator.pushReplacementNamed(context, '/pagina1');
+              Navigator.pushReplacementNamed(context, '/loja');
               break;
             case 1:
               //Navegue para alguma página
@@ -264,5 +255,5 @@ class _PaginaLojaState extends State<PaginaLoja> {
         },
       ),
     );
-  }
+}
 }
