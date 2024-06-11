@@ -1,0 +1,1 @@
+export { IFriendshipRepository } from './FriendshipRepository';

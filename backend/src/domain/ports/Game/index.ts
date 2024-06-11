@@ -1,0 +1,1 @@
+export { IGameRepository } from './GameRepository';
