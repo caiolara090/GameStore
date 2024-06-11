@@ -1,8 +1,11 @@
-import { User } from "../../entities/User";
+import { IUser } from "../../entities/User";
 
 export interface IUserRepository {
-  create(user: User): Promise<User>;
-  update(_id: string, user: Partial<User>): Promise<User>;
+  create(user: IUser): Promise<IUser>;
+  update(_id: string, user: Partial<IUser>): Promise<IUser>;
   delete(_id: string): Promise<void>;
-  find(user: Partial<User>): Promise<User | User[] | null>;
+  find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
+  findByEmail(email: string): Promise<IUser | null>;
+  findByUsername(username: string): Promise<IUser | null>;
+  findById(_id: string): Promise<IUser | null>;
 };
