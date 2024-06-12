@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamestore/Entidades.dart';
+import 'Entidades.dart';
 
 class JogoPagina extends StatelessWidget {
   final Jogo jogo;
@@ -48,7 +48,6 @@ class JogoPagina extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                       SizedBox(height: 20),
-                    
                     ],
                   ),
                 ),
@@ -84,49 +83,47 @@ class JogoPagina extends StatelessWidget {
               SizedBox(height: 26),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Center(
-                  child: Text(
-                    'R\$ ${jogo.preco.toStringAsFixed(2)}',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          '${jogo.nome} adicionado à sua lista',
-                          style: TextStyle(color: Colors.white), // Define a cor do texto
-                        ),
-                        duration: Duration(seconds: 1), // Define a duração do pop-up
-                        behavior: SnackBarBehavior.fixed, // Define a animação como flutuante
-                        backgroundColor: Colors.red, // Define a cor de fundo vermelho claro
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'R\$ ${jogo.preco.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyan.shade400,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 50,
                     ),
-                  ),
-                  child: const Text(
-                    'Adicionar',
-                    style: TextStyle(
-                      fontSize: 17.0,
-                      color: Colors.white,
+                    ElevatedButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '${jogo.nome} adicionado à sua lista',
+                              style: TextStyle(color: Colors.white), // Define a cor do texto
+                            ),
+                            duration: Duration(seconds: 1), // Define a duração do pop-up
+                            behavior: SnackBarBehavior.fixed, // Define a animação como flutuante
+                            backgroundColor: Colors.red, // Define a cor de fundo vermelho claro
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.cyan.shade400,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 50,
+                        ),
+                      ),
+                      child: const Text(
+                        'Adicionar',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],

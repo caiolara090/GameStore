@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'token_manager.dart'; 
 import 'PaginaBiblioteca.dart';
 import 'Entidades.dart';
-import 'package:gamestore/Entidades.dart';
-import 'package:gamestore/PaginaDados.dart';
-import 'package:gamestore/PaginaJogo.dart';
+import 'Entidades.dart';
+import 'PaginaDados.dart';
+import 'PaginaJogo.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
 // class Jogo {

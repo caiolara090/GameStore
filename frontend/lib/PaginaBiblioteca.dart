@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'PaginaLogin.dart';
-import 'package:gamestore/PaginaLoja.dart';
+import 'PaginaLoja.dart';
 import "Entidades.dart";
 
 // void main() {

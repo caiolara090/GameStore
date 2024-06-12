@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gamestore/PaginaBiblioteca.dart';
-import 'package:gamestore/PaginaDados.dart';
-import 'package:gamestore/PaginaLoja.dart';
-import 'package:gamestore/PaginaAmigos.dart';
+import 'PaginaBiblioteca.dart';
+import 'PaginaDados.dart';
+import 'PaginaLoja.dart';
+import 'PaginaAmigos.dart';
 import '/PaginaLogin.dart';
-import 'package:gamestore/PaginaCreditos.dart';
+import 'PaginaCreditos.dart';
 
 
 void main() {
