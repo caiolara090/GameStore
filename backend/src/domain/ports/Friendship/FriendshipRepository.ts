@@ -1,7 +1,7 @@
-import { Friendship } from "../../entities/Friendship";
+import { IFriendship } from "../../entities/Friendship";
 
 export interface IFriendshipRepository {
-  create(friendship: Friendship): Promise<void>;
+  create(friendship: IFriendship): Promise<void>;
   delete(_id: string): Promise<void>;
-  find(friendship: Partial<Friendship>): Promise<Friendship | Friendship[] | null>;
+  find(friendship: Partial<IFriendship>): Promise<IFriendship | IFriendship[] | null>;
 }

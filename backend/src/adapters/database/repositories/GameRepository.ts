@@ -1,9 +1,9 @@
 import { IGameRepository } from "../../../domain/ports/Game";
-import { Game } from "../../../domain/entities/Game";
+import { IGame } from "../../../domain/entities/Game";
 import { GameModel } from "../models/Game";
 
 export class GameRepository implements IGameRepository {
-  async create(game: Game): Promise<Game> {
+  async create(game: IGame): Promise<IGame> {
     try {
       const createdGame = await GameModel.create(game);
       return createdGame;
@@ -12,7 +12,7 @@ export class GameRepository implements IGameRepository {
     }
   }
 
-  async update(id: string, game: Partial<Game>): Promise<Game> {
+  async update(id: string, game: Partial<IGame>): Promise<IGame> {
     try {
       const updatedGame = await GameModel.findByIdAndUpdate(id, game, { new: true });
       return updatedGame!; 
@@ -29,7 +29,7 @@ export class GameRepository implements IGameRepository {
     }
   }
 
-  async find(game: Partial<Game>): Promise<Game | Game[] | null> {
+  async find(game: Partial<IGame>): Promise<IGame | IGame[] | null> {
     try {
       const foundGame = await GameModel.find(game);
       // Se a lista tiver só um elemento, retorna apenas ele

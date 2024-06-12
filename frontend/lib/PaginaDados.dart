@@ -55,11 +55,7 @@ class _PaginaDadosState extends State<PaginaDados> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color.fromARGB(255, 255, 255, 255), Color.fromARGB(255, 222, 222, 222)],
-                ),
+                  color: Colors.white,
               ),
               child: SingleChildScrollView(
                 padding: EdgeInsets.zero,
@@ -70,15 +66,40 @@ class _PaginaDadosState extends State<PaginaDados> {
                     _buildInfoTextField('Nome:', nome),
                     _buildInfoTextField('Email:', email),
                     _buildInfoTextField('Telefone:', telefone.toString()),
-                    _buildInfoTextField('Rua:', rua),
-                    _buildInfoTextField('Número:', numero.toString()),
-                    _buildInfoTextField('Bairro:', bairro),
-                    _buildInfoTextField('Complemento:', complemento),
-                    _buildInfoTextField('Ponto de Referência:', ponto_referencia),
                     SizedBox(height: 20),
                   ],
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/amigos');
+                    // Adicionar ação para a aba "Amigos"
+                  },
+                  child: Text('Amigos',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black)
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/creditos');
+                    // Adicionar ação para a aba "Adicionar Créditos"
+                  },
+                  child: Text('Adicionar Créditos',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black),
+                ),
+                )
+              ],
             ),
           ),
         ],
@@ -111,10 +132,10 @@ class _PaginaDadosState extends State<PaginaDados> {
               Navigator.pushReplacementNamed(context, '/loja');
               break;
             case 1:
-              
+              Navigator.pushReplacementNamed(context, '/biblioteca');
               break;
             case 2:
-              // Não faça nada, pois já está na página atual
+              Navigator.pushReplacementNamed(context, '/dados');
               break;
           }
         },
@@ -144,6 +165,3 @@ class _PaginaDadosState extends State<PaginaDados> {
     );
   }
 }
-
-
-

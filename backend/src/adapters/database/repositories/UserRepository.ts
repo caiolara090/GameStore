@@ -14,7 +14,9 @@ export class UserRepository implements IUserRepository {
 
   async update(_id: string, user: Partial<IUser>): Promise<IUser> {
     try {
-      const updatedUser = await UserModel.findByIdAndUpdate(_id, user, { new: true });
+      const updatedUser = await UserModel.findByIdAndUpdate(_id, user, {
+        new: true,
+      });
       return updatedUser!; // todo dar uma olhada nisso depois
     } catch (error: any) {
       throw new Error("Error updating user: " + error.message);

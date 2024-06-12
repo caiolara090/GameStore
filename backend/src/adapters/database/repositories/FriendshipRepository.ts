@@ -1,9 +1,9 @@
 import { IFriendshipRepository } from "../../../domain/ports/Friendship/FriendshipRepository";
 import { FriendshipModel } from "../models/Friendship";
-import { Friendship } from "../../../domain/entities/Friendship";
+import { IFriendship } from "../../../domain/entities/Friendship";
 
 export class FriendshipRepository implements IFriendshipRepository {
-  async create(friendship: Friendship): Promise<void> {
+  async create(friendship: IFriendship): Promise<void> {
     try {
       await FriendshipModel.create(friendship);
     } catch (error: any) {
@@ -19,7 +19,7 @@ export class FriendshipRepository implements IFriendshipRepository {
     }
   }
 
-  async find(friendship: Partial<Friendship>): Promise<Friendship | Friendship[] | null> {
+  async find(friendship: Partial<IFriendship>): Promise<IFriendship | IFriendship[] | null> {
     try {
       const foundFriendship = await FriendshipModel.find(friendship);
       // Se a lista tiver só um elemento, retorna apenas ele

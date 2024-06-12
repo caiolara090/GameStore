@@ -1,19 +1,19 @@
 import { IReviewRepository } from "../../../domain/ports/Review/ReviewRepository";
 import { ReviewModel } from "../models/Review";
-import { Review } from "../../../domain/entities/Review";
+import { IReview } from "../../../domain/entities/Review";
 
 export class ReviewRepository implements IReviewRepository {
-  async create(review: Review): Promise<Review> {
+  async create(review: IReview): Promise<IReview> {
     try {
       const reviewModel = new ReviewModel(review);
       await reviewModel.save();
-      return reviewModel.toObject() as Review;
+      return reviewModel.toObject();
     } catch (error: any) {
       throw new Error('Error creating review: ' + error.message);
     }
   }
 
-  async update(_id: string, review: Partial<Review>): Promise<Review> {
+  async update(_id: string, review: Partial<IReview>): Promise<IReview> {
     try {
       const updatedReview = await ReviewModel.findByIdAndUpdate(_id, review, { new: true });
       return updatedReview!;
@@ -30,7 +30,7 @@ export class ReviewRepository implements IReviewRepository {
     }
   }
 
-  async find(review: Partial<Review>): Promise<Review | Review[] | null> {
+  async find(review: Partial<IReview>): Promise<IReview | IReview[] | null> {
     try {
       const foundReview = await ReviewModel.find(review);
       // Se a lista tiver só um elemento, retorna apenas ele

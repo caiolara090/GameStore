@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'token_manager.dart'; 
+import 'PaginaBiblioteca.dart';
+import 'Entidades.dart';
 import 'package:gamestore/Entidades.dart';
 import 'package:gamestore/PaginaDados.dart';
 import 'package:gamestore/PaginaJogo.dart';
 // import 'package:teste3/PaginaJogo.dart';
 
+// class Jogo {
+//   String nome;
+//   String descricao;
+//   double preco;
+//   bool favorito;
+
+//   Jogo(
+//       {required this.nome,
+//       required this.descricao,
+//       required this.preco,
+//       this.favorito = false});
+// }
 
 class PaginaLoja extends StatefulWidget {
   @override
@@ -14,74 +29,87 @@ class _PaginaLojaState extends State<PaginaLoja> {
   int _currentIndex = 0;
   List<Jogo> jogos = [
     Jogo(
-      nome: "The Witcher 3",
-      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
-    ),
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
+        
     Jogo(
-      nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
-    ),
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
-    ),
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "The Witcher 3",
-      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
-    ),
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
-    ),
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
-    ),
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "The Witcher 3",
-      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
-    ),
+        nome: "The Witcher 3",
+        descricao:
+            "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        preco: 59.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png"
-    ),
+        nome: "Minecraft",
+        descricao:
+            "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+        preco: 29.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
     Jogo(
-      nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png"
-    ),
-    Jogo(
-      nome: "The Witcher 3",
-      descricao: "Um RPG épico, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png"
-    ),
+        nome: "GTA V",
+        descricao:
+            "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+        preco: 39.99,
+        link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
+        isFavorite: true),
   ];
 
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
+  String? _token;
 
   @override
   void initState() {
     super.initState();
     _filteredJogos = jogos;
+    _loadToken();
+  }
+
+    Future<void> _loadToken() async {
+    String? token = await TokenManager.getToken();
+    setState(() {
+      _token = token;
+    });
   }
 
   @override
@@ -144,34 +172,28 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 JogoPagina(jogo: _filteredJogos[index])),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.network(
-                            _filteredJogos[index].link,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(_filteredJogos[index].nome,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
-                                SizedBox(height: 5),
-                                Text(_filteredJogos[index].descricao,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black)),
-                                SizedBox(height: 5),
-                                Text(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(_filteredJogos[index].nome,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                          subtitle: Text(_filteredJogos[index].descricao,
+                              style: TextStyle(color: Colors.black)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.network(
+                              _filteredJogos[index].link, // Placeholder image URL
+                              fit: BoxFit.cover,
+                            ),
+                              // Image.asset(_filteredJogos[index].link,
+                              //     height:
+                              //         200), 
+                              SizedBox(width: 8),
+                              Text(
                                   'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
@@ -181,8 +203,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           ),
                         ],
                       ),
-                    ),
-                  );
+                    );
                 },
               ),
             ],
@@ -217,18 +238,16 @@ class _PaginaLojaState extends State<PaginaLoja> {
               Navigator.pushReplacementNamed(context, '/loja');
               break;
             case 1:
-              // Navegação para a biblioteca
+              //Navegue para alguma página
               Navigator.pushReplacementNamed(context, '/biblioteca');
               break;
             case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PaginaDados()),
-              );
+              //Navegue para alguma página
+              Navigator.pushReplacementNamed(context, '/dados');
               break;
           }
         },
       ),
     );
-  }
+}
 }
