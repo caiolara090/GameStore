@@ -12,6 +12,9 @@ export const signUp = async (
 
   try {
     userService.createUser(req.body);
+    return res.status(StatusCodes.CREATED).json({
+      message: "Signup successful",
+    });
   } catch (error: any) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: error.message,

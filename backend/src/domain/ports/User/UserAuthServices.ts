@@ -1,7 +1,6 @@
 import { ObjectId } from "mongoose";
 import { SignUpRequest } from "../../../adapters/api/middlewares/Auth/SignupValidation";
 import { IUser } from "../../entities/User";
-import { LoginRequest } from "../../../adapters/api/middlewares/Auth/LoginValidation";
 
 export interface IUserAuthServices {
   signToken(userId: ObjectId): string;

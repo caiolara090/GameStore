@@ -1,4 +1,4 @@
-import app from './app';
+import app from './App';
 import 'dotenv/config';
 import { connectToDatabase } from './config/db.config';
 
