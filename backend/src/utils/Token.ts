@@ -22,7 +22,7 @@ export const verify = (
     if (typeof decoded === "string") return "INVALID_TOKEN";
 
     return decoded as IJwtData;
-  } catch (error) {
+  } catch (error: any) {
     return "INVALID_TOKEN";
   }
 };

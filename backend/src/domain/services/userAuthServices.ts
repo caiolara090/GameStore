@@ -6,7 +6,6 @@ import { IUser } from "../entities/User";
 import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
 import bcrypt from "bcryptjs";
-import { LoginRequest } from "../../adapters/api/middlewares/Auth/LoginValidation";
 
 export class UserAuthServices implements IUserAuthServices {
   signToken = (userId: ObjectId): string => {

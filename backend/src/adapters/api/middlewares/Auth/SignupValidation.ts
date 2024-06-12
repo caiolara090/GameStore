@@ -40,7 +40,7 @@ export const checkDuplicateUsername: RequestHandler = async (
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {
-    const user = await userAuthService.findByEmail(req.body.username);
+    const user = await userAuthService.findByUsername(req.body.username);
     if (user)
       return res.status(StatusCodes.BAD_REQUEST).json({
         error: "Username already registered",
