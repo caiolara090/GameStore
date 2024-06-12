@@ -12,6 +12,6 @@ export class Review implements IReview {
     public description: string,
     public rating: number,
     public user: string,
-    public game: string,
+    public game: string
   ) {}
 }
