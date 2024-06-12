@@ -19,7 +19,6 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text(
           'Colocar Créditos',
