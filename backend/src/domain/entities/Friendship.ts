@@ -1,13 +1,13 @@
 export interface IFriendship {
-  user: string;
-  friend: string;
+  userId: string;
+  friendId: string;
   status: number;
 }
 
 export class Friendship implements IFriendship {
   constructor(
-    public user: string,
-    public friend: string,
+    public userId: string,
+    public friendId: string,
     public status: number,
   ) {}
 }
