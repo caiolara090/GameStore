@@ -8,4 +8,5 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<IUser | null>;
   findByUsername(username: string): Promise<IUser | null>;
   findById(_id: string): Promise<IUser | null>;
+  find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
 };

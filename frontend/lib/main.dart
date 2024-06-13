@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gamestore/PaginaBiblioteca.dart';
-import 'package:gamestore/PaginaDados.dart';
-import 'package:gamestore/PaginaLoja.dart';
+import 'PaginaBiblioteca.dart';
+import 'PaginaDados.dart';
+import 'PaginaLoja.dart';
+import 'PaginaAmigos.dart';
 import '/PaginaLogin.dart';
+import 'PaginaCreditos.dart';
 
 
 void main() {
@@ -13,6 +15,9 @@ void main() {
       '/dados': (context) => PaginaDados(),
       '/loja': (context) => PaginaLoja(),
       '/biblioteca':(context) => GameLibraryPage(),
+      '/amigos':(context) => FriendPage(),
+      '/creditos':(context) => AddCreditsScreen()
     },
   ));
 }
+

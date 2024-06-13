@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'PaginaLogin.dart';
+import 'PaginaLoja.dart';
 import "Entidades.dart";
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Biblioteca de Jogos',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: GameLibraryPage(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Biblioteca de Jogos',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: GameLibraryPage(),
+//     );
+//   }
+// }
 
 class GameLibraryPage extends StatefulWidget {
   @override
@@ -25,11 +27,12 @@ class GameLibraryPage extends StatefulWidget {
 }
 
 class _GameLibraryPageState extends State<GameLibraryPage> {
+  int _currentIndex = 1;
   List<Jogo> allGames = [
-    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
-    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 2'),
-    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
-    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'assets/teste.png', descricao: 'Descrição do Jogo 4'),
+    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
+    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 2'),
+    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
+    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 4'),
   ];
 
   TextEditingController _gameSearchController = TextEditingController();
@@ -246,6 +249,42 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
             ],
           ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(162, 38, 197, 218),
+        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+        currentIndex: _currentIndex,
+        unselectedItemColor:
+            Colors.white, 
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.videogame_asset),
+            label: 'Loja',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.layers),
+            label: 'Biblioteca',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_align_justify),
+            label: 'Dados',
+          ),
+        ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/loja');
+              break;
+            case 1:
+              //Navegue para alguma página
+              Navigator.pushReplacementNamed(context, '/biblioteca');
+              break;
+            case 2:
+              //Navegue para alguma página
+              Navigator.pushReplacementNamed(context, '/dados');
+              break;
+          }
+        },
+      ),
       );
   }
 }

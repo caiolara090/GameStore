@@ -1,6 +1,6 @@
 export interface IUserGame {
-  game: string,
-  favorite: boolean,
+  game: string;
+  favorite: boolean;
 }
 
 export interface IUser {
@@ -17,6 +17,6 @@ export class User implements IUser {
     public age: number,
     public email: string,
     public password: string,
-    public games?: IUserGame[],
+    public games?: IUserGame[]
   ) {}
 }
