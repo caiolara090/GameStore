@@ -12,6 +12,8 @@ class PaginaLoja extends StatefulWidget {
 
 class _PaginaLojaState extends State<PaginaLoja> {
   int _currentIndex = 0;
+  
+  // Primeira lista de jogos
   List<Jogo> jogos = [
     Jogo(
       nome: "The Witcher 3",
@@ -36,7 +38,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
     ),
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
@@ -57,7 +59,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
     ),
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
@@ -78,21 +80,49 @@ class _PaginaLojaState extends State<PaginaLoja> {
     ),
   ];
 
+  // Segunda lista de jogos
+  List<Jogo> jogos2 = [
+    Jogo(
+      nome: "The Witcher 3",
+      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      preco: 59.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
+      isFavorite: true,
+    ),
+    Jogo(
+      nome: "Minecraft",
+      descricao: "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+      preco: 29.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
+      isFavorite: true,
+    ),
+    Jogo(
+      nome: "GTA V",
+      descricao: "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+      preco: 39.99,
+      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
+      isFavorite: true,
+    ),
+  ];
+
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
+  List<Jogo> _filteredJogos2 = [];
   String? _token;
 
   @override
   void initState() {
     super.initState();
     _filteredJogos = jogos;
+    _filteredJogos2 = jogos2;
     _loadToken();
   }
 
   Future<void> _loadToken() async {
-    String? token = await TokenManager.getToken();
+    // Simulação do carregamento de token
+    await Future.delayed(Duration(seconds: 1));
     setState(() {
-      _token = token;
+      _token = 'dummy_token'; // Token carregado
     });
   }
 
@@ -133,8 +163,13 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           setState(() {
                             _filteredJogos = jogos
                                 .where((jogo) => jogo.nome
-                                .toLowerCase()
-                                .contains(value.toLowerCase()))
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase()))
+                                .toList();
+                            _filteredJogos2 = jogos2
+                                .where((jogo) => jogo.nome
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase()))
                                 .toList();
                           });
                         },
@@ -171,59 +206,147 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 ),
               ),
               SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _filteredJogos.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                JogoPagina(jogo: _filteredJogos[index])),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(
-                            _filteredJogos[index].nome,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          subtitle: Text(
-                            _filteredJogos[index].descricao,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.network(
-                                _filteredJogos[index].link, // Placeholder image URL
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+              // Lista de jogos em alta
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Center(
+                      child: Text(
+                        'Jogos em Alta',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _filteredJogos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    JogoPagina(jogo: _filteredJogos[index])),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                _filteredJogos[index].nome,
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                            ],
-                          ),
+                              subtitle: Text(
+                                _filteredJogos[index].descricao,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.network(
+                                    _filteredJogos[index].link, // Placeholder image URL
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(), // Linha divisória entre os itens da lista
+                          ],
                         ),
-                        Divider(), // Linha divisória entre os itens da lista
-                      ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20), // Espaçamento entre as listas
+              // Lista de todos os jogos
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Center(
+                      child: Text(
+                        'Todos os Jogos',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _filteredJogos2.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    JogoPagina(jogo: _filteredJogos2[index])),
+                          );
+                          // Implemente ação ao clicar nos jogos da segunda lista
+                        },
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                _filteredJogos2[index].nome,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              subtitle: Text(
+                                _filteredJogos2[index].descricao,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.network(
+                                    _filteredJogos2[index].link, // Placeholder image URL
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(), // Linha divisória entre os itens da lista
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -268,4 +391,3 @@ class _PaginaLojaState extends State<PaginaLoja> {
     );
   }
 }
-
