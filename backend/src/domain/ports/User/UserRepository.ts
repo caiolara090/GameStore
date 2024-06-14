@@ -9,4 +9,6 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<IUser | null>;
   findById(_id: string): Promise<IUser | null>;
   find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
+  addCredits(_id: string, credits: number): Promise<void>;
+  addGame(_id: string, game: string): Promise<void>;
 };

@@ -71,4 +71,20 @@ export class UserRepository implements IUserRepository {
       throw new Error("Error finding user by id: " + error.message);
     }
   }
+
+  async addCredits(_id: string, credits: number): Promise<void> {
+    try {
+      await UserModel.findByIdAndUpdate(_id, {$inc: {credits}});
+    } catch (error: any) {
+      throw new Error("Error adding credits to user: " + error.message);
+    }
+  }
+
+  async addGame(_id: string, game: string): Promise<void> {
+    try {
+      await UserModel.findByIdAndUpdate(_id, {$push: {games: {game, favorites: false}}});
+    } catch (error: any) {
+      throw new Error("Error adding game to user: " + error.message);
+    }
+  }
 }
