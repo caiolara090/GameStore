@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:validators/validators.dart';
 import 'dart:convert';
 
 class RegistrationScreen extends StatefulWidget {
@@ -32,75 +33,116 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           },
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade400, Colors.blue.shade900],
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.cyan.shade400, Colors.blue.shade900],
+              ),
+            ),
+            child: const SizedBox.expand(),
           ),
-        ),
-        padding: const EdgeInsets.all(30.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTextField(
-                controller: _nameController,
-                labelText: 'Nome do Usuário',
-                validator: (value) {
-                  return value!.isEmpty || !RegExp(r'^[a-zA-Z ]+$').hasMatch(value)
-                      ? 'Digite apenas letras'
-                      : null;
-                },
-                icon: Icons.person,
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 90),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _nameController,
+                          labelText: 'Nome do Usuário',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo não pode estar vazio';
+                            }
+                            if (value.length > 20) {
+                              return 'Nome deve ter no máximo 20 caracteres';
+                            }
+                            if (!RegExp(r'^[a-zA-ZÀ-ÿ ]+$').hasMatch(value)) {
+                              return 'Digite apenas letras';
+                            }
+                            return null;
+                          },
+                          icon: Icons.person,
+                        ),
+                        const SizedBox(height: 10),
+                        _buildDateField(
+                          context: context,
+                          controller: _dobController,
+                          labelText: 'Data de Nascimento',
+                          validator: (value) {
+                            return value!.isEmpty ? 'Selecione uma data' : null;
+                          },
+                          icon: Icons.calendar_today,
+                        ),
+                        const SizedBox(height: 10),
+                        _buildTextField(
+                          controller: _emailController,
+                          labelText: 'E-mail',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Campo não pode estar vazio';
+                            }
+                            if (!isEmail(value)) {
+                              return 'Digite um e-mail válido';
+                            }
+                            return null;
+                          },
+                          icon: Icons.email,
+                        ),
+                        const SizedBox(height: 10),
+                        _buildTextField(
+                          controller: _passwordController,
+                          labelText: 'Senha',
+                          isPassword: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Digite a senha';
+                            }
+                            if (value.length < 6) {
+                              return 'A senha deve ter pelo menos 6 caracteres';
+                            }
+                            return null;
+                          },
+                          icon: Icons.lock,
+                        ),
+                        const SizedBox(height: 50), // Espaço adicional
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              _buildDateField(
-                context: context,
-                controller: _dobController,
-                labelText: 'Data de Nascimento',
-                validator: (value) {
-                  return value!.isEmpty ? 'Selecione uma data' : null;
-                },
-                icon: Icons.calendar_today,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _emailController,
-                labelText: 'E-mail',
-                validator: (value) {
-                  return value!.isEmpty || !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)
-                      ? 'Digite um e-mail válido'
-                      : null;
-                },
-                icon: Icons.email,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _passwordController,
-                labelText: 'Senha',
-                isPassword: true,
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite a senha' : null;
-                },
-                icon: Icons.lock,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _register,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
-                ),
-                child: const Text(
-                  'Registrar',
-                  style: TextStyle(fontSize: 20.0, color: Colors.black),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            bottom: 20,
+            left: 0, // Adjust to zero to make it align with the edges
+            right: 0, // Adjust to zero to make it align with the edges
+            child: SizedBox(
+              width: double.infinity, // Take full width
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: ElevatedButton(
+                  onPressed: _register,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  ),
+                  child: const Text(
+                    'Registrar',
+                    style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -213,6 +255,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       // Lógica adicional de registro, como enviar para um servidor, etc.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          backgroundColor: Colors.blue,
           content: Text('Registro bem-sucedido para $name!'),
         ),
       );
