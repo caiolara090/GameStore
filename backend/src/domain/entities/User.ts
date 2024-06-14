@@ -1,22 +1,19 @@
-export interface IUserGame {
-  game: string;
-  favorite: boolean;
-}
+import { IGame } from "./Game";
 
 export interface IUser {
+  userId?: string;
   username: string;
   age: number;
   email: string;
   password: string;
-  games?: IUserGame[];
+  games?: IGame[];
 }
 
-export class User implements IUser {
-  constructor(
-    public username: string,
-    public age: number,
-    public email: string,
-    public password: string,
-    public games?: IUserGame[]
-  ) {}
+export interface UserSearchResult {
+  users: Partial<IUser>[];
+  resPage: {
+    currentPage: number;
+    totalPages: number;
+    size: number;
+  };
 }

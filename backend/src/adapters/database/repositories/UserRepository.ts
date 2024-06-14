@@ -1,6 +1,6 @@
 import { IUserRepository } from "../../../domain/ports/User";
 import { UserModel } from "../models/User";
-import { IUser } from "../../../domain/entities/User";
+import { IUser, UserSearchResult } from "../../../domain/entities/User";
 
 export class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<IUser> {
@@ -47,7 +47,7 @@ export class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<IUser | null> {
     try {
-      const foundUser = await UserModel.findOne({email});
+      const foundUser = await UserModel.findOne({ email });
       return foundUser;
     } catch (error: any) {
       throw new Error("Error finding user by email: " + error.message);
@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository {
 
   async findByUsername(username: string): Promise<IUser | null> {
     try {
-      const foundUser = await UserModel.findOne({username});
+      const foundUser = await UserModel.findOne({ username });
       return foundUser;
     } catch (error: any) {
       throw new Error("Error finding user by username: " + error.message);
@@ -69,6 +69,36 @@ export class UserRepository implements IUserRepository {
       return foundUser;
     } catch (error: any) {
       throw new Error("Error finding user by id: " + error.message);
+    }
+  }
+
+  async searchUsers(
+    username: string,
+    fields: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<UserSearchResult | null> {
+    try {
+      const query = {} as any;
+      query.username = { $regex: username, $options: "iu" };
+
+      const users = await UserModel.find(query)
+        .sort(username)
+        .select(fields)
+        .skip((Number(page) - 1) * Number(limit))
+        .limit(Number(limit));
+
+      const resPage = {
+        currentPage: page,
+        totalPages: Math.ceil(
+          (await UserModel.find(query).countDocuments()) / limit
+        ),
+        size: users.length,
+      };
+
+      return { users, resPage };
+    } catch (error: any) {
+      throw new Error("Error searching for users: " + error.message);
     }
   }
 }

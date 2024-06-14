@@ -1,4 +1,4 @@
-import { IGame } from "../../entities/Game";
+import { GameSearchResult, IGame } from "../../entities/Game";
 
 export interface IGameRepository {
   create(game: IGame): Promise<IGame>;
@@ -6,4 +6,11 @@ export interface IGameRepository {
   delete(_id: string): Promise<void>;
   find(game: Partial<IGame>): Promise<IGame | IGame[] | null>;
   getUserGames(userId: string): Promise<Partial<IGame>[] | null>;
+  searchGames(
+    gameTitle: string,
+    fields: string,
+    sortField: string,
+    page: number,
+    limit: number
+  ): Promise<GameSearchResult | null>;
 }

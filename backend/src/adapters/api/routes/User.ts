@@ -6,10 +6,13 @@ import {
   checkDuplicateUsername,
 } from "../middlewares/Auth/SignupValidation";
 import { signUp } from "../controllers/Auth/SignUp";
+import { searchUsers } from "../controllers/User";
 
 const router = Router();
 
 router.post("/signup", checkDuplicateEmail, checkDuplicateUsername, signUp);
 router.post("/login", loginValidation, login);
+
+router.get("/searchUser", searchUsers);
 
 export { router as userRouter };

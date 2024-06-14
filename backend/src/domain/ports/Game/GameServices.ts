@@ -1,5 +1,11 @@
-import { IGame } from "../../entities/Game";
+import { GameSearchResult } from "../../entities/Game";
 
 export interface IGameServices {
-  getLibraryGames(userId: string): Promise<Partial<IGame>[] | null>;
+  searchGames(
+    gameTitle: string,
+    fields: string,
+    sortField: string,
+    page: Number,
+    limit: Number
+  ): Promise<GameSearchResult | null>;
 }

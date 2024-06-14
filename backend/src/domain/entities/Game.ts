@@ -7,13 +7,11 @@ export interface IGame {
   favorite: boolean;
 }
 
-export class Game implements IGame {
-  constructor(
-    public name: string,
-    public description: string,
-    public price: number,
-    public image: string,
-    public favorite: boolean,
-    public reviews?: string[]
-  ) {}
+export interface GameSearchResult {
+  games: Partial<IGame>[];
+  resPage: {
+    currentPage: number;
+    totalPages: number;
+    size: number;
+  };
 }

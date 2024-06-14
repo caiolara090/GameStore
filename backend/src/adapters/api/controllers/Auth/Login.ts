@@ -7,9 +7,10 @@ export const login = async (_req: Request, res: Response) => {
   const user = res.locals.user;
   const userService: IUserAuthServices = new UserAuthServices();
 
-  if (user._id) {
+  if (user) {
     try {
-      userService.signToken(user._id);
+      const id = user._id;
+      userService.signToken(id);
 
       return res.status(StatusCodes.OK).json({
         message: "Login successful",

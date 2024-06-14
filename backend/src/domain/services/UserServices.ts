@@ -1,12 +1,17 @@
+import { UserRepository } from "../../adapters/database/repositories/UserRepository";
+import { UserSearchResult } from "../entities/User";
 import { IUserRepository } from "../ports/User";
 import { IUserServices } from "../ports/User/UserServices";
 
 export class UserServices implements IUserServices {
-  constructor(private readonly userRepository: IUserRepository) {}
+  async searchUsers(
+    username: string,
+    fields: string,
+    page: number,
+    limit: number
+  ): Promise<UserSearchResult | null> {
+    const userRepository: IUserRepository = new UserRepository();
 
-  async checkCredentials(username: string, password: string): Promise<boolean> {
-    const user = await this.userRepository.findByUsername(username);
-    if (!user) throw new Error("User not found");
-    return user.password === password;
+    return await userRepository.searchUsers(username, fields, page, limit);
   }
 }
