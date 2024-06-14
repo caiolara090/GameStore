@@ -23,8 +23,12 @@ export class FriendshipServices implements IFriendshipServices {
       friendId: userId,
       status: 1,
     };
-    await this.friendshipRepository.create(friendshipSent);
-    await this.friendshipRepository.create(friendshipReceived);
+    try {
+      await this.friendshipRepository.create(friendshipSent);
+      await this.friendshipRepository.create(friendshipReceived);
+    } catch (error: any) {
+      throw new Error("Error creating friendship: " + error.message);
+    }
   }
 
   async acceptFriendshipRequest(userId: string, friendId: string): Promise<void> {
@@ -71,9 +75,13 @@ export class FriendshipServices implements IFriendshipServices {
   }
 
   async delete(userId: string, friendId: string): Promise<void> {
-    const friendship = await this.friendshipRepository.findByUsers(userId, friendId);
-    if (friendship?._id !== undefined) {
-      return await this.friendshipRepository.delete(friendship._id);
+    try {
+      const friendship = await this.friendshipRepository.findByUsers(userId, friendId);
+      if (friendship?._id !== undefined) {
+        return await this.friendshipRepository.delete(friendship._id);
+      }
+    } catch (error: any) {
+      throw new Error("Error deleting friendship: " + error.message);
     }
   }
 
