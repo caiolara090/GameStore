@@ -1,6 +1,7 @@
 import { IGameRepository } from "../../../domain/ports/Game";
 import { IGame } from "../../../domain/entities/Game";
 import { GameModel } from "../models/Game";
+import { UserModel } from "../models/User";
 
 export class GameRepository implements IGameRepository {
   async create(game: IGame): Promise<IGame> {
@@ -14,8 +15,10 @@ export class GameRepository implements IGameRepository {
 
   async update(id: string, game: Partial<IGame>): Promise<IGame> {
     try {
-      const updatedGame = await GameModel.findByIdAndUpdate(id, game, { new: true });
-      return updatedGame!; 
+      const updatedGame = await GameModel.findByIdAndUpdate(id, game, {
+        new: true,
+      });
+      return updatedGame!;
     } catch (error: any) {
       throw new Error("Error updating game: " + error.message);
     }
@@ -39,5 +42,13 @@ export class GameRepository implements IGameRepository {
     } catch (error: any) {
       throw new Error("Error finding game: " + error.message);
     }
+  }
+
+  async getUserGames(userId: string): Promise<Partial<IGame>[] | null> {
+    const user = await UserModel.findById(userId).populate("games.game");
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user.games ? user.games.map((game) => game) : null;
   }
 }
