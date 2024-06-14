@@ -5,3 +5,8 @@ export interface IFriendship {
   status: number;
   _id?: string;
 }
+
+export interface IFriendshipRequest {
+  userId: string;
+  friendId: string;
+}

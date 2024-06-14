@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { SignUpRequest } from "../../middlewares/Auth/SignupValidation";
+import { SignUpRequest } from "../../../../domain/entities/User";
 import { UserAuthServices } from "../../../../domain/services/userAuthServices";
 import { IUserAuthServices } from "../../../../domain/ports/User/UserAuthServices";
 

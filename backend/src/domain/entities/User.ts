@@ -9,6 +9,18 @@ export interface IUser {
   games?: IGame[];
 }
 
+export interface SignUpRequest {
+  username: string;
+  age: number;
+  email: string;
+  password: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export interface UserSearchResult {
   users: Partial<IUser>[];
   resPage: {

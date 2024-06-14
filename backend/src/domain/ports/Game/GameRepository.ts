@@ -5,7 +5,6 @@ export interface IGameRepository {
   update(_id: string, game: Partial<IGame>): Promise<IGame>;
   delete(_id: string): Promise<void>;
   find(game: Partial<IGame>): Promise<IGame | IGame[] | null>;
-  getUserGames(userId: string): Promise<Partial<IGame>[] | null>;
   searchGames(
     gameTitle: string,
     fields: string,

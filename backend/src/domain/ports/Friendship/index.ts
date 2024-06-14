@@ -1,1 +1,2 @@
-export { IFriendshipRepository } from './FriendshipRepository';
+export { IFriendshipRepository } from "./FriendshipRepository";
+export { IFriendshipServices } from "./FriendshipServices";

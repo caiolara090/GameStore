@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 import { sign } from "../../utils/Token";
 import { IUserAuthServices } from "../ports/User/UserAuthServices";
-import { SignUpRequest } from "../../adapters/api/middlewares/Auth/SignupValidation";
+import { SignUpRequest } from "../entities/User";
 import { IUser } from "../entities/User";
 import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";

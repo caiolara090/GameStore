@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { SignUpRequest } from "../../../adapters/api/middlewares/Auth/SignupValidation";
+import { SignUpRequest } from "../../entities/User";
 import { IUser } from "../../entities/User";
 
 export interface IUserAuthServices {

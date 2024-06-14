@@ -4,7 +4,7 @@ export interface IUserServices {
   searchUsers(
     username: string,
     fields: string,
-    page: Number,
-    limit: Number
+    page?: Number,
+    limit?: Number
   ): Promise<UserSearchResult | null>;
 }

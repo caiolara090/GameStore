@@ -6,7 +6,7 @@ import {
   checkDuplicateUsername,
 } from "../middlewares/Auth/SignupValidation";
 import { signUp } from "../controllers/Auth/SignUp";
-import { searchUsers } from "../controllers/User";
+import { searchUsers } from "../controllers/user/User";
 
 const router = Router();
 

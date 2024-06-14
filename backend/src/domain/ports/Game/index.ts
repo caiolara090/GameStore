@@ -1,1 +1,2 @@
-export { IGameRepository } from './GameRepository';
+export { IGameRepository } from "./GameRepository";
+export { IGameServices } from "./GameServices";

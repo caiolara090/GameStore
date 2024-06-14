@@ -45,14 +45,6 @@ export class GameRepository implements IGameRepository {
     }
   }
 
-  async getUserGames(userId: string): Promise<Partial<IGame>[] | null> {
-    const user = await UserModel.findById(userId).populate("games.game");
-    if (!user) {
-      throw new Error("User not found");
-    }
-    return user.games ? user.games.map((game) => game) : null;
-  }
-
   async searchGames(
     gameTitle: string,
     fields: string,

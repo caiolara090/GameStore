@@ -2,13 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Request, RequestHandler } from "express";
 import { IUserAuthServices } from "../../../../domain/ports/User/UserAuthServices";
 import { UserAuthServices } from "../../../../domain/services/userAuthServices";
-
-export interface SignUpRequest {
-  username: string;
-  age: number;
-  email: string;
-  password: string;
-}
+import { SignUpRequest } from "../../../../domain/entities/User";
 
 export const checkDuplicateEmail: RequestHandler = async (
   req: Request<{}, {}, SignUpRequest>,

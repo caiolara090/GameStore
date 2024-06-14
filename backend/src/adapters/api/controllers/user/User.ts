@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { UserServices } from "../../../domain/services/UserServices";
-import { IUserServices } from "../../../domain/ports/User/UserServices";
+import { UserServices } from "../../../../domain/services/UserServices";
+import { IUserServices } from "../../../../domain/ports/User/UserServices";
 
 export const searchUsers = async (req: Request, res: Response) => {
   const userService: IUserServices = new UserServices();
