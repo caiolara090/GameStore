@@ -9,8 +9,9 @@ export const login = async (_req: Request, res: Response) => {
 
   if (user) {
     try {
-      const id = user._id;
-      userService.signToken(id);
+      const accessToken = userService.signToken(user._id);
+
+      res.cookie('access_token', accessToken, { httpOnly: true });
 
       return res.status(StatusCodes.OK).json({
         message: "Login successful",

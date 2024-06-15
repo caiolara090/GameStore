@@ -114,7 +114,9 @@ export class UserRepository implements IUserRepository {
     } catch (error: any) {
       throw new Error("Error retrieving user's games:" +  error.message);
     }
-  }  
+  }
+
+  // Implemente uma função 
 
   async toggleUsersGameFavorite(userId: string, gameId: string, 
     isFavorite: boolean): Promise<void> {
