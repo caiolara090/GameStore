@@ -30,4 +30,21 @@ export class FriendshipRepository implements IFriendshipRepository {
       throw new Error("Error finding friendship: " + error.message);
     }
   }
+
+  async findByUsers(userId: string, friendId: string): Promise<IFriendship | null> {
+    try {
+      const friendship = await FriendshipModel.findOne({ userId, friendId });
+      return friendship;
+    } catch (error: any) {
+      throw new Error("Error finding friendship: " + error.message);
+    }
+  }
+
+  async update(_id: string, friendship: Partial<IFriendship>): Promise<void> {
+    try {
+      await FriendshipModel.findByIdAndUpdate(_id, friendship);
+    } catch (error: any) {
+      throw new Error("Error updating friendship: " + error.message);
+    }
+  }
 }
