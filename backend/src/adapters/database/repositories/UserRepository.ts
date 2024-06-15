@@ -136,4 +136,26 @@ export class UserRepository implements IUserRepository {
       throw new Error("Error searching for user's library: " + error.message);
     }
   }
+
+  async toggleGameFavorite(
+    username: string,
+    gameId: string,
+    isFavorite: boolean
+  ): Promise<void> {
+    try {
+      const user = await UserModel.findOne({ username });
+      if (!user) {
+        throw new Error("User not found");
+      }
+  
+      const gameIndex = user?.games?.findIndex((game) => game.id == gameId);
+      if (gameIndex === undefined || gameIndex < 0) {
+        throw new Error("Game not found in user's library");
+      }
+      user?.games?[gameIndex].favorite = isFavorite;
+      await user.save();
+    } catch (error: any) {
+      throw new Error("Error toggling game favorite: " + error.message);
+    }
+  }
 }

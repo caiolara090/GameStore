@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { IGame } from "../../../domain/entities/Game";
-import { boolean } from "yup";
 
 const GameSchema = new mongoose.Schema<IGame>({
   name: { type: String, required: true },
