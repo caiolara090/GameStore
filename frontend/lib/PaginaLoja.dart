@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'token_manager.dart'; 
+import 'token_manager.dart';
 import 'PaginaBiblioteca.dart';
 import 'Entidades.dart';
 import 'PaginaDados.dart';
@@ -12,68 +12,77 @@ class PaginaLoja extends StatefulWidget {
 
 class _PaginaLojaState extends State<PaginaLoja> {
   int _currentIndex = 0;
-  
+
   // Primeira lista de jogos
   List<Jogo> jogos = [
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao:
+          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+      descricao:
+          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
       preco: 29.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+      descricao:
+          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
       preco: 39.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao:
+          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+      descricao:
+          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
       preco: 29.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+      descricao:
+          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
       preco: 39.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao:
+          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+      descricao:
+          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
       preco: 29.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+      descricao:
+          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
       preco: 39.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
       isFavorite: true,
@@ -84,21 +93,24 @@ class _PaginaLojaState extends State<PaginaLoja> {
   List<Jogo> jogos2 = [
     Jogo(
       nome: "The Witcher 3",
-      descricao: "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      descricao:
+          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       preco: 59.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "Minecraft",
-      descricao: "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
+      descricao:
+          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
       preco: 29.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
       isFavorite: true,
     ),
     Jogo(
       nome: "GTA V",
-      descricao: "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
+      descricao:
+          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
       preco: 39.99,
       link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
       isFavorite: true,
@@ -134,7 +146,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
         title: Center(
           child: Text(
             'GameStore',
-            style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -173,25 +186,29 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           });
                         },
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           hintText: 'Pesquisar...',
-                          border: OutlineInputBorder(),
+                          hintStyle: TextStyle(color: Colors.black),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          labelStyle: TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
                     SizedBox(width: 10),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.2, // Definindo largura relativa
+                      width: MediaQuery.of(context).size.width * 0.25,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(
-                            child: Text(
-                              'Nome',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          SizedBox(height: 8),
                           Center(
                             child: Text(
                               'R\$00,00',
@@ -214,7 +231,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
                     child: Center(
                       child: Text(
                         'Jogos em Alta',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -233,42 +251,50 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                     JogoPagina(jogo: _filteredJogos[index])),
                           );
                         },
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                _filteredJogos[index].nome,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                _filteredJogos[index].link,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _filteredJogos[index].nome,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      _filteredJogos[index].descricao,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              subtitle: Text(
-                                _filteredJogos[index].descricao,
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.network(
-                                    _filteredJogos[index].link, // Placeholder image URL
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(), // Linha divisória entre os itens da lista
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -285,7 +311,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
                     child: Center(
                       child: Text(
                         'Todos os Jogos',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -303,44 +330,51 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 builder: (context) =>
                                     JogoPagina(jogo: _filteredJogos2[index])),
                           );
-                          // Implemente ação ao clicar nos jogos da segunda lista
                         },
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                _filteredJogos2[index].nome,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                _filteredJogos2[index].link,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _filteredJogos2[index].nome,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      _filteredJogos2[index].descricao,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              subtitle: Text(
-                                _filteredJogos2[index].descricao,
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.network(
-                                    _filteredJogos2[index].link, // Placeholder image URL
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(), // Linha divisória entre os itens da lista
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
