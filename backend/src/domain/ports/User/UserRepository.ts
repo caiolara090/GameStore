@@ -15,4 +15,11 @@ export interface IUserRepository {
     page: number,
     limit: number
   ): Promise<UserSearchResult | null>;
+  searchUsersLibrary(
+    username: string,
+    gameTitle: string,
+    fields: string,
+    page: number,
+    limit: number
+  ): Promise<UserSearchResult | null>;
 }

@@ -70,7 +70,7 @@ export class GameRepository implements IGameRepository {
         size: games.length,
       };
 
-      return { games, resPage };
+      return { games: games, resPage: resPage };
     } catch (error: any) {
       throw new Error("Error searching for games: " + error.message);
     }

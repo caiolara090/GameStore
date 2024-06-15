@@ -96,9 +96,44 @@ export class UserRepository implements IUserRepository {
         size: users.length,
       };
 
-      return { users, resPage };
+      return { users: users, resPage: resPage };
     } catch (error: any) {
       throw new Error("Error searching for users: " + error.message);
+    }
+  }
+
+  async searchUsersLibrary(
+    username: string,
+    gameTitle: string,
+    fields: string,
+    page: number = 1,
+    limit: number = 5
+  ): Promise<UserSearchResult | null> {
+    try {
+      const query = {} as any;
+      query.username = username;
+      query.games = {
+        $elemMatch: { game: { $regex: gameTitle, $options: "iu" } },
+      };
+
+      const library = await UserModel.find(query)
+        .sort(gameTitle)
+        .select(fields)
+        .populate("games.game")
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+      const resPage = {
+        currentPage: page,
+        totalPages: Math.ceil(
+          (await UserModel.find(query).countDocuments()) / limit
+        ),
+        size: library.length,
+      };
+
+      return { users: library, resPage: resPage };
+    } catch (error: any) {
+      throw new Error("Error searching for user's library: " + error.message);
     }
   }
 }
