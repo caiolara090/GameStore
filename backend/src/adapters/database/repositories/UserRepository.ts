@@ -1,6 +1,6 @@
 import { IUserRepository } from "../../../domain/ports/User";
 import { UserModel } from "../models/User";
-import { IUser, UserSearchResult } from "../../../domain/entities/User";
+import { IUser, IUserGame } from "../../../domain/entities/User";
 
 export class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<IUser> {
@@ -34,11 +34,10 @@ export class UserRepository implements IUserRepository {
   async find(user: Partial<IUser>): Promise<IUser | IUser[] | null> {
     try {
       const foundUser = await UserModel.find(user);
-      // Se não encontrar nenhum usuário, retorna null
+
       if (foundUser.length === 0) return null;
-      // Se a lista tiver só um elemento, retorna apenas ele
       if (foundUser.length === 1) return foundUser[0];
-      // Caso contrário, retorna a lista
+
       return foundUser;
     } catch (error: any) {
       throw new Error("Error finding user: " + error.message);
@@ -74,10 +73,8 @@ export class UserRepository implements IUserRepository {
 
   async searchUsers(
     username: string,
-    fields: string,
-    page: number = 1,
-    limit: number = 10
-  ): Promise<UserSearchResult | null> {
+    fields: string
+  ): Promise<IUser[] | null> {
     try {
       const query = {} as any;
       query.username = { $regex: username, $options: "iu" };
@@ -85,74 +82,57 @@ export class UserRepository implements IUserRepository {
       const users = await UserModel.find(query)
         .sort(username)
         .select(fields)
-        .skip((Number(page) - 1) * Number(limit))
-        .limit(Number(limit));
 
-      const resPage = {
-        currentPage: page,
-        totalPages: Math.ceil(
-          (await UserModel.find(query).countDocuments()) / limit
-        ),
-        size: users.length,
-      };
-
-      return { users: users, resPage: resPage };
+      return users;
     } catch (error: any) {
       throw new Error("Error searching for users: " + error.message);
     }
   }
 
-  async searchUsersLibrary(
-    username: string,
-    gameTitle: string,
-    fields: string,
-    page: number = 1,
-    limit: number = 5
-  ): Promise<UserSearchResult | null> {
+  async searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]> {
     try {
-      const query = {} as any;
-      query.username = username;
-      query.games = {
-        $elemMatch: { game: { $regex: gameTitle, $options: "iu" } },
-      };
-
-      const library = await UserModel.find(query)
-        .sort(gameTitle)
-        .select(fields)
-        .populate("games.game")
-        .skip((page - 1) * limit)
-        .limit(limit);
-
-      const resPage = {
-        currentPage: page,
-        totalPages: Math.ceil(
-          (await UserModel.find(query).countDocuments()) / limit
-        ),
-        size: library.length,
-      };
-
-      return { users: library, resPage: resPage };
-    } catch (error: any) {
-      throw new Error("Error searching for user's library: " + error.message);
-    }
-  }
-
-  async toggleGameFavorite(
-    username: string,
-    gameId: string,
-    isFavorite: boolean
-  ): Promise<void> {
-    try {
-      const user = await UserModel.findOne({ username });
-      if (!user) {
-        throw new Error("User not found");
-      }
+      const user = await UserModel.findById(userId)
+        .populate({
+          path: 'games.game',
+          select: 'name description image',
+        })
+        .exec();
   
-      const gameIndex = user?.games?.findIndex((game) => game.id == gameId);
-      if (gameIndex === undefined || gameIndex < 0) {
+      if (!user) throw new Error('User not found');
+  
+      const userGames = user?.games?.filter(gameEntry => gameEntry.game.name.toLowerCase()
+      .includes(title.toLowerCase())).map(gameEntry => ({
+        game: {
+          name: gameEntry.game.name,
+          description: gameEntry.game.description,
+          image: gameEntry.game.image,
+        },
+        favorite: gameEntry.favorite,
+      }));
+  
+      return userGames as IUserGame[];
+    } catch (error: any) {
+      throw new Error("Error retrieving user's games:" +  error.message);
+    }
+  }  
+
+  async toggleUsersGameFavorite(userId: string, gameId: string, 
+    isFavorite: boolean): Promise<void> {
+    try {
+      const user = await UserModel.findById(userId);
+
+      if (!user) throw new Error("User not found");
+      
+      if(user.games === undefined) throw new Error("User has no games");
+
+      const gameIndex = user.games.findIndex((game) => game.game.gameId == gameId);
+      if (gameIndex < 0) {
         throw new Error("Game not found in user's library");
       }
-      user?.games?[gameIndex].favorite = isFavorite;
+      const game = user.games[gameIndex].game;
+
+      user?.games?.splice(gameIndex, 1);
+      user?.games?.push({ game: game, favorite: isFavorite });
       await user.save();
     } catch (error: any) {
       throw new Error("Error toggling game favorite: " + error.message);

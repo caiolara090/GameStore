@@ -1,11 +1,5 @@
-import { GameSearchResult } from "../../entities/Game";
+import { IGame } from "../../entities/Game";
 
 export interface IGameServices {
-  searchGames(
-    gameTitle: string,
-    fields: string,
-    sortField: string,
-    page: Number,
-    limit: Number
-  ): Promise<GameSearchResult | null>;
+  searchGames(gameTitle: string, fields: string): Promise<IGame[] | null>;
 }

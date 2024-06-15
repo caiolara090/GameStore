@@ -2,13 +2,16 @@ import { StatusCodes } from "http-status-codes";
 import { Request, RequestHandler } from "express";
 import { IUserAuthServices } from "../../../../domain/ports/User/UserAuthServices";
 import { UserAuthServices } from "../../../../domain/services/userAuthServices";
-import { SignUpRequest } from "../../../../domain/entities/User";
+
+export interface SignUpRequest {
+  username: string;
+  age: number;
+  email: string;
+  password: string;
+}
 
 export const checkDuplicateEmail: RequestHandler = async (
-  req: Request<{}, {}, SignUpRequest>,
-  res,
-  next
-) => {
+  req: Request<{}, {}, SignUpRequest>, res, next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {
@@ -27,10 +30,7 @@ export const checkDuplicateEmail: RequestHandler = async (
 };
 
 export const checkDuplicateUsername: RequestHandler = async (
-  req: Request<{}, {}, SignUpRequest>,
-  res,
-  next
-) => {
+  req: Request<{}, {}, SignUpRequest>, res,next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {

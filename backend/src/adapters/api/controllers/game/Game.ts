@@ -5,10 +5,10 @@ import { GameServices } from "../../../../domain/services/GameServices";
 
 export const searchGames = async (req: Request<{}, {}>, res: Response) => {
   const gameService: IGameServices = new GameServices();
-  const { name, fields, sortField, page, limit } = req.body;
+  const { name, fields } = req.body;
 
   try {
-    const games = gameService.searchGames(name, fields, sortField, page, limit);
+    const games = gameService.searchGames(name, fields);
 
     return res.status(StatusCodes.OK).json({
       games: games,

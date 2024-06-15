@@ -1,4 +1,4 @@
-import { IUser, UserSearchResult } from "../../entities/User";
+import { IUser, IUserGame } from "../../entities/User";
 
 export interface IUserRepository {
   create(user: IUser): Promise<IUser>;
@@ -9,17 +9,7 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<IUser | null>;
   findById(_id: string): Promise<IUser | null>;
   find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
-  searchUsers(
-    user: string,
-    fields: string,
-    page: number,
-    limit: number
-  ): Promise<UserSearchResult | null>;
-  searchUsersLibrary(
-    username: string,
-    gameTitle: string,
-    fields: string,
-    page: number,
-    limit: number
-  ): Promise<UserSearchResult | null>;
+  searchUsers(user: string, fields: string): Promise<IUser[] | null>;
+  searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]>;
+  toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void>;
 }

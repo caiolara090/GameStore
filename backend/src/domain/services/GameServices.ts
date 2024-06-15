@@ -1,24 +1,12 @@
 import { GameRepository } from "../../adapters/database/repositories/GameRepository";
-import { GameSearchResult } from "../entities/Game";
+import { IGame } from "../entities/Game";
 import { IGameRepository } from "../ports/Game/GameRepository";
 import { IGameServices } from "../ports/Game/GameServices";
 
 export class GameServices implements IGameServices {
-  async searchGames(
-    gameTitle: string,
-    fields: string,
-    sortField: string,
-    page: number,
-    limit: number
-  ): Promise<GameSearchResult | null> {
+  async searchGames(gameTitle: string, fields: string): Promise<IGame[] | null> {
     const gameRepository: IGameRepository = new GameRepository();
 
-    return await gameRepository.searchGames(
-      gameTitle,
-      fields,
-      sortField,
-      page,
-      limit
-    );
+    return await gameRepository.searchGames(gameTitle, fields);
   }
 }

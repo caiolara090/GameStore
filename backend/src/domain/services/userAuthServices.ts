@@ -1,11 +1,11 @@
 import { ObjectId } from "mongoose";
 import { sign } from "../../utils/Token";
 import { IUserAuthServices } from "../ports/User/UserAuthServices";
-import { SignUpRequest } from "../entities/User";
 import { IUser } from "../entities/User";
 import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
 import bcrypt from "bcryptjs";
+import { SignUpRequest } from "../../adapters/api/middlewares/Auth/SignupValidation";
 
 export class UserAuthServices implements IUserAuthServices {
   signToken = (userId: ObjectId): string => {

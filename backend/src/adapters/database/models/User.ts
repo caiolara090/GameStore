@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { IUser } from "../../../domain/entities/User";
 import mongoose from "mongoose";
 
@@ -12,7 +11,7 @@ const UserSchema = new mongoose.Schema<IUser>({
       game: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Game",
-      } as unknown as mongoose.SchemaDefinitionProperty<string>, // Para o TypeScript aceitar string na interface e ObjectId no schema
+      } as unknown as mongoose.SchemaDefinitionProperty<string>,
       favorite: { type: Boolean, required: true, default: false },
     },
   ],

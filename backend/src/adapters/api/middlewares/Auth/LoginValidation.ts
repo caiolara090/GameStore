@@ -3,13 +3,14 @@ import { Request, RequestHandler, Response } from "express";
 import bcrypt from "bcryptjs";
 import { IUserAuthServices } from "../../../../domain/ports/User/UserAuthServices";
 import { UserAuthServices } from "../../../../domain/services/userAuthServices";
-import { LoginRequest } from "../../../../domain/entities/User";
 
-export const loginValidation: RequestHandler = async (
-  req: Request<{}, {}, LoginRequest>,
-  res: Response,
-  next
-) => {
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export const loginValidation: RequestHandler = async (req: Request<{}, {}, LoginRequest>,
+  res: Response, next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {

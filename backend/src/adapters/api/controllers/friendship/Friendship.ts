@@ -6,9 +6,7 @@ import { FriendshipServices } from "../../../../domain/services/FriendshipServic
 
 // todo revisar, decidir se vai fazer tudo com dois id
 export const createFriendshipRequest = async (
-  req: Request<{}, {}, IFriendshipRequest>,
-  res: Response
-) => {
+  req: Request<{}, {}, IFriendshipRequest>,res: Response) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
   const { userId, friendId }: IFriendshipRequest = req.body;
   try {
