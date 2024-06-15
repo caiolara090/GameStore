@@ -9,11 +9,8 @@ export interface LoginRequest {
   password: string;
 }
 
-export const loginValidation: RequestHandler = async (
-  req: Request<{}, {}, LoginRequest>,
-  res: Response,
-  next
-) => {
+export const loginValidation: RequestHandler = async (req: Request<{}, {}, LoginRequest>,
+  res: Response, next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {

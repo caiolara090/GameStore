@@ -1,22 +1,15 @@
+import { IGame } from "./Game";
+
 export interface IUserGame {
-  game: string;
-  favorite: boolean;
+  game: IGame,
+  favorite: boolean,
 }
 
 export interface IUser {
+  userId?: string;
   username: string;
   age: number;
   email: string;
   password: string;
   games?: IUserGame[];
-}
-
-export class User implements IUser {
-  constructor(
-    public username: string,
-    public age: number,
-    public email: string,
-    public password: string,
-    public games?: IUserGame[]
-  ) {}
 }

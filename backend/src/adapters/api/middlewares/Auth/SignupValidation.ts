@@ -11,10 +11,7 @@ export interface SignUpRequest {
 }
 
 export const checkDuplicateEmail: RequestHandler = async (
-  req: Request<{}, {}, SignUpRequest>,
-  res,
-  next
-) => {
+  req: Request<{}, {}, SignUpRequest>, res, next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {
@@ -33,10 +30,7 @@ export const checkDuplicateEmail: RequestHandler = async (
 };
 
 export const checkDuplicateUsername: RequestHandler = async (
-  req: Request<{}, {}, SignUpRequest>,
-  res,
-  next
-) => {
+  req: Request<{}, {}, SignUpRequest>, res,next) => {
   const userAuthService: IUserAuthServices = new UserAuthServices();
 
   try {

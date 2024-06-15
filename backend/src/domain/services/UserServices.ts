@@ -1,12 +1,24 @@
+import { UserRepository } from "../../adapters/database/repositories/UserRepository";
+import { IUser, IUserGame } from "../entities/User";
 import { IUserRepository } from "../ports/User";
 import { IUserServices } from "../ports/User/UserServices";
 
 export class UserServices implements IUserServices {
-  constructor(private readonly userRepository: IUserRepository) {}
+  async searchUsers(username: string, fields: string): Promise<IUser[] | null> {
+    const userRepository: IUserRepository = new UserRepository();
 
-  async checkCredentials(username: string, password: string): Promise<boolean> {
-    const user = await this.userRepository.findByUsername(username);
-    if (!user) throw new Error("User not found");
-    return user.password === password;
+    return await userRepository.searchUsers(username, fields);
+  }
+
+  async searchUsersLibrary(userId: string, gameTitle: string): Promise<IUserGame[]>{
+    const userRepository: IUserRepository = new UserRepository();
+
+    return await userRepository.searchUsersLibrary(userId, gameTitle);
+  }
+
+  async toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void> {
+    const userRepository: IUserRepository = new UserRepository();
+
+    return await userRepository.toggleUsersGameFavorite(userId, gameId, isFavorite);
   }
 }
