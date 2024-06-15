@@ -1,5 +1,11 @@
 import { IUser } from "../../entities/User";
 
+export interface IUserRepositoryGame {
+  name: string;
+  image: string;
+  favorite: boolean;
+}
+
 export interface IUserRepository {
   create(user: IUser): Promise<IUser>;
   update(_id: string, user: Partial<IUser>): Promise<IUser>;
@@ -11,4 +17,5 @@ export interface IUserRepository {
   find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
   addCredits(_id: string, credits: number): Promise<void>;
   addGame(_id: string, game: string): Promise<void>;
+  getGames(_id: string): Promise<IUserRepositoryGame[]>;
 };

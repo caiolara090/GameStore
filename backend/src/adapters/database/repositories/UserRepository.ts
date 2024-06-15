@@ -1,6 +1,8 @@
 import { IUserRepository } from "../../../domain/ports/User";
 import { UserModel } from "../models/User";
 import { IUser } from "../../../domain/entities/User";
+import { IGame } from "../../../domain/entities/Game";
+import { IUserRepositoryGame } from "../../../domain/ports/User/UserRepository";
 
 export class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<IUser> {
@@ -85,6 +87,22 @@ export class UserRepository implements IUserRepository {
       await UserModel.findByIdAndUpdate(_id, {$push: {games: {game, favorites: false}}});
     } catch (error: any) {
       throw new Error("Error adding game to user: " + error.message);
+    }
+  }
+
+  async getGames(_id: string): Promise<IUserRepositoryGame[]> {
+    try {
+      const user = await UserModel.findById(_id).populate("games.game");
+      let games = [] as IUserRepositoryGame[];
+      if (user?.games !== undefined) {
+        games = user.games as unknown as IUserRepositoryGame[];
+      }
+      if (user?.games !== undefined) {
+        return games;
+      }
+      return [];
+    } catch (error: any) {
+      throw new Error("Error getting games from user: " + error.message);
     }
   }
 }
