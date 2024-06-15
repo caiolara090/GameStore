@@ -27,6 +27,8 @@ export class UserStoreServices implements IUserStoreServices {
       if (game._id !== undefined) {
         this.userRepository.addGame(userId, game._id);
         this.userRepository.addCredits(userId, -game.price);
+      } else {
+        throw new Error("Game not found");
       }
 
     } catch (error: any) {
