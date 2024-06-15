@@ -9,7 +9,7 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<IUser | null>;
   findById(_id: string): Promise<IUser | null>;
   find(user: Partial<IUser>): Promise<IUser | IUser[] | null>;
-  searchUsers(user: string, fields: string): Promise<IUser[] | null>;
+  searchUsers(username: string, fields: string): Promise<IUser[] | null>;
   searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]>;
   toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void>;
 }

@@ -4,10 +4,7 @@ import { IUserRepository } from "../ports/User";
 import { IUserServices } from "../ports/User/UserServices";
 
 export class UserServices implements IUserServices {
-  async searchUsers(
-    username: string,
-    fields: string
-  ): Promise<IUser[] | null> {
+  async searchUsers(username: string, fields: string): Promise<IUser[] | null> {
     const userRepository: IUserRepository = new UserRepository();
 
     return await userRepository.searchUsers(username, fields);

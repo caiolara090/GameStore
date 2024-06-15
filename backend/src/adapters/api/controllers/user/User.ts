@@ -5,11 +5,11 @@ import { IUserServices } from "../../../../domain/ports/User/UserServices";
 
 export const searchUsers = async (req: Request, res: Response) => {
   const userService: IUserServices = new UserServices();
-  const { name, fields } = req.body;
+  const { username, fields } = req.body;
 
   try {
-    const users = userService.searchUsers(name, fields);
-
+    const users = await userService.searchUsers(username, fields);
+    console.log(users);
     return res.status(StatusCodes.OK).json({
       users: users,
     });
@@ -25,7 +25,7 @@ export const searchUsersLibrary = async (req: Request, res: Response) => {
   const { userId, gameTitle } = req.body;
 
   try {
-    const library = userService.searchUsersLibrary(userId, gameTitle);
+    const library = await userService.searchUsersLibrary(userId, gameTitle);
 
     return res.status(StatusCodes.OK).json({
       library: library,

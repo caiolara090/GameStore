@@ -71,10 +71,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async searchUsers(
-    username: string,
-    fields: string
-  ): Promise<IUser[] | null> {
+  async searchUsers(username: string, fields: string): Promise<IUser[] | null> {
     try {
       const query = {} as any;
       query.username = { $regex: username, $options: "iu" };
@@ -82,7 +79,7 @@ export class UserRepository implements IUserRepository {
       const users = await UserModel.find(query)
         .sort(username)
         .select(fields)
-
+      
       return users;
     } catch (error: any) {
       throw new Error("Error searching for users: " + error.message);
@@ -115,8 +112,6 @@ export class UserRepository implements IUserRepository {
       throw new Error("Error retrieving user's games:" +  error.message);
     }
   }
-
-  // Implemente uma função 
 
   async toggleUsersGameFavorite(userId: string, gameId: string, 
     isFavorite: boolean): Promise<void> {
