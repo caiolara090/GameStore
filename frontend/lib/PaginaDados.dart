@@ -105,7 +105,7 @@ class _PaginaDadosState extends State<PaginaDados> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.cyan.shade400,
+        backgroundColor: Color.fromARGB(162, 38, 197, 218),
         selectedItemColor: Color.fromARGB(255, 0, 0, 0),
         currentIndex: _currentIndex,
         unselectedItemColor: Colors.white,

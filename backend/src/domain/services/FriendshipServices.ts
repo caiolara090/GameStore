@@ -3,8 +3,6 @@ import { IFriendshipRepository } from "../ports/Friendship/FriendshipRepository"
 import { FriendshipRepository } from "../../adapters/database/repositories/FriendshipRepository";
 import { IFriendship } from "../entities/Friendship";
 
-// todo envolver tudo em try
-// todo fazer funcionar
 export class FriendshipServices implements IFriendshipServices {
   private friendshipRepository: IFriendshipRepository;
 
@@ -45,7 +43,13 @@ export class FriendshipServices implements IFriendshipServices {
     try {
       // todo Talvez reduzir a quantidade de consultas mexendo no repositório
       const friendship1Data = await this.friendshipRepository.findByUsers(userId, friendId);
+      if (friendship1Data?.status != 1) {
+        throw new Error("Friendship request not found");
+      }
       const friendship2Data = await this.friendshipRepository.findByUsers(friendId, userId);
+      if (friendship2Data?.status != 0) {
+        throw new Error("Friendship request not found");
+      }
   
       if (friendship1Data?._id !== undefined) {
         await this.friendshipRepository.update(friendship1Data._id, friendship1);
@@ -62,7 +66,13 @@ export class FriendshipServices implements IFriendshipServices {
   async rejectFriendshipRequest(userId: string, friendId: string): Promise<void> {
     try {
       const friendship1 = await this.friendshipRepository.findByUsers(userId, friendId);
+      if (friendship1?.status != 1) {
+        throw new Error("Friendship request not found");
+      }
       const friendship2 = await this.friendshipRepository.findByUsers(friendId, userId);
+      if (friendship2?.status != 0) {
+        throw new Error("Friendship request not found");
+      }
       if (friendship1?._id !== undefined) {
         await this.friendshipRepository.delete(friendship1._id);
       }
@@ -78,7 +88,12 @@ export class FriendshipServices implements IFriendshipServices {
     try {
       const friendship = await this.friendshipRepository.findByUsers(userId, friendId);
       if (friendship?._id !== undefined) {
-        return await this.friendshipRepository.delete(friendship._id);
+        await this.friendshipRepository.delete(friendship._id);
+      }
+      const friendship2 = await this.friendshipRepository.findByUsers(friendId, userId);
+      console.log(friendship2);
+      if (friendship2?._id !== undefined) {
+        await this.friendshipRepository.delete(friendship2._id);
       }
     } catch (error: any) {
       throw new Error("Error deleting friendship: " + error.message);

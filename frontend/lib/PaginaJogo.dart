@@ -357,7 +357,7 @@ class _JogoPaginaState extends State<JogoPagina> {
                                             String avaliacaoTexto = _avaliacaoController.text;
                                             int notaAvaliacao = selectedStars.where((star) => star).length;
                                             // Simular envio para o backend
-                                            await Future.delayed(Duration(seconds: 2)); // Simulação de envio
+                                            // await Future.delayed(Duration(seconds: 2)); // Simulação de envio
 
                                             // Adicionar nova avaliação localmente
                                             Avaliacao novaAvaliacao = Avaliacao(
