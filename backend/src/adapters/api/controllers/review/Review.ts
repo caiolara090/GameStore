@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { IReviewServices } from '../../../../domain/ports/Review/ReviewServices';
 import { ReviewServices } from '../../../../domain/services/ReviewServices';
 import { IReview } from '../../../../domain/entities/Review';
+import { IReviewRequest } from '../../../../domain/entities/Review';
 
-export const createReview = async (req: Request, res: Response) => {
+export const createReview = async (req: Request<{}, {}, IReviewRequest>, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
   const review: IReview = req.body;
@@ -15,7 +16,7 @@ export const createReview = async (req: Request, res: Response) => {
   }
 }
 
-export const findReview = async (req: Request, res: Response) => {
+export const findReview = async (req: Request<{}, {}, IReviewRequest>, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
   const review: Partial<IReview> = req.body;

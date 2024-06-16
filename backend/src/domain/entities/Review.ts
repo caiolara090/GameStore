@@ -4,3 +4,10 @@ export interface IReview {
   userId: string;
   gameId: string;
 }
+
+export interface IReviewRequest {
+  userId: string;
+  gameId: string;
+  rating: number;
+  description: string;
+}

@@ -9,17 +9,24 @@ import {
   getUserGames 
 } from "../controllers/user/UserLibrary";
 import { searchUsers } from "../controllers/user/User";
+import { buyGame, addCredits } from "../controllers/user/UserStore";
+import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();
 
 router.post("/signup", checkDuplicateEmail, checkDuplicateUsername, signUp);
 router.post("/login", loginValidation, login);
 
-router.get("/library", getUserLibrary);
+router.get("/library", checkJwtToken, getUserLibrary);
 
 router.get("/userGames", getUserGames);
 
 router.post("/searchUser", searchUsers);
-router.post("/searchUserLibrary", searchUsersLibrary);
+
+router.post("/searchUserLibrary", checkJwtToken, searchUsersLibrary);
+
+router.post("/buyGame", checkJwtToken, buyGame);
+
+router.post("/addCredits", checkJwtToken, addCredits);
 
 export { router as userRouter };
