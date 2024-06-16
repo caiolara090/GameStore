@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { createReview, deleteReview, findReview } from '../controllers/Review';
+import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();
 
-router.post('/review', createReview);
+router.post('/review', checkJwtToken, createReview);
 
-router.delete('/review/:reviewId', deleteReview);
+router.delete('/review/:reviewId', checkJwtToken, deleteReview);
 
 router.get('/review', findReview);
 

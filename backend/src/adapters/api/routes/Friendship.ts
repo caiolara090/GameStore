@@ -5,15 +5,16 @@ import {
   rejectFriendshipRequest,
   deleteFriendship
 } from '../controllers/Friendship';
+import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();
 
-router.post('/createFriendshipRequest', createFriendshipRequest);
+router.post('/createFriendshipRequest', checkJwtToken, createFriendshipRequest);
 
-router.post('/acceptFriendshipRequest', acceptFriendshipRequest);
+router.post('/acceptFriendshipRequest', checkJwtToken, acceptFriendshipRequest);
 
-router.post('/rejectFriendshipRequest', rejectFriendshipRequest);
+router.post('/rejectFriendshipRequest', checkJwtToken, rejectFriendshipRequest);
 
-router.delete('/deleteFriendship', deleteFriendship);
+router.delete('/deleteFriendship', checkJwtToken, deleteFriendship);
 
 export { router as friendshipRouter };

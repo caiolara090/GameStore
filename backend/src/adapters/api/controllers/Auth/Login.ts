@@ -9,7 +9,14 @@ export const login = async (_req: Request, res: Response) => {
 
   if (user._id) {
     try {
-      userService.signToken(user._id);
+      const accessToken = userService.signToken(user._id);
+
+      if (accessToken === "JWT_SECRET_NOT_FOUND") {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          error: "Internal server error",
+        });
+      }
+      res.cookie("access_token", accessToken, { httpOnly: true });
 
       return res.status(StatusCodes.OK).json({
         message: "Login successful",

@@ -1,6 +1,6 @@
 export interface IReviewRequest {
-  user: string;
-  game: string;
+  userId: string;
+  gameId: string;
   rating: number;
   description: string;
 }

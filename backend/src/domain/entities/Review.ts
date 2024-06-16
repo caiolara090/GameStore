@@ -1,15 +1,15 @@
 export interface IReview {
   description: string;
   rating: number;
-  user: string;
-  game: string;
+  userId: string;
+  gameId: string;
 }
 
 export class Review implements IReview {
   constructor(
     public description: string,
     public rating: number,
-    public user: string,
-    public game: string
+    public userId: string,
+    public gameId: string
   ) {}
 }
