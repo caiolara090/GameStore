@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { 
-  createFriendshipRequest, 
-  acceptFriendshipRequest, 
+import { Router } from "express";
+import {
+  createFriendshipRequest,
+  acceptFriendshipRequest,
   rejectFriendshipRequest,
   deleteFriendship
 } from '../controllers/Friendship';

@@ -7,7 +7,7 @@ export const login = async (_req: Request, res: Response) => {
   const user = res.locals.user;
   const userService: IUserAuthServices = new UserAuthServices();
 
-  if (user._id) {
+  if (user) {
     try {
       const accessToken = userService.signToken(user._id);
 

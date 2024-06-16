@@ -1,4 +1,4 @@
-import { IUser } from "../../entities/User";
+import { IUser, IUserGame } from "../../entities/User";
 
 export interface IUserRepositoryGame {
   name: string;
@@ -18,4 +18,7 @@ export interface IUserRepository {
   addCredits(_id: string, credits: number): Promise<void>;
   addGame(_id: string, game: string): Promise<void>;
   getGames(_id: string): Promise<IUserRepositoryGame[]>;
+  searchUsers(username: string, fields: string): Promise<IUser[] | null>;
+  searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]>;
+  toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void>;
 };

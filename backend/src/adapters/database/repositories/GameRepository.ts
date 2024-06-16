@@ -14,8 +14,10 @@ export class GameRepository implements IGameRepository {
 
   async update(id: string, game: Partial<IGame>): Promise<IGame> {
     try {
-      const updatedGame = await GameModel.findByIdAndUpdate(id, game, { new: true });
-      return updatedGame!; 
+      const updatedGame = await GameModel.findByIdAndUpdate(id, game, {
+        new: true,
+      });
+      return updatedGame!;
     } catch (error: any) {
       throw new Error("Error updating game: " + error.message);
     }
@@ -32,9 +34,10 @@ export class GameRepository implements IGameRepository {
   async find(game: Partial<IGame>): Promise<IGame | IGame[] | null> {
     try {
       const foundGame = await GameModel.find(game);
-      // Se a lista tiver só um elemento, retorna apenas ele
+
+      if (foundGame.length === 0) return null;
       if (foundGame.length === 1) return foundGame[0];
-      // Caso contrário, retorna a lista
+
       return foundGame;
     } catch (error: any) {
       throw new Error("Error finding game: " + error.message);
@@ -47,6 +50,21 @@ export class GameRepository implements IGameRepository {
       return foundGame;
     } catch (error: any) {
       throw new Error("Error finding game: " + error.message);
+    }
+  }
+  
+  async searchGames(gameTitle: string, fields: string): Promise<IGame[] | null> {
+    try {
+      const query = {} as any;
+      query.name = { $regex: gameTitle, $options: "iu" };
+
+      const games = await GameModel.find(query)
+        .sort(gameTitle)
+        .select(fields)
+
+      return games;
+    } catch (error: any) {
+      throw new Error("Error searching for games: " + error.message);
     }
   }
 }

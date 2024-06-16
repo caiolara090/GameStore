@@ -1,4 +1,4 @@
-import { IGame } from '../../entities/Game';
+import { IGame } from "../../entities/Game";
 
 export interface IGameRepository {
   create(game: IGame): Promise<IGame>;
@@ -6,4 +6,5 @@ export interface IGameRepository {
   delete(_id: string): Promise<void>;
   find(game: Partial<IGame>): Promise<IGame | IGame[] | null>;
   findById(_id: string): Promise<IGame | null>;
+  searchGames(gameTitle: string, fields: string): Promise<IGame[] | null>;
 }

@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema<IUser>({
       game: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Game",
-      } as unknown as mongoose.SchemaDefinitionProperty<string>, // Para o TypeScript aceitar string na interface e ObjectId no schema
+      } as unknown as mongoose.SchemaDefinitionProperty<string>,
       favorite: { type: Boolean, required: true, default: false },
     },
   ] as unknown as mongoose.SchemaDefinitionProperty<[]>, // Faz o valor padrão ser uma string vazia

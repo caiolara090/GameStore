@@ -6,11 +6,7 @@ export interface IFriendship {
   _id?: string;
 }
 
-export class Friendship implements IFriendship {
-  constructor(
-    public userId: string,
-    public friendId: string,
-    public status: number,
-    public _id?: string
-  ) {}
+export interface IFriendshipRequest {
+  userId: string;
+  friendId: string;
 }
