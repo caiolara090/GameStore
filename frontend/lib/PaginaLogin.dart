@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'token_manager.dart';
 import '/PaginaCadastro.dart';
 import 'PaginaLoja.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -137,31 +139,60 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      final String email = _emailController.text.trim();
-      final String password = _passwordController.text.trim();
+Future<void> _login() async {
+  if (_formKey.currentState!.validate()) {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
 
-      if (email.isNotEmpty && password.isNotEmpty) {
-        String token = 'token1234567890';
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_token', token);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login bem-sucedido para $email!'),
-          ),
+    if (email.isNotEmpty && password.isNotEmpty) {
+      try {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/login'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'password': password,
+          }),
         );
 
-        Navigator.pushReplacementNamed(context, '/loja');
-      } else {
+        if (response.statusCode == 200) {
+          // final responseBody = jsonDecode(response.body);
+          // final String token = responseBody['token'];
+
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          // await prefs.setString('user_token', token);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.blue,
+              content: Text('Login bem-sucedido para $email!', style: TextStyle(color: Colors.white)),
+            ),
+          );
+
+          Navigator.pushReplacementNamed(context, '/loja');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Falha no login. Por favor, verifique suas credenciais.'),
+            ),
+          );
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor, insira um e-mail e senha válidos.'),
+          SnackBar(
+            content: Text('Erro de rede: $e'),
           ),
         );
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, insira um e-mail e senha válidos.'),
+        ),
+      );
     }
   }
+}
 }

@@ -120,7 +120,6 @@ class _PaginaLojaState extends State<PaginaLoja> {
 
   Future<void> _loadToken() async {
     // Simulação do carregamento de token
-    await Future.delayed(Duration(seconds: 1));
     setState(() {
       _token = 'dummy_token'; // Token carregado
     });
