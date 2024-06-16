@@ -4,7 +4,7 @@ import {
   acceptFriendshipRequest,
   rejectFriendshipRequest,
   deleteFriendship
-} from '../controllers/Friendship';
+} from '../controllers/friendship/Friendship';
 import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();

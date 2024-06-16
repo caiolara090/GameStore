@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { IReviewServices } from '../../../domain/ports/Review/ReviewServices';
-import { ReviewServices } from '../../../domain/services/ReviewServices';
-import { IReview } from '../../../domain/entities/Review';
+import { IReviewServices } from '../../../../domain/ports/Review/ReviewServices';
+import { ReviewServices } from '../../../../domain/services/ReviewServices';
+import { IReview } from '../../../../domain/entities/Review';
 
 export const createReview = async (req: Request, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();

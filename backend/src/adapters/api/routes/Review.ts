@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createReview, deleteReview, findReview } from '../controllers/Review';
+import { createReview, deleteReview, findReview } from '../controllers/review/Review';
 import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();

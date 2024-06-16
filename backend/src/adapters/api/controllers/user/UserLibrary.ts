@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { IUserLibraryServices } from '../../../domain/ports/User/UserLibraryServices';
-import { UserLibraryServices } from '../../../domain/services/UserLibraryServices';
+import { IUserLibraryServices } from '../../../../domain/ports/User/UserLibraryServices';
+import { UserLibraryServices } from '../../../../domain/services/UserLibraryServices';
 
 export const getUserLibrary = async (req: Request, res: Response) => {
   const userLibraryServices: IUserLibraryServices = new UserLibraryServices();

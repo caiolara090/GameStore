@@ -7,7 +7,7 @@ import { signUp } from "../controllers/Auth/SignUp";
 import { 
   getUserLibrary, 
   getUserGames 
-} from "../controllers/UserLibrary";
+} from "../controllers/user/UserLibrary";
 import { searchUsers } from "../controllers/user/User";
 
 const router = Router();
