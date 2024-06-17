@@ -26,7 +26,7 @@ export class ReviewServices implements IReviewServices {
     }
   }
 
-  findReview(review: Partial<IReview>): Promise<IReview | IReview[] | null> {
+  async findReview(review: Partial<IReview>): Promise<IReview | IReview[] | null> {
     try {
       return this.reviewRepository.find(review);
     } catch (error: any) {

@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/review', checkJwtToken, createReview);
 
-router.delete('/review/:reviewId', checkJwtToken, deleteReview);
+router.delete('/review', checkJwtToken, deleteReview);
 
 router.get('/review', findReview);
 
