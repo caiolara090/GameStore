@@ -44,6 +44,15 @@ export class GameRepository implements IGameRepository {
     }
   }
 
+  async findById(_id: string): Promise<IGame | null> {
+    try {
+      const foundGame = await GameModel.findById(_id);
+      return foundGame;
+    } catch (error: any) {
+      throw new Error("Error finding game: " + error.message);
+    }
+  }
+  
   async searchGames(gameTitle: string, fields: string): Promise<IGame[] | null> {
     try {
       const query = {} as any;

@@ -5,4 +5,5 @@ export interface IGame {
   price: number;
   image: string;
   reviews?: string[];
+  _id?: string;
 }

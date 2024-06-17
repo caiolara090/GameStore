@@ -11,5 +11,6 @@ export interface IUser {
   age: number;
   email: string;
   password: string;
+  credits?: number;
   games?: IUserGame[];
 }

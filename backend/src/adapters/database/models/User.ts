@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema<IUser>({
       } as unknown as mongoose.SchemaDefinitionProperty<string>,
       favorite: { type: Boolean, required: true, default: false },
     },
-  ],
+  ] as unknown as mongoose.SchemaDefinitionProperty<[]>, // Faz o valor padrão ser uma string vazia
+  credits: { type: Number, default: 0 },
 });
 
 export const UserModel = mongoose.model<IUser>("User", UserSchema);

@@ -1,7 +1,13 @@
 export interface IReview {
-  title: string;
   description: string;
   rating: number;
-  user: string;
-  game: string;
+  userId: string;
+  gameId: string;
+}
+
+export interface IReviewRequest {
+  userId: string;
+  gameId: string;
+  rating: number;
+  description: string;
 }
