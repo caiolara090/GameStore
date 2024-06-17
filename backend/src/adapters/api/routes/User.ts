@@ -1,4 +1,4 @@
-import { searchUsersLibrary } from './../controllers/user/User';
+import { searchUsersLibrary, toggleUsersGameFavorite } from './../controllers/user/User';
 import { login } from "../controllers/Auth/Login";
 import { loginValidation } from "./../middlewares/Auth/LoginValidation";
 import { Router } from "express";
@@ -28,5 +28,7 @@ router.post("/searchUserLibrary", checkJwtToken, searchUsersLibrary);
 router.post("/buyGame", checkJwtToken, buyGame);
 
 router.post("/addCredits", checkJwtToken, addCredits);
+
+router.post("/setFavorite", checkJwtToken, toggleUsersGameFavorite);
 
 export { router as userRouter };

@@ -21,8 +21,8 @@ export const findReview = async (req: Request<{}, {}, IReviewRequest>, res: Resp
 
   const review: Partial<IReview> = req.body;
   try {
-    await reviewServices.findReview(review);
-    res.status(200).send();
+    const foundReview = await reviewServices.findReview(review);
+    res.status(200).send(foundReview);
   } catch (error: any) {
     res.status(400).send(error.message);
   }
@@ -31,7 +31,7 @@ export const findReview = async (req: Request<{}, {}, IReviewRequest>, res: Resp
 export const deleteReview = async (req: Request, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
-  const _id = req.params.reviewId;
+  const _id = req.body.reviewId;
   try {
     await reviewServices.deleteReview(_id);
     res.status(200).send();

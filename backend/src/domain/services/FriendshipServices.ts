@@ -22,6 +22,10 @@ export class FriendshipServices implements IFriendshipServices {
       status: 1,
     };
     try {
+
+      if (await this.friendshipRepository.findByUsers(userId, friendId)) 
+        throw new Error("Friendship already exists.");
+
       await this.friendshipRepository.create(friendshipSent);
       await this.friendshipRepository.create(friendshipReceived);
     } catch (error: any) {

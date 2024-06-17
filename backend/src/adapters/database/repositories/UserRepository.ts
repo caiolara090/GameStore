@@ -130,6 +130,8 @@ export class UserRepository implements IUserRepository {
         .exec();
   
       if (!user) throw new Error('User not found');
+
+      console.log(title);
   
       const userGames = user?.games?.filter(gameEntry => gameEntry.game.name.toLowerCase()
       .includes(title.toLowerCase())).map(gameEntry => ({
@@ -156,7 +158,7 @@ export class UserRepository implements IUserRepository {
       
       if(user.games === undefined) throw new Error("User has no games");
 
-      const gameIndex = user.games.findIndex((game) => game.game.gameId == gameId);
+      const gameIndex = user.games.findIndex((game) => game.game._id == gameId);
       if (gameIndex < 0) {
         throw new Error("Game not found in user's library");
       }
