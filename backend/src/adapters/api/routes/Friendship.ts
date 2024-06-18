@@ -3,7 +3,9 @@ import {
   createFriendshipRequest,
   acceptFriendshipRequest,
   rejectFriendshipRequest,
-  deleteFriendship
+  deleteFriendship,
+  getFriendshipRequests,
+  getFriends
 } from '../controllers/friendship/Friendship';
 import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
@@ -16,5 +18,9 @@ router.post('/acceptFriendshipRequest', checkJwtToken, acceptFriendshipRequest);
 router.post('/rejectFriendshipRequest', checkJwtToken, rejectFriendshipRequest);
 
 router.delete('/deleteFriendship', checkJwtToken, deleteFriendship);
+
+router.get('/friendshipRequests', checkJwtToken, getFriendshipRequests);
+
+router.get('/friends', checkJwtToken, getFriends);
 
 export { router as friendshipRouter };

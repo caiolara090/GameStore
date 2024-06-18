@@ -58,3 +58,31 @@ export const deleteFriendship = async (
     res.status(400).send("Error deleting friendship: " + error.message);
   }
 };
+
+export const getFriendshipRequests = async (
+  req: Request,
+  res: Response
+) => {
+  const friendshipServices: IFriendshipServices = new FriendshipServices();
+  const { userId }: IFriendshipRequest = req.body;
+  try {
+    const friendshipRequests = await friendshipServices.find({ userId, status: 1 });
+    res.status(200).send(friendshipRequests);
+  } catch (error: any) {
+    res.status(400).send("Error getting friendship requests: " + error.message);
+  }
+};
+
+export const getFriends = async (
+  req: Request,
+  res: Response
+) => {
+  const friendshipServices: IFriendshipServices = new FriendshipServices();
+  const { userId }: IFriendshipRequest = req.body;
+  try {
+    const friends = await friendshipServices.find({ userId, status: 2 });
+    res.status(200).send(friends);
+  } catch (error: any) {
+    res.status(400).send("Error getting friends: " + error.message);
+  }
+};
