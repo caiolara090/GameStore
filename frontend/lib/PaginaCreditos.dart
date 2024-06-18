@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'token_manager.dart';
 
 class AddCreditsScreen extends StatefulWidget {
   const AddCreditsScreen({Key? key}) : super(key: key);
@@ -14,96 +17,192 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? _cookie;
+  String? _userId;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Colocar Créditos',
-          style: TextStyle(fontSize: 35.0),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.cyan.shade400],
-          ),
-        ),
-        padding: const EdgeInsets.all(30.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTextField(
-                controller: _nameController,
-                labelText: 'Nome do Titular',
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite o nome do titular' : null;
-                },
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _valueController,
-                labelText: 'Valor',
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite o valor' : null;
-                },
-                icon: Icons.attach_money,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _cardNumberController,
-                labelText: 'Número do Cartão',
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite o número do cartão' : null;
-                },
-                icon: Icons.credit_card,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _expiryDateController,
-                labelText: 'Data de Validade',
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite a data de validade' : null;
-                },
-                icon: Icons.date_range,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _cvvController,
-                labelText: 'CVV',
-                isPassword: true,
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite o CVV' : null;
-                },
-                icon: Icons.lock,
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  _addCredits();
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
-                ),
-                child: const Text(
-                  'Adicionar',
-                  style: TextStyle(fontSize: 20.0, color: Colors.black),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _initializeData();
   }
+
+  Future<void> _initializeData() async {
+    await _loadUserId();
+    await _loadUserCookie();
+  }
+    
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
+    setState(() {
+      _userId = id;
+    });
+  }
+
+  Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
+    });
+  }
+
+  Future<void> addCredits(String userId, int credits) async {
+  final baseUrl = '10.0.2.2:3000';
+  final endPointUrl = '/addCredits';
+  
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "userId": "$_userId",
+    "credits": "$credits"
+  });
+
+   try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      print('Créditos adicionados com sucesso');
+    } else {
+      print('Failed to add credits: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error adding credits: $e');
+  }
+  }
+
+  void _addCredits() async {
+    if (_formKey.currentState!.validate()) {
+      final String name = _nameController.text.trim();
+      final String value = _valueController.text.trim();
+      final String cardNumber = _cardNumberController.text.trim();
+      final String expiryDate = _expiryDateController.text.trim();
+      final String cvv = _cvvController.text.trim();
+
+      if (name.isNotEmpty && value.isNotEmpty && cardNumber.isNotEmpty && expiryDate.isNotEmpty && cvv.isNotEmpty) {
+        if (_userId!= null) {
+          int credits = int.tryParse(value) ?? 0;
+          await addCredits(_userId!, credits);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro: Token de usuário não encontrado.'),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, preencha todos os campos.'),
+          ),
+        );
+      }
+    }
+  }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      centerTitle: true,
+      title: const Text(
+        'Colocar Créditos',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
+      ),
+      backgroundColor: Colors.white,
+    ),
+    resizeToAvoidBottomInset: false, // Evita overflow do teclado
+    body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.white, Colors.cyan.shade400],
+        ),
+      ),
+      child: Center(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildTextField(
+                  controller: _nameController,
+                  labelText: 'Nome do Titular',
+                  validator: (value) {
+                    return value!.isEmpty ? 'Digite o nome do titular' : null;
+                  },
+                  icon: Icons.person,
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                  controller: _valueController,
+                  labelText: 'Valor',
+                  validator: (value) {
+                    return value!.isEmpty ? 'Digite o valor' : null;
+                  },
+                  icon: Icons.attach_money,
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                  controller: _cardNumberController,
+                  labelText: 'Número do Cartão',
+                  validator: (value) {
+                    return value!.isEmpty ? 'Digite o número do cartão' : null;
+                  },
+                  icon: Icons.credit_card,
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                  controller: _expiryDateController,
+                  labelText: 'Data de Validade',
+                  validator: (value) {
+                    return value!.isEmpty ? 'Digite a data de validade' : null;
+                  },
+                  icon: Icons.date_range,
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(
+                  controller: _cvvController,
+                  labelText: 'CVV',
+                  isPassword: true,
+                  validator: (value) {
+                    return value!.isEmpty ? 'Digite o CVV' : null;
+                  },
+                  icon: Icons.lock,
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: _addCredits,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
+                  ),
+                  child: const Text(
+                    'Adicionar',
+                    style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  ),
+                ),
+                const SizedBox(height: 20.0), // Espaço opcional no final
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
   Widget _buildTextField({
     required TextEditingController controller,
@@ -138,32 +237,5 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
       obscureText: isPassword,
       validator: validator,
     );
-  }
-
-  void _addCredits() {
-    if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text.trim();
-      final String value = _valueController.text.trim();
-      final String cardNumber = _cardNumberController.text.trim();
-      final String expiryDate = _expiryDateController.text.trim();
-      final String cvv = _cvvController.text.trim();
-
-      // Adicione aqui a lógica para adicionar créditos
-      // Exemplo básico: verificar se os campos são válidos
-
-      if (name.isNotEmpty && value.isNotEmpty && cardNumber.isNotEmpty && expiryDate.isNotEmpty && cvv.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Créditos adicionados com sucesso para $name!'),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor, preencha todos os campos.'),
-          ),
-        );
-      }
-    }
   }
 }

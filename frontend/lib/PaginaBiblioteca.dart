@@ -2,24 +2,9 @@ import 'package:flutter/material.dart';
 import 'PaginaLogin.dart';
 import 'PaginaLoja.dart';
 import "Entidades.dart";
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Biblioteca de Jogos',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: GameLibraryPage(),
-//     );
-//   }
-// }
+import 'token_manager.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class GameLibraryPage extends StatefulWidget {
   @override
@@ -28,23 +13,17 @@ class GameLibraryPage extends StatefulWidget {
 
 class _GameLibraryPageState extends State<GameLibraryPage> {
   int _currentIndex = 1;
-  List<Jogo> allGames = [
-    Jogo(nome: 'Jogo 1', preco: 59.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 1', isFavorite: true),
-    Jogo(nome: 'Jogo 2', preco: 49.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 2'),
-    Jogo(nome: 'Jogo 3', preco: 39.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 3', isFavorite: true),
-    Jogo(nome: 'Jogo 4', preco: 29.99, link: 'https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png', descricao: 'Descrição do Jogo 4'),
-  ];
-
-  TextEditingController _gameSearchController = TextEditingController();
+  List<Jogo> allGames = [];
   List<Jogo> filteredGames = [];
+  TextEditingController _gameSearchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   OverlayEntry? _overlayEntry;
+  String? _userId;
 
   @override
   void initState() {
     super.initState();
-    filteredGames = allGames;
-
+    _loadUserId();
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         _showOverlay();
@@ -53,6 +32,41 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
       }
     });
   }
+
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
+    setState(() {
+      _userId = id;
+    });
+    if (_userId != null) {
+      await _fetchUserGames(_userId!);
+    }
+  }
+
+Future<void> _fetchUserGames(String userId) async {
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:3000/userGames?userId=$userId'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    List<dynamic> gamesData = jsonDecode(response.body);
+    List<Jogo> loadedGames = gamesData.map((gameData) => Jogo.fromJson(gameData)).toList();
+    setState(() {
+      allGames = loadedGames;
+      filteredGames = loadedGames;
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Erro ao carregar jogos: ${response.body}', style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+}
 
   void filterGames(String query) {
     setState(() {
