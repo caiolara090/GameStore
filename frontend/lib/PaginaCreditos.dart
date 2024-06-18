@@ -17,52 +17,66 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? _token;
-  String? _id;
+  String? _cookie;
+  String? _userId;
 
   @override
   void initState() {
     super.initState();
-    _loadToken();
+    _initializeData();
   }
 
-  Future<void> _loadToken() async {
-    String? token = await CookieManager.loadCookie();
+  Future<void> _initializeData() async {
+    await _loadUserId();
+    await _loadUserCookie();
+  }
+    
+  Future<void> _loadUserId() async {
     String? id = await CookieManager.loadId();
     setState(() {
-      _token = token;
-      _id = id;
+      _userId = id;
+    });
+  }
+
+  Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
     });
   }
 
   Future<void> addCredits(String userId, int credits) async {
+  final baseUrl = '10.0.2.2:3000';
+  final endPointUrl = '/addCredits';
+  
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "userId": "$_userId",
+    "credits": "$credits"
+  });
+
+   try {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:3000/addCredits'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'access_token' : _token ?? "",
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
       },
-      body: jsonEncode({
-        'userId': userId,
-        'credits': credits,
-      }),
+      body: body,
     );
 
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.blue,
-          content: Text('Créditos adicionados com sucesso!', style: TextStyle(color: Colors.white)),
-        ),
-      );
+      print('Créditos adicionados com sucesso');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.blue,
-          content: Text('Erro ao adicionar créditos: ${response.body}', style: TextStyle(color: Colors.white)),
-        ),
-      );
+      print('Failed to add credits: ${response.statusCode}');
     }
+  } catch (e) {
+    print('Error adding credits: $e');
+  }
   }
 
   void _addCredits() async {
@@ -74,9 +88,9 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
       final String cvv = _cvvController.text.trim();
 
       if (name.isNotEmpty && value.isNotEmpty && cardNumber.isNotEmpty && expiryDate.isNotEmpty && cvv.isNotEmpty) {
-        if (_id != null) {
+        if (_userId!= null) {
           int credits = int.tryParse(value) ?? 0;
-          await addCredits(_id!, credits);
+          await addCredits(_userId!, credits);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -94,31 +108,35 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Colocar Créditos',
-          style: TextStyle(fontSize: 35.0),
-        ),
-        backgroundColor: Colors.white,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      centerTitle: true,
+      title: const Text(
+        'Colocar Créditos',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.cyan.shade400],
-          ),
+      backgroundColor: Colors.white,
+    ),
+    resizeToAvoidBottomInset: false, // Evita overflow do teclado
+    body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.white, Colors.cyan.shade400],
         ),
-        padding: const EdgeInsets.all(30.0),
+      ),
+      child: Center(
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildTextField(
                   controller: _nameController,
@@ -176,13 +194,15 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
                     style: TextStyle(fontSize: 20.0, color: Colors.black),
                   ),
                 ),
+                const SizedBox(height: 20.0), // Espaço opcional no final
               ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildTextField({
     required TextEditingController controller,

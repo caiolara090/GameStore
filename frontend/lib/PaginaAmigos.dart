@@ -34,8 +34,6 @@ class _FriendPageState extends State<FriendPage> {
     await _loadAllUsers();
     await _loadUserId();
     await _loadUserCookie();
-    // print(_userId);
-    // print(_cookie);
   }
     
   Future<void> _loadUserId() async {
@@ -55,8 +53,8 @@ class _FriendPageState extends State<FriendPage> {
   
 
 Future<void> _loadAllUsers() async {
-  final baseUrl = '10.0.2.2:3000';  // Endereço base do servidor
-  final endPointUrl = '/searchUser'; // Caminho específico da API
+  final baseUrl = '10.0.2.2:3000';
+  final endPointUrl = '/searchUser';
   
   final uri = Uri.http(baseUrl, endPointUrl);
 
