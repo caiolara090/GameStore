@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'Entidades.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Loja de Jogos Mobile',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FriendPage(),
-    );
-  }
-}
+import 'token_manager.dart';
 
 class FriendPage extends StatefulWidget {
   @override
@@ -25,103 +10,146 @@ class FriendPage extends StatefulWidget {
 }
 
 class _FriendPageState extends State<FriendPage> {
-  List<User> users = [
-    User(
-      name: 'Amigo 1',
-      dob: '01/01/1990',
-      email: 'amigo1@example.com',
-      password: 'senha123',
-    ),
-    User(
-      name: 'Amigo 2',
-      dob: '02/02/1991',
-      email: 'amigo2@example.com',
-      password: 'senha123',
-    ),
-    User(
-      name: 'Amigo 3',
-      dob: '03/03/1992',
-      email: 'amigo3@example.com',
-      password: 'senha123',
-    ),
-  ];
+  List<User> users = [];
 
-  List<User> pendingRequests = [
-    User(
-      name: 'Bisnago',
-      dob: '04/04/1993',
-      email: 'bisnago@example.com',
-      password: 'senha123',
-    ),
-    User(
-      name: 'Gerônimo',
-      dob: '05/05/1994',
-      email: 'geronimo@example.com',
-      password: 'senha123',
-    ),
-  ];
+  List<User> pendingRequests = [];
 
-  List<User> allUsers = [
-    User(name: 'John Doe', dob: '01-01-1990', email: 'john.doe@example.com', password: 'password123'),
-    User(name: 'Jane Smith', dob: '05-10-1985', email: 'jane.smith@example.com', password: 'password456'),
-    User(name: 'Bob Johnson', dob: '12-12-1975', email: 'bob.johnson@example.com', password: 'password789'),
-    User(
-      name: 'Amigo 1',
-      dob: '01/01/1990',
-      email: 'amigo1@example.com',
-      password: 'senha123',
-    ),
-    User(
-      name: 'Amigo 2',
-      dob: '02/02/1991',
-      email: 'amigo2@example.com',
-      password: 'senha123',
-    ),
-    User(
-      name: 'Amigo 3',
-      dob: '03/03/1992',
-      email: 'amigo3@example.com',
-      password: 'senha123',
-    ),
-  ];
+  List<User> allUsers = [];
+
+  String? _userId;
+  String? _cookie;
 
   final ValueNotifier<List<User>> _filteredUsers = ValueNotifier<List<User>>([]);
 
   final TextEditingController _friendNameController = TextEditingController();
   bool _showUserList = false;
 
-  void _filterUsers(String query) {
-  List<User> filtered = allUsers.where((user) {
-    return user.name.toLowerCase().contains(query.toLowerCase());
-  }).toList();
-  _filteredUsers.value = filtered;
-}
-
-  void sendFriendRequest(String name) {
-    setState(() {
-      pendingRequests.add(User(name: name, dob: '', email: '', password: ''));
-      _showUserList = false; // Hide the user list after sending the request
-    });
-    _friendNameController.clear();
+   @override
+  void initState() {
+    super.initState();
+    _initializeData();
   }
 
-  void acceptRequest(int index) {
+  Future<void> _initializeData() async {
+    await _loadAllUsers();
+    await _loadUserId();
+    await _loadUserCookie();
+    // print(_userId);
+    // print(_cookie);
+  }
+    
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
     setState(() {
-      users.add(pendingRequests[index]);
-      pendingRequests.removeAt(index);
+      _userId = id;
     });
+  }
+
+  Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
+    });
+  }
+
+  
+
+Future<void> _loadAllUsers() async {
+  final baseUrl = '10.0.2.2:3000';  // Endereço base do servidor
+  final endPointUrl = '/searchUser'; // Caminho específico da API
+  
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "username": "^[a-zA-ZÀ-ÿ]+"
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      
+      Map<String, dynamic> data = jsonDecode(response.body);
+      List<dynamic> usersData = data['users'];
+      
+      setState(() {
+        allUsers = usersData.map((userData) => User.fromJson(userData)).toList();
+      });
+    } else {
+      throw Exception('Failed to load users');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+}
+
+  void _filterUsers(String query) {
+    if (query.isEmpty) {
+      _filteredUsers.value = [];
+      return;
+    }
+
+    List<User> filteredUsers = allUsers.where((user) =>
+        user.name.toLowerCase().contains(query.toLowerCase())).toList();
+    
+    _filteredUsers.value = filteredUsers;
+  }
+
+void sendFriendRequest(String friendId) async {
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/createFriendShipRequest';
+  final uri = Uri.http(baseUrl, endpointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "friendId": friendId
+  });
+
+  print('Sending POST request to: $uri');
+  print('Request body: $body');
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      print('Friend request sent successfully');
+    } else {
+      print('Failed to send friend request: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error sending friend request: $e');
+  }
+
+  _friendNameController.clear();
+}
+
+
+  void acceptRequest(int index) {
+
   }
 
   void rejectRequest(int index) {
-    setState(() {
-      pendingRequests.removeAt(index);
-    });
+
   }
 
   void removeFriend(int index) {
-    setState(() {
-      users.removeAt(index);
-    });
+
   }
 
   @override
@@ -183,59 +211,59 @@ class _FriendPageState extends State<FriendPage> {
                 ],
               ),
               if (_showUserList)
-  Container(
-    height: 200,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      border: Border.all(color: Colors.grey),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: ValueListenableBuilder<List<User>>(
-      valueListenable: _filteredUsers,
-      builder: (context, filteredUsers, child) {
-        return ListView.builder(
-          itemCount: filteredUsers.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(filteredUsers[index].name),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  sendFriendRequest(filteredUsers[index].name);
-                  setState(() {
-                    _showUserList = false;
-                  });
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.person_add,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Enviar',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: ValueListenableBuilder<List<User>>(
+                    valueListenable: _filteredUsers,
+                    builder: (context, filteredUsers, child) {
+                      return ListView.builder(
+                        itemCount: filteredUsers.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(filteredUsers[index].name),
+                            trailing: ElevatedButton(
+                              onPressed: () {
+                                sendFriendRequest(filteredUsers[index].id ?? "");
+                                setState(() {
+                                  _showUserList = false;
+                                });
+                              },
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.person_add,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Enviar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      },
-    ),
-  ),
               const SizedBox(height: 8),
               Theme(
                 data: ThemeData().copyWith(dividerColor: Colors.transparent),
@@ -306,12 +334,12 @@ class _FriendPageState extends State<FriendPage> {
                     'Solicitações',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  initiallyExpanded: true,
-                  childrenPadding: EdgeInsets.zero,
+                  initiallyExpanded: true,  
+childrenPadding: EdgeInsets.zero,
                   children: pendingRequests.map((request) {
                     int index = pendingRequests.indexOf(request);
                     return Card(
-                      color: const Color.fromARGB(255, 169, 214, 254),
+                      color: const Color.fromARGB(255, 254, 224, 179),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -344,11 +372,11 @@ class _FriendPageState extends State<FriendPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.check, color: Colors.green),
+                              icon: Icon(Icons.check, color: Colors.green),
                               onPressed: () => acceptRequest(index),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.close, color: Colors.red),
+                              icon: Icon(Icons.close, color: Colors.red),
                               onPressed: () => rejectRequest(index),
                             ),
                           ],
@@ -357,11 +385,10 @@ class _FriendPageState extends State<FriendPage> {
                     );
                   }).toList(),
                 ),
-              ),
-            ],
+          ), ],
           ),
-        ),
-      ),
-    );
+            ),
+          ),
+        );
   }
 }

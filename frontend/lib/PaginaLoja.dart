@@ -127,15 +127,15 @@ class _PaginaLojaState extends State<PaginaLoja> {
     super.initState();
     _filteredJogos = jogos;
     _filteredJogos2 = jogos2;
-    _loadToken();
+    // _loadToken();
   }
 
-  Future<void> _loadToken() async {
-    // Simulação do carregamento de token
-    setState(() {
-      _token = 'dummy_token'; // Token carregado
-    });
-  }
+//  Future<void> _loadToken() async {
+//   String? token = await TokenManager.getToken();
+//   setState(() {
+//     _token = token;
+//   });
+// }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.cyan.shade400,
-        title: Center(
+        title: const Center(
           child: Text(
             'GameStore',
             style: TextStyle(
@@ -152,7 +152,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -165,7 +165,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
                   children: [
                     Expanded(
@@ -185,7 +185,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 .toList();
                           });
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           hintText: 'Pesquisar...',
@@ -203,10 +203,10 @@ class _PaginaLojaState extends State<PaginaLoja> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.25,
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
@@ -221,12 +221,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               // Lista de jogos em alta
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Center(
                       child: Text(
@@ -236,10 +236,10 @@ class _PaginaLojaState extends State<PaginaLoja> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _filteredJogos.length,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
@@ -263,29 +263,29 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 height: 100,
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       _filteredJogos[index].nome,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       _filteredJogos[index].descricao,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
@@ -301,12 +301,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                   ),
                 ],
               ),
-              SizedBox(height: 20), // Espaçamento entre as listas
+              const SizedBox(height: 20), // Espaçamento entre as listas
               // Lista de todos os jogos
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Center(
                       child: Text(
@@ -316,10 +316,10 @@ class _PaginaLojaState extends State<PaginaLoja> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _filteredJogos2.length,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
@@ -343,29 +343,29 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 height: 100,
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       _filteredJogos2[index].nome,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       _filteredJogos2[index].descricao,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
@@ -386,20 +386,20 @@ class _PaginaLojaState extends State<PaginaLoja> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(162, 38, 197, 218),
-        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(162, 38, 197, 218),
+        selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
         currentIndex: _currentIndex,
         unselectedItemColor: Colors.white,
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.videogame_asset),
             label: 'Loja',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.layers),
             label: 'Biblioteca',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.format_align_justify),
             label: 'Dados',
           ),
