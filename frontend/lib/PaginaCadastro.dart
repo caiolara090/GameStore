@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:validators/validators.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:validators/validators.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -36,6 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: Stack(
         children: [
           Container(
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -65,7 +67,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             if (value.length > 20) {
                               return 'Nome deve ter no máximo 20 caracteres';
                             }
-                            if (!RegExp(r'^[a-zA-ZÀ-ÿ ]+$').hasMatch(value)) {
+                            if (!RegExp(r'^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$').hasMatch(value)) {
                               return 'Digite apenas letras';
                             }
                             return null;
@@ -73,12 +75,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           icon: Icons.person,
                         ),
                         const SizedBox(height: 10),
-                        _buildDateField(
-                          context: context,
-                          controller: _dobController,
-                          labelText: 'Data de Nascimento',
+                        _buildAgeField(
+                          controller: _ageController,
+                          labelText: 'Idade',
                           validator: (value) {
-                            return value!.isEmpty ? 'Selecione uma data' : null;
+                            if (value!.isEmpty) {
+                              return 'Digite a idade';
+                            }
+                            if (!isNumeric(value)) {
+                              return 'Idade deve ser um número';
+                            }
+                            return null;
                           },
                           icon: Icons.calendar_today,
                         ),
@@ -114,31 +121,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           icon: Icons.lock,
                         ),
                         const SizedBox(height: 50), // Espaço adicional
+                        ElevatedButton(
+                          onPressed: _register,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
+                          ),
+                          child: const Text(
+                            'Registrar',
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 0, // Adjust to zero to make it align with the edges
-            right: 0, // Adjust to zero to make it align with the edges
-            child: SizedBox(
-              width: double.infinity, // Take full width
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: ElevatedButton(
-                  onPressed: _register,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  ),
-                  child: const Text(
-                    'Registrar',
-                    style: TextStyle(fontSize: 20.0, color: Colors.black),
-                  ),
-                ),
               ),
             ),
           ),
@@ -184,8 +180,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _buildDateField({
-    required BuildContext context,
+  Widget _buildAgeField({
     required TextEditingController controller,
     required String labelText,
     String? Function(String?)? validator,
@@ -193,6 +188,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }) {
     return TextFormField(
       controller: controller,
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: icon != null ? Icon(icon) : null,
@@ -215,50 +211,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
       validator: validator,
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode());
-        DateTime? pickedDate = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-        );
-        if (pickedDate != null) {
-          String formattedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-          controller.text = formattedDate;
-        }
-      },
     );
   }
 
-  void _register() {
+  void _register() async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text.trim();
-      final String dob = _dobController.text.trim();
+      final String age = _ageController.text.trim(); // Idade em formato de string
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      // Criando um mapa com os dados do formulário
+      // Montando o corpo da requisição JSON
       final Map<String, dynamic> formData = {
-        'name': name,
-        'dob': dob,
         'email': email,
         'password': password,
+        'age': age,
+        'username': name, // Aqui estou usando o nome como username
       };
 
       // Convertendo o mapa em uma string JSON
       final String jsonData = jsonEncode(formData);
 
-      // Aqui você pode fazer o que quiser com o JSON gerado
-      print(jsonData);
+      // Enviando a requisição POST para a API
+      Uri url = Uri.parse('http://10.0.2.2:3000/signup');
+      try {
+        final response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonData,
+        );
 
-      // Lógica adicional de registro, como enviar para um servidor, etc.
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.blue,
-          content: Text('Registro bem-sucedido para $name!'),
-        ),
-      );
+        // Verificando o status da resposta
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.blue,
+              content: Text('Registro bem-sucedido para $name!'),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Falha no registro. Tente novamente.'),
+            ),
+          );
+          print(response.statusCode);
+          print(response.body);
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Erro ao conectar com o servidor.'),
+          ),
+        );
+      }
     }
   }
 }
