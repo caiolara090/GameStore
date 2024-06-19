@@ -34,6 +34,8 @@ class _FriendPageState extends State<FriendPage> {
     await _loadAllUsers();
     await _loadUserId();
     await _loadUserCookie();
+    await _loadFriends();
+    _loadFriendRequests();
   }
     
   Future<void> _loadUserId() async {
@@ -50,8 +52,6 @@ class _FriendPageState extends State<FriendPage> {
     });
   }
 
-  
-
 Future<void> _loadAllUsers() async {
   final baseUrl = '10.0.2.2:3000';
   final endPointUrl = '/searchUser';
@@ -59,7 +59,7 @@ Future<void> _loadAllUsers() async {
   final uri = Uri.http(baseUrl, endPointUrl);
 
   final body = jsonEncode({
-    "username": "^[a-zA-ZÀ-ÿ]+"
+    "username": "^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+"
   });
 
   try {
@@ -87,6 +87,95 @@ Future<void> _loadAllUsers() async {
   }
 }
 
+Future<void> _loadFriends() async {
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/friends';
+
+  final queryParameters = {
+  'userId': '$_userId',
+};
+  final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
+
+  print('URI: $uri');
+  print('User ID: $_userId');
+  print('Cookie: $_cookie');
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+    );
+
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      List<dynamic> friendIds = data['friendId'];
+
+      print('Friend IDs: $friendIds');
+
+      setState(() {
+        users = allUsers.where((user) => friendIds.contains(user.id)).toList();
+      });
+      print('Friendships loaded! Users: $users');
+    } else {
+      print('Failed to load friendships: ${response.statusCode}');
+      print('Error Body: ${response.body}');
+    }
+  } catch (e) {
+    print('Error loading friendships: $e');
+  }
+}
+
+
+Future<void> _loadFriendRequests() async {
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/friendshipRequests';
+
+  final queryParameters = {
+  'userId': '$_userId',
+};
+  final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
+
+  print('URI: $uri');
+  print('User ID: $_userId');
+  print('Cookie: $_cookie');
+
+  try {
+    final response = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+    );
+
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      List<dynamic> friendIds = data['friendId'];
+
+      print('Friend IDs: $friendIds');
+
+      setState(() {
+        pendingRequests = allUsers.where((user) => friendIds.contains(user.id)).toList();
+      });
+      print('Friendships loaded! Users: $users');
+    } else {
+      print('Failed to load friendships: ${response.statusCode}');
+      print('Error Body: ${response.body}');
+    }
+  } catch (e) {
+    print('Error loading friendships: $e');
+  }
+}
+
   void _filterUsers(String query) {
     if (query.isEmpty) {
       _filteredUsers.value = [];
@@ -109,8 +198,37 @@ void sendFriendRequest(String friendId) async {
     "friendId": friendId
   });
 
-  print('Sending POST request to: $uri');
-  print('Request body: $body');
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Friend request sent successfully');
+    } else {
+      print('Failed to send friend request: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error sending friend request: $e');
+  }
+  _friendNameController.clear();
+}
+
+
+  void acceptRequest(String friendId) async{
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/acceptFriendShipRequest';
+  final uri = Uri.http(baseUrl, endpointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "friendId": friendId
+  });
 
   try {
     final response = await http.post(
@@ -122,9 +240,6 @@ void sendFriendRequest(String friendId) async {
       body: body,
     );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     if (response.statusCode == 200) {
       print('Friend request sent successfully');
     } else {
@@ -134,19 +249,68 @@ void sendFriendRequest(String friendId) async {
     print('Error sending friend request: $e');
   }
 
-  _friendNameController.clear();
-}
-
-
-  void acceptRequest(int index) {
-
   }
 
-  void rejectRequest(int index) {
+  void rejectRequest(String friendId) async {
 
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/rejectFriendShipRequest';
+  final uri = Uri.http(baseUrl, endpointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "friendId": friendId
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      print('Pedido rejeitado');
+    } else {
+      print('Failed to reject friend request: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error sending friend reject: $e');
+  }
   }
 
-  void removeFriend(int index) {
+  void removeFriend(String friendId) async{
+
+          final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/deleteFriendShipRequest';
+  final uri = Uri.http(baseUrl, endpointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "friendId": friendId
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      print('Amizade excluída');
+    } else {
+      print('Failed to delete friendship: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error deleting friendship: $e');
+  }
 
   }
 
@@ -317,7 +481,7 @@ void sendFriendRequest(String friendId) async {
                               value: index,
                             ),
                           ],
-                          onSelected: (value) => removeFriend(value),
+                          onSelected: (value) => removeFriend(users[value].id!),
                         ),
                       ),
                     );
@@ -333,7 +497,7 @@ void sendFriendRequest(String friendId) async {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   initiallyExpanded: true,  
-childrenPadding: EdgeInsets.zero,
+                  childrenPadding: EdgeInsets.zero,
                   children: pendingRequests.map((request) {
                     int index = pendingRequests.indexOf(request);
                     return Card(
@@ -371,11 +535,11 @@ childrenPadding: EdgeInsets.zero,
                           children: [
                             IconButton(
                               icon: Icon(Icons.check, color: Colors.green),
-                              onPressed: () => acceptRequest(index),
+                              onPressed: () => acceptRequest(pendingRequests[index].id ?? ""),
                             ),
                             IconButton(
                               icon: Icon(Icons.close, color: Colors.red),
-                              onPressed: () => rejectRequest(index),
+                              onPressed: () => rejectRequest(pendingRequests[index].id ?? ""),
                             ),
                           ],
                         ),

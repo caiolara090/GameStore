@@ -127,15 +127,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
     super.initState();
     _filteredJogos = jogos;
     _filteredJogos2 = jogos2;
-    // _loadToken();
   }
 
-//  Future<void> _loadToken() async {
-//   String? token = await TokenManager.getToken();
-//   setState(() {
-//     _token = token;
-//   });
-// }
 
   @override
   Widget build(BuildContext context) {

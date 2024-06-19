@@ -254,7 +254,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.grey,
               content: Text('Falha no registro. Tente novamente.'),
             ),
           );
@@ -264,7 +264,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.grey,
             content: Text('Erro ao conectar com o servidor.'),
           ),
         );
