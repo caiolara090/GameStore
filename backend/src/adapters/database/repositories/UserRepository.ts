@@ -111,7 +111,7 @@ export class UserRepository implements IUserRepository {
       query.username = { $regex: username, $options: "iu" };
 
       const users = await UserModel.find(query)
-        .sort(username)
+        .sort({ username: 1 })
         .select(fields)
       
       return users;
@@ -130,8 +130,6 @@ export class UserRepository implements IUserRepository {
         .exec();
   
       if (!user) throw new Error('User not found');
-
-      console.log(title);
   
       const userGames = user?.games?.filter(gameEntry => gameEntry.game.name.toLowerCase()
       .includes(title.toLowerCase())).map(gameEntry => ({

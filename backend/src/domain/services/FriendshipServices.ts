@@ -95,7 +95,6 @@ export class FriendshipServices implements IFriendshipServices {
         await this.friendshipRepository.delete(friendship._id);
       }
       const friendship2 = await this.friendshipRepository.findByUsers(friendId, userId);
-      console.log(friendship2);
       if (friendship2?._id !== undefined) {
         await this.friendshipRepository.delete(friendship2._id);
       }
