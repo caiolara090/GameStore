@@ -19,7 +19,7 @@ export const createReview = async (req: Request<{}, {}, IReviewRequest>, res: Re
 export const findReview = async (req: Request<{}, {}, IReviewRequest>, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
-  const review: Partial<IReview> = req.body;
+  const review: Partial<IReview> = req.query;
   try {
     const foundReview = await reviewServices.findReview(review);
     res.status(200).send(foundReview);
@@ -31,7 +31,7 @@ export const findReview = async (req: Request<{}, {}, IReviewRequest>, res: Resp
 export const deleteReview = async (req: Request, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
-  const _id = req.body.reviewId;
+  const _id = req.query.reviewId as string;
   try {
     await reviewServices.deleteReview(_id);
     res.status(200).send();

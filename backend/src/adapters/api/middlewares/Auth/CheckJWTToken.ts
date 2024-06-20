@@ -4,6 +4,7 @@ import { verify } from "../../../../utils/Token";
 
 export const checkJwtToken: RequestHandler = async (req, res, next) => {
   const token = req.cookies["access_token"];
+  const userId = req.body.userId || req.query.userId;
 
   if (!token)
     return res.status(StatusCodes.FORBIDDEN).json({
@@ -21,7 +22,7 @@ export const checkJwtToken: RequestHandler = async (req, res, next) => {
       error: "Token verification failed",
     });
   } else if (
-    req.body.userId !== String(jwtData.uid) &&
+    userId !== String(jwtData.uid) &&
     String(jwtData.uid) !== process.env.ADMIN
   ) {
     return res.status(StatusCodes.FORBIDDEN).json({

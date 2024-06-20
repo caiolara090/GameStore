@@ -6,7 +6,7 @@ export const getUserLibrary = async (req: Request, res: Response) => {
   const userLibraryServices: IUserLibraryServices = new UserLibraryServices();
 
   try {
-    const user = req.body.userId;
+    const user = req.query.userId as string;
     const library = await userLibraryServices.getUserLibrary(user);
     res.status(200).json(library);
   } catch (error: any) {
@@ -18,7 +18,7 @@ export const getUserGames = async (req: Request, res: Response) => {
   const userLibraryServices: IUserLibraryServices = new UserLibraryServices();
 
   try {
-    const user = req.body.userId;
+    const user = req.query.userId as string;
     const games = await userLibraryServices.getUserGames(user);
     res.status(200).json(games);
   } catch (error: any) {

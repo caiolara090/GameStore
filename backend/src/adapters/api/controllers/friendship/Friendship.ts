@@ -50,7 +50,8 @@ export const deleteFriendship = async (
   res: Response
 ) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
-  const { userId, friendId }: IFriendshipRequest = req.body;
+  const userId = req.query.userId as string;
+  const friendId = req.query.friendId as string;
   try {
     await friendshipServices.delete(userId, friendId);
     res.status(200).send();
@@ -64,7 +65,7 @@ export const getFriendshipRequests = async (
   res: Response
 ) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
-  const { userId }: IFriendshipRequest = req.body;
+  const userId = req.query.userId as string;
   try {
     const friendshipRequests = await friendshipServices.find({ userId, status: 1 });
     res.status(200).send(friendshipRequests);
@@ -78,7 +79,7 @@ export const getFriends = async (
   res: Response
 ) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
-  const { userId }: IFriendshipRequest = req.body;
+  const userId = req.query.userId as string;
   try {
     const friends = await friendshipServices.find({ userId, status: 2 });
     res.status(200).send(friends);
