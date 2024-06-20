@@ -3,6 +3,7 @@ export interface IReview {
   rating: number;
   userId: string;
   gameId: string;
+  _id?: string;
 }
 
 export interface IReviewRequest {
@@ -10,4 +11,5 @@ export interface IReviewRequest {
   gameId: string;
   rating: number;
   description: string;
+  _id?: string;
 }

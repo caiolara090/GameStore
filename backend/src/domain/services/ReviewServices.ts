@@ -2,6 +2,8 @@ import { IReviewServices } from "../ports/Review/ReviewServices";
 import { IReview } from "../entities/Review";
 import { IReviewRepository } from "../ports/Review/ReviewRepository";
 import { ReviewRepository } from "../../adapters/database/repositories/ReviewRepository";
+import { IGameRepository } from "../ports/Game/GameRepository";
+import { GameRepository } from "../../adapters/database/repositories/GameRepository";
 
 export class ReviewServices implements IReviewServices {
   private reviewRepository: IReviewRepository;
@@ -10,16 +12,33 @@ export class ReviewServices implements IReviewServices {
     this.reviewRepository = new ReviewRepository();
   }
 
-  createReview(review: IReview): Promise<IReview> {
+  async createReview(review: IReview): Promise<IReview> {
     try {
-      return this.reviewRepository.create(review);
+      const createdReview = await this.reviewRepository.create(review);
+
+      const gameRepository: IGameRepository = new GameRepository();
+      const game = await gameRepository.findById(review.gameId);
+      if (!game) {
+        throw new Error("Game not found");
+      };
+      game!.reviews!.push(createdReview._id as string);
+      game!.rating = (game!.rating! * (game!.reviews!.length - 1) + createdReview.rating) / game!.reviews!.length;
+
+      return createdReview;
     } catch (error: any) {
       throw new Error("Error creating review: " + error.message);
     }
   }
 
-  deleteReview(_id: string): Promise<void> {
+  async deleteReview(_id: string): Promise<void> {
     try {
+      const review = await this.reviewRepository.find({ _id }) as IReview;
+
+      const gameRepository: IGameRepository = new GameRepository();
+      const game = await gameRepository.findById(review!.gameId);
+      game!.reviews = game!.reviews!.filter((reviewId) => reviewId !== _id);
+      game!.rating = (game!.rating! * (game!.reviews!.length + 1) - review.rating) / game!.reviews!.length;
+
       return this.reviewRepository.delete(_id);
     } catch (error: any) {
       throw new Error("Error deleting review: " + error.message);

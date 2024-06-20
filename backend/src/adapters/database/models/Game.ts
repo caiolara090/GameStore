@@ -7,6 +7,7 @@ const GameSchema = new mongoose.Schema<IGame>({
   image: { type: String, required: true },
   price: { type: Number, required: true },
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review', default: [] }],
+  rating: { type: Number, default: 0 },
 });
 
 export const GameModel = mongoose.model<IGame>("Game", GameSchema);
