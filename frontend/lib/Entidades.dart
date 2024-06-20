@@ -8,6 +8,7 @@ class User {
   String password;
   String? link;
   String? id;
+  int credits;
 
   User({
     required this.name,
@@ -15,7 +16,8 @@ class User {
     required this.email,
     required this.password,
     this.link,
-    this.id
+    this.id,
+    required this.credits,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -24,7 +26,8 @@ class User {
       dob: json['age'].toString(),
       email: json['email'] ?? '',
       password: json['password'] ?? '',
-      id : json['_id'],
+      id: json['_id'],
+      credits: json['credits'] ?? 0,
     );
   }
 
@@ -35,9 +38,12 @@ class User {
       'email': email,
       'password': password,
       'link': link,
+      'id': id,
+      'credits': credits,
     };
   }
 }
+
 
 class Jogo {
   String nome;
