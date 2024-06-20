@@ -67,4 +67,13 @@ export class GameRepository implements IGameRepository {
       throw new Error("Error searching for games: " + error.message);
     }
   }
+
+  async getPopularGames(): Promise<IGame[] | null> {
+    try {
+      const games = await GameModel.find().sort({ rating: -1 }).limit(10);
+      return games;
+    } catch (error: any) {
+      throw new Error("Error getting popular games: " + error.message);
+    }
+  }
 }

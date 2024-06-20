@@ -7,4 +7,5 @@ export interface IGameRepository {
   find(game: Partial<IGame>): Promise<IGame | IGame[] | null>;
   findById(_id: string): Promise<IGame | null>;
   searchGames(gameTitle: string, fields: string): Promise<IGame[] | null>;
+  getPopularGames(): Promise<IGame[] | null>;
 }

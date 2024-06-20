@@ -19,3 +19,18 @@ export const searchGames = async (req: Request<{}, {}>, res: Response) => {
     });
   }
 };
+
+export const getPopularGames = async (req: Request, res: Response) => {
+  const gameService: IGameServices = new GameServices();
+  try {
+    const games = await gameService.getPopularGames();
+
+    return res.status(StatusCodes.OK).json({
+      games: games,
+    });
+  } catch (error: any) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: error.message,
+    });
+  }
+};

@@ -9,4 +9,10 @@ export class GameServices implements IGameServices {
 
     return await gameRepository.searchGames(gameTitle, fields);
   }
+
+  async getPopularGames(): Promise<IGame[] | null> {
+    const gameRepository: IGameRepository = new GameRepository();
+
+    return await gameRepository.getPopularGames();
+  }
 }
