@@ -60,7 +60,7 @@ export class GameRepository implements IGameRepository {
       query.name = { $regex: gameTitle, $options: "iu" };
 
       const games = await GameModel.find(query)
-        .sort(gameTitle)
+        .sort('name')
         .select(fields)
 
       return games;
