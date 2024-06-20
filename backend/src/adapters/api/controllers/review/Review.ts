@@ -32,6 +32,10 @@ export const deleteReview = async (req: Request, res: Response) => {
   const reviewServices: IReviewServices = new ReviewServices();
 
   const _id = req.query.reviewId as string;
+  if (!_id) {
+    res.status(400).send("Error deleting review: reviewId is required");
+    return;
+  }
   try {
     await reviewServices.deleteReview(_id);
     res.status(200).send();

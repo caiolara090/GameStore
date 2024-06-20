@@ -52,6 +52,10 @@ export const deleteFriendship = async (
   const friendshipServices: IFriendshipServices = new FriendshipServices();
   const userId = req.query.userId as string;
   const friendId = req.query.friendId as string;
+  if (!userId || !friendId) {
+    res.status(400).send("Error deleting friendship: userId and friendId are required");
+    return;
+  }
   try {
     await friendshipServices.delete(userId, friendId);
     res.status(200).send();
@@ -66,6 +70,10 @@ export const getFriendshipRequests = async (
 ) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
   const userId = req.query.userId as string;
+  if (!userId) {
+    res.status(400).send("Error getting friendship requests: userId is required");
+    return;
+  }
   try {
     const friendshipRequests = await friendshipServices.find({ userId, status: 1 });
     res.status(200).send(friendshipRequests);
@@ -80,6 +88,10 @@ export const getFriends = async (
 ) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();
   const userId = req.query.userId as string;
+  if (!userId) {
+    res.status(400).send("Error getting friends: userId is required");
+    return;
+  }
   try {
     const friends = await friendshipServices.find({ userId, status: 2 });
     res.status(200).send(friends);
