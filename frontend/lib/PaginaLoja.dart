@@ -4,6 +4,8 @@ import 'PaginaBiblioteca.dart';
 import 'Entidades.dart';
 import 'PaginaDados.dart';
 import 'PaginaJogo.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PaginaLoja extends StatefulWidget {
   @override
@@ -12,6 +14,11 @@ class PaginaLoja extends StatefulWidget {
 
 class _PaginaLojaState extends State<PaginaLoja> {
   int _currentIndex = 0;
+  List<User> users = [];
+  List<User> allUsers = [];
+  String? _userId;
+  String? _cookie;
+  int? _userCredits;
 
   // Primeira lista de jogos
   List<Jogo> jogos = [
@@ -120,15 +127,84 @@ class _PaginaLojaState extends State<PaginaLoja> {
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
   List<Jogo> _filteredJogos2 = [];
-  String? _token;
 
   @override
   void initState() {
     super.initState();
     _filteredJogos = jogos;
     _filteredJogos2 = jogos2;
+    _initializeData().then((_) {
+      if (_userId != null) {
+        _getUserCreditsById(_userId!).then((credits) {
+          setState(() {
+            _userCredits = credits;
+          });
+        });
+      }
+    });
   }
 
+  Future<void> _initializeData() async {
+    await _loadAllUsers();
+    await _loadUserId();
+    await _loadUserCookie();
+  }
+
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
+    setState(() {
+      _userId = id;
+    });
+  }
+
+  Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
+    });
+  }
+
+  Future<void> _loadAllUsers() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/searchUser';
+
+    final uri = Uri.http(baseUrl, endPointUrl);
+
+    final body = jsonEncode({
+      "username": "^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+"
+    });
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> usersData = data['users'];
+        setState(() {
+          allUsers = usersData.map((userData) => User.fromJson(userData)).toList();
+        });
+      } else {
+        throw Exception('Failed to load users');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<int?> _getUserCreditsById(String userId) async {
+    for (var user in allUsers) {
+      if (user.id == userId) {
+        return user.credits;
+      }
+    }
+    return null; // Retorna null se o usuário não for encontrado
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,16 +275,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                     const SizedBox(width: 10),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.25,
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              'R\$00,00',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ],
+                      child: Center(
+                        child: Text(
+                          'R\$${_userCredits ?? 0},00',
+                          style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],
@@ -260,7 +332,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                                                    children: [
                                     Text(
                                       _filteredJogos[index].nome,
                                       style: const TextStyle(
@@ -417,3 +489,4 @@ class _PaginaLojaState extends State<PaginaLoja> {
     );
   }
 }
+
