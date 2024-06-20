@@ -17,12 +17,7 @@ export class ReviewServices implements IReviewServices {
       const createdReview = await this.reviewRepository.create(review);
 
       const gameRepository: IGameRepository = new GameRepository();
-      const game = await gameRepository.findById(review.gameId);
-      if (!game) {
-        throw new Error("Game not found");
-      };
-      game!.reviews!.push(createdReview._id as string);
-      game!.rating = (game!.rating! * (game!.reviews!.length - 1) + createdReview.rating) / game!.reviews!.length;
+      await gameRepository.insertReview(review.gameId, createdReview as IReview);
 
       return createdReview;
     } catch (error: any) {
@@ -35,9 +30,7 @@ export class ReviewServices implements IReviewServices {
       const review = await this.reviewRepository.find({ _id }) as IReview;
 
       const gameRepository: IGameRepository = new GameRepository();
-      const game = await gameRepository.findById(review!.gameId);
-      game!.reviews = game!.reviews!.filter((reviewId) => reviewId !== _id);
-      game!.rating = (game!.rating! * (game!.reviews!.length + 1) - review.rating) / game!.reviews!.length;
+      await gameRepository.removeReview(review.gameId, review as IReview);
 
       return this.reviewRepository.delete(_id);
     } catch (error: any) {

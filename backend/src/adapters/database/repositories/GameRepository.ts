@@ -1,6 +1,7 @@
 import { IGameRepository } from "../../../domain/ports/Game";
 import { IGame } from "../../../domain/entities/Game";
 import { GameModel } from "../models/Game";
+import { IReview } from "../../../domain/entities/Review";
 
 export class GameRepository implements IGameRepository {
   async create(game: IGame): Promise<IGame> {
@@ -70,10 +71,42 @@ export class GameRepository implements IGameRepository {
 
   async getPopularGames(): Promise<IGame[] | null> {
     try {
-      const games = await GameModel.find().sort({ rating: -1 }).limit(10);
+      const games = await GameModel.find()
+      .sort({ rating: -1 })
+      .limit(10)
+      .populate({
+        path: 'reviews',
+        populate: {
+          path: 'userId',
+          model: 'User',
+          select: 'username email'
+        }
+      });
       return games;
     } catch (error: any) {
       throw new Error("Error getting popular games: " + error.message);
+    }
+  }
+
+  async insertReview(gameId: string, review: IReview): Promise<void> {
+    try {
+      const game = await GameModel.findById(gameId);
+      game!.reviews!.push(review._id as string);
+      game!.rating = (game!.rating! * (game!.reviews!.length - 1) + review.rating) / game!.reviews!.length;
+      await game!.save();
+    } catch (error: any) {
+      throw new Error("Error inserting review: " + error.message);
+    }
+  }
+
+  async removeReview(gameId: string, review: IReview): Promise<void> {
+    try {
+      const game = await GameModel.findById(gameId);
+      game!.reviews = game!.reviews!.filter((gameReview) => gameReview !== review._id as string);
+      game!.rating = (game!.rating! * (game!.reviews!.length + 1) - review.rating) / game!.reviews!.length;
+      await game!.save();
+    } catch (error: any) {
+      throw new Error("Error removing review: " + error.message);
     }
   }
 }
