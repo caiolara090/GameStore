@@ -62,11 +62,11 @@ class Jogo {
 
   factory Jogo.fromJson(Map<String, dynamic> json) {
     return Jogo(
-      nome: json['nome'],
-      preco: json['preco'].toDouble(),
-      link: json['link'],
-      descricao: json['descricao'],
-      isFavorite: json['isFavorite'] ?? false,
+      nome: json['name'] as String,
+      preco: (json['price'] as num).toDouble(),
+      link: json['image'] as String,
+      descricao: json['description'] as String,
+      isFavorite: json['isFavorite'] != null ? json['isFavorite'] as bool : false,
     );
   }
 }
