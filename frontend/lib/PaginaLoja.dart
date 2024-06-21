@@ -19,110 +19,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
   String? _userId;
   String? _cookie;
   int? _userCredits;
-
-  // Primeira lista de jogos
-  List<Jogo> jogos = [
-    Jogo(
-      nome: "The Witcher 3",
-      descricao:
-          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "Minecraft",
-      descricao:
-          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "GTA V",
-      descricao:
-          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "The Witcher 3",
-      descricao:
-          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "Minecraft",
-      descricao:
-          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "GTA V",
-      descricao:
-          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "The Witcher 3",
-      descricao:
-          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "Minecraft",
-      descricao:
-          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "GTA V",
-      descricao:
-          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/9/9c/Minecraft_capa.png",
-      isFavorite: true,
-    ),
-  ];
-
-  // Segunda lista de jogos
-  List<Jogo> jogos2 = [
-    Jogo(
-      nome: "The Witcher 3",
-      descricao:
-          "Um RPG épico aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      preco: 59.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "Minecraft",
-      descricao:
-          "Construa e explore mundos infinitos, Construa e explore mundos infinitos",
-      preco: 29.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
-      isFavorite: true,
-    ),
-    Jogo(
-      nome: "GTA V",
-      descricao:
-          "Um jogo de ação em mundo aberto, Um jogo de ação em mundo aberto",
-      preco: 39.99,
-      link: "https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png",
-      isFavorite: true,
-    ),
-  ];
+  List<Jogo> allGames = [];
+  List<Jogo> popularGames = [];
 
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
@@ -131,8 +29,6 @@ class _PaginaLojaState extends State<PaginaLoja> {
   @override
   void initState() {
     super.initState();
-    _filteredJogos = jogos;
-    _filteredJogos2 = jogos2;
     _initializeData().then((_) {
       if (_userId != null) {
         _getUserCreditsById(_userId!).then((credits) {
@@ -148,6 +44,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
     await _loadAllUsers();
     await _loadUserId();
     await _loadUserCookie();
+    await _loadAllGames();
+    await _loadPopularGames();
   }
 
   Future<void> _loadUserId() async {
@@ -206,6 +104,70 @@ class _PaginaLojaState extends State<PaginaLoja> {
     return null; // Retorna null se o usuário não for encontrado
   }
 
+  Future<void> _loadAllGames() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/searchGame';
+
+    final uri = Uri.http(baseUrl, endPointUrl);
+
+    final body = jsonEncode({
+      "gameTitle": ".*",
+      
+    });
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> gamesData = data['games'];
+        setState(() {
+          allGames = gamesData.map((gameData) => Jogo.fromJson(gameData)).toList();
+          _filteredJogos = allGames;
+        });
+      } else {
+        throw Exception('Failed to load games');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> _loadPopularGames() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/popular';
+
+    final uri = Uri.http(baseUrl, endPointUrl);
+
+    try {
+      final response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> gamesData = data['games'];
+        setState(() {
+          popularGames = gamesData.map((gameData) => Jogo.fromJson(gameData)).toList();
+          _filteredJogos2 = popularGames;
+        });
+      } else {
+        throw Exception('Failed to load popular games');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -242,12 +204,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                         controller: _searchController,
                         onChanged: (value) {
                           setState(() {
-                            _filteredJogos = jogos
+                            _filteredJogos = allGames
                                 .where((jogo) => jogo.nome
                                     .toLowerCase()
                                     .contains(value.toLowerCase()))
                                 .toList();
-                            _filteredJogos2 = jogos2
+                            _filteredJogos2 = popularGames
                                 .where((jogo) => jogo.nome
                                     .toLowerCase()
                                     .contains(value.toLowerCase()))
@@ -296,86 +258,6 @@ class _PaginaLojaState extends State<PaginaLoja> {
                     child: Center(
                       child: Text(
                         'Jogos em Alta',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _filteredJogos.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    JogoPagina(jogo: _filteredJogos[index])),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                _filteredJogos[index].link,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                    Text(
-                                      _filteredJogos[index].nome,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      _filteredJogos[index].descricao,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20), // Espaçamento entre as listas
-              // Lista de todos os jogos
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Text(
-                        'Todos os Jogos',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -446,6 +328,86 @@ class _PaginaLojaState extends State<PaginaLoja> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20), // Espaçamento entre as listas
+              // Lista de todos os jogos
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Center(
+                      child: Text(
+                        'Todos os Jogos',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _filteredJogos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    JogoPagina(jogo: _filteredJogos[index])),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                _filteredJogos[index].link,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _filteredJogos[index].nome,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      _filteredJogos[index].descricao,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -489,4 +451,3 @@ class _PaginaLojaState extends State<PaginaLoja> {
     );
   }
 }
-
