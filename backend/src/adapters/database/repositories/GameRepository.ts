@@ -60,6 +60,14 @@ export class GameRepository implements IGameRepository {
       query.name = { $regex: gameTitle, $options: "iu" };
 
       const games = await GameModel.find(query)
+        .populate({
+          path: 'reviews',
+          populate: {
+            path: 'userId',
+            model: 'User',
+            select: 'username email'
+          }
+        })
         .sort('name')
         .select(fields)
 
