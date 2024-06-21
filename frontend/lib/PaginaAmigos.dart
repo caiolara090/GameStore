@@ -373,10 +373,10 @@ void removeFriend(String friendId) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 100).withOpacity(0.9),
+        backgroundColor: Colors.cyan.shade400,
         title: const Text(
           'Página de Amigos',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
       ),

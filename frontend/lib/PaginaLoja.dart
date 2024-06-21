@@ -169,7 +169,9 @@ class _PaginaLojaState extends State<PaginaLoja> {
   }
 
   @override
+
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

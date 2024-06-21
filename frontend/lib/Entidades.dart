@@ -27,7 +27,7 @@ class User {
       email: json['email'] ?? '',
       password: json['password'] ?? '',
       id: json['_id'],
-      credits: json['credits'] ?? 0,
+      credits: int.parse(json['credits'].toStringAsFixed(0))
     );
   }
 

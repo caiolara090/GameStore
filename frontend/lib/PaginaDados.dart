@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'token_manager.dart';
+import 'PaginaBiblioteca.dart';
+import 'Entidades.dart';
+import 'PaginaDados.dart';
+import 'PaginaJogo.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PaginaDados extends StatefulWidget {
   PaginaDados({Key? key}) : super(key: key);
@@ -9,27 +16,78 @@ class PaginaDados extends StatefulWidget {
 
 class _PaginaDadosState extends State<PaginaDados> {
   int _currentIndex = 2;
-  late String nome;
-  late String email;
-  late int telefone;
-  late String rua;
-  late int numero;
-  late String bairro;
-  late String complemento;
-  late String ponto_referencia;
-  double saldo = 0.00;
+  late String nome = "";
+  late String email = "";
+  late String idade = "";
+  late String? _userId;
+  List<User> allUsers = [];
+  bool isLoading = true; // Variável de estado para controlar o carregamento
 
   @override
   void initState() {
     super.initState();
-    nome = 'Luiz Fernando Rocha';
-    email = 'luiz.fernando50@gmail.com';
-    telefone = 25;
-    rua = "paranaiba";
-    numero = 462;
-    bairro = "Macaquinhos";
-    complemento = "Perto do Posto Ipiranga";
-    ponto_referencia = "Próximo ao Posto Ipiranga";
+    initializeData();
+  }
+
+  Future<void> initializeData() async {
+    await _loadUserId();
+    await _loadAllUsers();
+    await _getUserCreditsById(_userId!);
+    setState(() {
+      isLoading = false; // Define isLoading como falso após carregar os dados
+    });
+  }
+
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
+    setState(() {
+      _userId = id;
+    });
+  }
+
+  Future<void> _getUserCreditsById(String userId) async {
+    for (var user in allUsers) {
+      if (user.id == userId) {
+        setState(() {
+          nome = user.name;
+          email = user.email;
+          idade = user.dob;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadAllUsers() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/searchUser';
+
+    final uri = Uri.http(baseUrl, endPointUrl);
+
+    final body = jsonEncode({
+      "username": "^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+"
+    });
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> usersData = data['users'];
+        setState(() {
+          allUsers = usersData.map((userData) => User.fromJson(userData)).toList();
+        });
+      } else {
+        throw Exception('Failed to load users');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -42,7 +100,7 @@ class _PaginaDadosState extends State<PaginaDados> {
           child: Text(
             'Informações da Conta',
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -65,7 +123,7 @@ class _PaginaDadosState extends State<PaginaDados> {
                     SizedBox(height: 20),
                     _buildInfoTextField('Nome:', nome),
                     _buildInfoTextField('Email:', email),
-                    _buildInfoTextField('Telefone:', telefone.toString()),
+                    _buildInfoTextField('Idade:', idade),
                     SizedBox(height: 20),
                   ],
                 ),

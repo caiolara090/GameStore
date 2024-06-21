@@ -42,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan.shade400, Colors.blue.shade900],
+                colors: [Colors.cyan.shade400, Colors.cyan.shade400],
               ),
             ),
             child: const SizedBox.expand(),
