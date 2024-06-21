@@ -251,20 +251,40 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 ),
               ),
               const SizedBox(height: 10),
-              // Lista de jogos em alta
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Text(
-                        'Jogos em Alta',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Sombra
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // Deslocamento da sombra
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  child: Center(
+                    child: Text(
+                      'TOP 10 Jogos',
+                      style: TextStyle(
+                        fontSize: 24, // Tamanho da fonte
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Cor do texto
+                        shadows: [
+                          Shadow(
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                ),
                   const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
@@ -335,16 +355,37 @@ class _PaginaLojaState extends State<PaginaLoja> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Text(
-                        'Todos os Jogos',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                  Container(
+                  decoration: BoxDecoration(
+                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Sombra
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // Deslocamento da sombra
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  child: Center(
+                    child: Text(
+                      'Todos os Jogos',
+                      style: TextStyle(
+                        fontSize: 24, // Tamanho da fonte
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Cor do texto
+                        shadows: [
+                          Shadow(
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                ),
                   const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
