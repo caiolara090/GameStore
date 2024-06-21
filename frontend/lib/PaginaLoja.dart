@@ -6,6 +6,7 @@ import 'PaginaDados.dart';
 import 'PaginaJogo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class PaginaLoja extends StatefulWidget {
   @override
@@ -171,7 +172,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
   @override
 
   Widget build(BuildContext context) {
-
+    final formatter = NumberFormat('#,##0.00', 'pt_BR');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -239,7 +240,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Center(
           child: Text(
-            'R\$${_userCredits ?? 0},00',
+            'R\$${formatter.format(_userCredits ?? 0)}',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -349,7 +350,8 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
+                                    
+                                    'R\$${formatter.format(_filteredJogos2[index].preco ?? 0)}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -466,7 +468,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                  'R\$${formatter.format(_filteredJogos[index].preco ?? 0)}',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
