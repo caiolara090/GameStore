@@ -35,7 +35,12 @@ class _FriendPageState extends State<FriendPage> {
     await _loadUserId();
     await _loadUserCookie();
     await _loadFriends();
-    _loadFriendRequests();
+    await _loadFriendRequests();
+  }
+
+    Future<void> _loadFriendship() async {
+    await _loadFriends();
+    await _loadFriendRequests();
   }
     
   Future<void> _loadUserId() async {
@@ -90,21 +95,16 @@ Future<void> _loadAllUsers() async {
 Future<void> _loadFriends() async {
   final baseUrl = '10.0.2.2:3000';
   final endpointUrl = '/friends';
-
   final queryParameters = {
-  'userId': '$_userId',
-};
+    'userId': _userId,
+  };
   final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
-
-  print('URI: $uri');
-  print('User ID: $_userId');
-  print('Cookie: $_cookie');
 
   try {
     final response = await http.get(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=utf-8',
         'Cookie': 'access_token=$_cookie'
       },
     );
@@ -113,14 +113,40 @@ Future<void> _loadFriends() async {
     print('Response Body: ${response.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      List<dynamic> friendIds = data['friendId'];
+      var data = jsonDecode(response.body);
 
-      print('Friend IDs: $friendIds');
+      List<User> friends = [];
+
+      if (data is List) {
+        // Se a resposta for uma lista
+        friends = data.map((friendship) {
+          var friendData = friendship['friendId'];
+          return User(
+            name: friendData['username'] ?? '',
+            dob: friendData['age'].toString(),
+            email: friendData['email'] ?? '',
+            password: friendData['password'] ?? '',
+            id: friendData['_id'],
+            credits: friendData['credits'] ?? 0,
+          );
+        }).toList();
+      } else if (data is Map) {
+        // Se a resposta for um único mapa
+        var friendData = data['friendId'];
+        friends.add(User(
+          name: friendData['username'] ?? '',
+          dob: friendData['age'].toString(),
+          email: friendData['email'] ?? '',
+          password: friendData['password'] ?? '',
+          id: friendData['_id'],
+          credits: friendData['credits'] ?? 0,
+        ));
+      }
 
       setState(() {
-        users = allUsers.where((user) => friendIds.contains(user.id)).toList();
+        users = friends; // Atualizamos a lista de usuários com os amigos
       });
+
       print('Friendships loaded! Users: $users');
     } else {
       print('Failed to load friendships: ${response.statusCode}');
@@ -141,31 +167,50 @@ Future<void> _loadFriendRequests() async {
 };
   final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
 
-  print('URI: $uri');
-  print('User ID: $_userId');
-  print('Cookie: $_cookie');
-
-  try {
+    try {
     final response = await http.get(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=utf-8',
         'Cookie': 'access_token=$_cookie'
       },
     );
 
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      List<dynamic> friendIds = data['friendId'];
+      var data = jsonDecode(response.body);
 
-      print('Friend IDs: $friendIds');
+      List<User> friends = [];
+
+      if (data is List) {
+        // Se a resposta for uma lista
+        friends = data.map((friendship) {
+          var friendData = friendship['friendId'];
+          return User(
+            name: friendData['username'] ?? '',
+            dob: friendData['age'].toString(),
+            email: friendData['email'] ?? '',
+            password: friendData['password'] ?? '',
+            id: friendData['_id'],
+            credits: friendData['credits'] ?? 0,
+          );
+        }).toList();
+      } else if (data is Map) {
+        // Se a resposta for um único mapa
+        var friendData = data['friendId'];
+        friends.add(User(
+          name: friendData['username'] ?? '',
+          dob: friendData['age'].toString(),
+          email: friendData['email'] ?? '',
+          password: friendData['password'] ?? '',
+          id: friendData['_id'],
+          credits: friendData['credits'] ?? 0,
+        ));
+      }
 
       setState(() {
-        pendingRequests = allUsers.where((user) => friendIds.contains(user.id)).toList();
+        pendingRequests = friends; // Atualizamos a lista de usuários com os amigos
       });
+
       print('Friendships loaded! Users: $users');
     } else {
       print('Failed to load friendships: ${response.statusCode}');
@@ -222,12 +267,12 @@ void sendFriendRequest(String friendId) async {
 
   void acceptRequest(String friendId) async{
   final baseUrl = '10.0.2.2:3000';
-  final endpointUrl = '/acceptFriendShipRequest';
+  final endpointUrl = '/acceptFriendshipRequest';
   final uri = Uri.http(baseUrl, endpointUrl);
 
   final body = jsonEncode({
-    "userId": _userId,
-    "friendId": friendId
+    "friendId":"$friendId",
+    "userId": "$_userId"
   });
 
   try {
@@ -237,13 +282,15 @@ void sendFriendRequest(String friendId) async {
         'Content-Type': 'application/json',
         'Cookie': 'access_token=$_cookie'
       },
-      body: body,
+      body: body
     );
 
     if (response.statusCode == 200) {
       print('Friend request sent successfully');
+      _loadFriendship();
     } else {
       print('Failed to send friend request: ${response.statusCode}');
+      print(response.body);
     }
   } catch (e) {
     print('Error sending friend request: $e');
@@ -254,12 +301,12 @@ void sendFriendRequest(String friendId) async {
   void rejectRequest(String friendId) async {
 
   final baseUrl = '10.0.2.2:3000';
-  final endpointUrl = '/rejectFriendShipRequest';
+  final endpointUrl = '/rejectFriendshipRequest';
   final uri = Uri.http(baseUrl, endpointUrl);
 
   final body = jsonEncode({
-    "userId": _userId,
-    "friendId": friendId
+    "friendId":"$friendId",
+    "userId": "$_userId"
   });
 
   try {
@@ -269,50 +316,58 @@ void sendFriendRequest(String friendId) async {
         'Content-Type': 'application/json',
         'Cookie': 'access_token=$_cookie'
       },
-      body: body,
+      body: body
     );
 
     if (response.statusCode == 200) {
       print('Pedido rejeitado');
+      _loadFriendship();
     } else {
       print('Failed to reject friend request: ${response.statusCode}');
+      print(response.body);
     }
   } catch (e) {
     print('Error sending friend reject: $e');
   }
   }
 
-  void removeFriend(String friendId) async{
+void removeFriend(String friendId) async {
+  final baseUrl = '10.0.2.2:3000';
+  final endpointUrl = '/deleteFriendship';
+  final queryParameters = {
+    'userId': _userId,
+    'friendId': friendId,
+  };
 
-          final baseUrl = '10.0.2.2:3000';
-  final endpointUrl = '/deleteFriendShipRequest';
-  final uri = Uri.http(baseUrl, endpointUrl);
+  final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
 
-  final body = jsonEncode({
-    "userId": _userId,
-    "friendId": friendId
-  });
+  print('URI: $uri');
+  print('User ID: $_userId');
+  print('Friend ID: $friendId');
+  print('Cookie: $_cookie');
 
   try {
-    final response = await http.post(
+    final response = await http.delete(
       uri,
       headers: {
-        'Content-Type': 'application/json',
         'Cookie': 'access_token=$_cookie'
       },
-      body: body,
     );
+
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
       print('Amizade excluída');
+      _loadFriends(); // Atualiza a lista de amizades após a exclusão
     } else {
       print('Failed to delete friendship: ${response.statusCode}');
+      print('Error Body: ${response.body}');
     }
   } catch (e) {
     print('Error deleting friendship: $e');
   }
-
-  }
+}
 
   @override
   Widget build(BuildContext context) {
