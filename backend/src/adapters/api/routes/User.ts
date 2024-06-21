@@ -31,4 +31,6 @@ router.post("/addCredits", checkJwtToken, addCredits);
 
 router.post("/setFavorite", checkJwtToken, toggleUsersGameFavorite);
 
+router.get("/hasGame", hasGame);
+
 export { router as userRouter };
