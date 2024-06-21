@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'token_manager.dart';
 import 'Entidades.dart';
+import 'PaginaDados.dart';
+import 'PaginaJogo.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Avaliacao {
   final String nome;
@@ -25,48 +30,21 @@ class JogoPagina extends StatefulWidget {
 }
 
 class _JogoPaginaState extends State<JogoPagina> {
+  int _currentIndex = 2;
+  late String nome = "";
+  late String email = "";
+  late String idade = "";
+  late String? _userId;
+  List<User> allUsers = [];
+  //bool isLoading = true;
+  String? _cookie;
   List<Avaliacao> avaliacoes = [
-    Avaliacao(
-      nome: 'João',
-      nota: 4,
-      comentario: 'Ótimo atendimento e ambiente agradável.',
-      data: DateTime(2023, 5, 10),
-    ),
-    Avaliacao(
-      nome: 'Maria',
-      nota: 5,
-      comentario: 'Excelente serviço! Recomendo a todos.',
-      data: DateTime(2023, 4, 22),
-    ),
-    Avaliacao(
-      nome: 'Pedro',
-      nota: 3,
-      comentario: 'Poderia melhorar no atendimento ao cliente.',
-      data: DateTime(2023, 3, 15),
-    ),
-    Avaliacao(
-      nome: 'João',
-      nota: 4,
-      comentario: 'Ótimo atendimento e ambiente agradável.',
-      data: DateTime(2023, 5, 10),
-    ),
-    Avaliacao(
-      nome: 'Maria',
-      nota: 5,
-      comentario: 'Excelente serviço! Recomendo a todos.',
-      data: DateTime(2023, 4, 22),
-    ),
-    Avaliacao(
-      nome: 'Pedro',
-      nota: 3,
-      comentario: 'Poderia melhorar no atendimento ao cliente.',
-      data: DateTime(2023, 3, 15),
-    ),
-  ];
+    ];
+  late String? _gameId;
 
   final TextEditingController _avaliacaoController = TextEditingController();
   List<bool> selectedStars = [true, false, false, false, false];
-  bool isLoading = false;
+  //bool isLoading = false;
 
   // Função para calcular a média das notas das avaliações
   double calcularMediaNotas(List<Avaliacao> avaliacoes) {
@@ -75,7 +53,87 @@ class _JogoPaginaState extends State<JogoPagina> {
     double somaNotas = avaliacoes.fold(0, (previous, current) => previous + current.nota);
     return somaNotas / avaliacoes.length;
   }
+   @override
+  void initState() {
+    super.initState();
+    initializeData();
+  }
 
+  Future<void> initializeData() async {
+    await _loadUserId();
+    await _loadUserCookie();
+    await _loadGame();
+    setState(() {
+      //isLoading = false; // Define isLoading como falso após carregar os dados
+    });
+  }
+
+  Future<void> _loadUserId() async {
+    String? id = await CookieManager.loadId();
+    setState(() {
+      _userId = id;
+    });
+  }
+  Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
+    });
+  }
+    Future<void> _loadGame() async {
+  final baseUrl = '10.0.2.2:3000'; // Altere conforme o seu servidor
+  final endPointUrl = '/searchGame';
+
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "gameTitle": widget.jogo.nome,
+    "fields": "name description price reviews" // Campos desejados
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      List<dynamic> games = data['games'];
+
+      if (games.isNotEmpty) {
+        Map<String, dynamic> gameData = games[0];
+        List<dynamic> reviewsData = gameData['reviews'];
+        _gameId = gameData['_id'];
+        List<Avaliacao> loadedAvaliacoes = reviewsData.map((review) {
+          return Avaliacao(
+            nome: review['userId']['username'],
+            nota: review['rating'],
+            comentario: review['description'],
+            data: DateTime.now(), // Aqui você pode usar a data real da avaliação, se disponível
+          );
+        }).toList();
+
+        setState(() {
+          avaliacoes = loadedAvaliacoes;
+          //isLoading = false;
+        });
+      } else {
+        throw Exception('Jogo não encontrado');
+      }
+    } else {
+      throw Exception('Falha ao carregar as avaliações do jogo');
+    }
+  } catch (e) {
+    print('Erro: $e');
+    setState(() {
+      //isLoading = false;
+    });
+  }
+}
   @override
   Widget build(BuildContext context) {
     // Calcular a média das notas
