@@ -169,7 +169,9 @@ class _PaginaLojaState extends State<PaginaLoja> {
   }
 
   @override
+
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -196,136 +198,173 @@ class _PaginaLojaState extends State<PaginaLoja> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            _filteredJogos = allGames
-                                .where((jogo) => jogo.nome
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase()))
-                                .toList();
-                            _filteredJogos2 = popularGames
-                                .where((jogo) => jogo.nome
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase()))
-                                .toList();
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          hintText: 'Pesquisar...',
-                          hintStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          labelStyle: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.25,
-                      child: Center(
-                        child: Text(
-                          'R\$${_userCredits ?? 0},00',
-                          style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  child: Row(
+    children: [
+      Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextField(
+            controller: _searchController,
+            onChanged: (value) {
+              setState(() {
+                _filteredJogos = allGames
+                    .where((jogo) =>
+                        jogo.nome.toLowerCase().contains(value.toLowerCase()))
+                    .toList();
+                _filteredJogos2 = popularGames
+                    .where((jogo) =>
+                        jogo.nome.toLowerCase().contains(value.toLowerCase()))
+                    .toList();
+              });
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              hintText: 'Pesquisar...',
+              hintStyle: TextStyle(color: Colors.black),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.search, color: Colors.black),
+            ),
+          ),
+        ),
+      ),
+      SizedBox(width: 16),
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.1),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        child: Center(
+          child: Text(
+            'R\$${_userCredits ?? 0},00',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
               const SizedBox(height: 10),
-              // Lista de jogos em alta
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Text(
-                        'Jogos em Alta',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Sombra
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // Deslocamento da sombra
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  child: Center(
+                    child: Text(
+                      'TOP 10 Jogos',
+                      style: TextStyle(
+                        fontSize: 24, // Tamanho da fonte
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Cor do texto
+                        shadows: [
+                          Shadow(
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                ),
                   const SizedBox(height: 10),
                   ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _filteredJogos2.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    JogoPagina(jogo: _filteredJogos2[index])),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _filteredJogos2.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => JogoPagina(jogo: _filteredJogos2[index])),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(0),
+                              child: Image.network(
                                 _filteredJogos2[index].link,
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
                               ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _filteredJogos2[index].nome,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _filteredJogos2[index].nome,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      _filteredJogos2[index].descricao,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.black),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    _filteredJogos2[index].descricao,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
+                ),
                 ],
               ),
               const SizedBox(height: 20), // Espaçamento entre as listas
@@ -333,79 +372,116 @@ class _PaginaLojaState extends State<PaginaLoja> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Text(
-                        'Todos os Jogos',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                  Container(
+                  decoration: BoxDecoration(
+                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Sombra
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // Deslocamento da sombra
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  child: Center(
+                    child: Text(
+                      'Todos os Jogos',
+                      style: TextStyle(
+                        fontSize: 24, // Tamanho da fonte
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Cor do texto
+                        shadows: [
+                          Shadow(
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                ),
                   const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _filteredJogos.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    JogoPagina(jogo: _filteredJogos[index])),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                _filteredJogos[index].link,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _filteredJogos[index].nome,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      _filteredJogos[index].descricao,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.black),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                 ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _filteredJogos.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => JogoPagina(jogo: _filteredJogos[index])),
                       );
                     },
-                  ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      padding: EdgeInsets.all(12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(0),
+                            child: Image.network(
+                              _filteredJogos[index].link,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _filteredJogos[index].nome,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  _filteredJogos[index].descricao,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
                 ],
               ),
             ],

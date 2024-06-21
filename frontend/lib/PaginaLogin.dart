@@ -23,82 +23,101 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(162, 38, 197, 218),
-        title: Column(
-          children: [
-            SizedBox(height: 20),
-            const Text(
-              'GameStore',
-              style: TextStyle(fontSize: 40.0),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Colors.cyan.shade400,
+      //   // title: const Text(
+      //   //   'GameStore',
+      //   //   style: TextStyle(fontSize: 40.0),
+      //   // ),
+      //   centerTitle: true,
+      // ),
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(162, 38, 197, 218),
+          color: Colors.cyan.shade400,
         ),
-        padding: const EdgeInsets.all(30.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTextField(
-                controller: _emailController,
-                labelText: 'E-mail',
-                validator: (value) {
-                  return value!.isEmpty ||
-                          !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                              .hasMatch(value)
-                      ? 'Digite um e-mail válido'
-                      : null;
-                },
-                icon: Icons.email,
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: _passwordController,
-                labelText: 'Senha',
-                isPassword: true,
-                validator: (value) {
-                  return value!.isEmpty ? 'Digite a senha' : null;
-                },
-                icon: Icons.lock,
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 50),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    radius: 120,
+                    backgroundImage: AssetImage("assets/GS.jpg"),
+                  ),
                 ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 20.0, color: Colors.black),
-                ),
+                  const SizedBox(height: 40.0),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _emailController,
+                          labelText: 'E-mail',
+                          validator: (value) {
+                            return value!.isEmpty ||
+                                    !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                        .hasMatch(value)
+                                ? 'Digite um e-mail válido'
+                                : null;
+                          },
+                          icon: Icons.email,
+                        ),
+                        const SizedBox(height: 10),
+                        _buildTextField(
+                          controller: _passwordController,
+                          labelText: 'Senha',
+                          isPassword: true,
+                          validator: (value) {
+                            return value!.isEmpty ? 'Digite a senha' : null;
+                          },
+                          icon: Icons.lock,
+                        ),
+                        const SizedBox(height: 20.0),
+                        ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15.0, horizontal: 50),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                         TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegistrationScreen()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 20),
+                        ),
+                        child: const Text(
+                          'Não tem uma conta? Registre-se',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegistrationScreen()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                child: const Text(
-                  'Não tem uma conta? Registre-se',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -179,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.blue,
-                  content: Text('Login bem-sucedido para $email!', style: TextStyle(color: Colors.white)),
+                  content: Text('Login bem-sucedido para $email!', style: const TextStyle(color: Colors.white)),
                 ),
               );
 

@@ -46,37 +46,37 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
   }
 
   Future<void> addCredits(String userId, int credits) async {
-  final baseUrl = '10.0.2.2:3000';
-  final endPointUrl = '/addCredits';
-  
-  final uri = Uri.http(baseUrl, endPointUrl);
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/addCredits';
+    
+    final uri = Uri.http(baseUrl, endPointUrl);
 
-  final body = jsonEncode({
-    "userId": "$_userId",
-    "credits": "$credits"
-  });
+    final body = jsonEncode({
+      "userId": "$_userId",
+      "credits": "$credits"
+    });
 
-   try {
-    final response = await http.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': 'access_token=$_cookie'
-      },
-      body: body,
-    );
+    try {
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': 'access_token=$_cookie'
+        },
+        body: body,
+      );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-    if (response.statusCode == 200) {
-      print('Créditos adicionados com sucesso');
-    } else {
-      print('Failed to add credits: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        print('Créditos adicionados com sucesso');
+      } else {
+        print('Failed to add credits: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error adding credits: $e');
     }
-  } catch (e) {
-    print('Error adding credits: $e');
-  }
   }
 
   void _addCredits() async {
@@ -87,122 +87,153 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
       final String expiryDate = _expiryDateController.text.trim();
       final String cvv = _cvvController.text.trim();
 
-      if (name.isNotEmpty && value.isNotEmpty && cardNumber.isNotEmpty && expiryDate.isNotEmpty && cvv.isNotEmpty) {
-        if (_userId!= null) {
-          int credits = int.tryParse(value) ?? 0;
-          await addCredits(_userId!, credits);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Erro: Token de usuário não encontrado.'),
-            ),
-          );
-        }
+      if (_userId != null) {
+        int credits = int.tryParse(value) ?? 0;
+        await addCredits(_userId!, credits);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor, preencha todos os campos.'),
+          SnackBar(
+            content: Text('Erro: Token de usuário não encontrado.'),
           ),
         );
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, preencha todos os campos corretamente.'),
+        ),
+      );
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      centerTitle: true,
-      title: const Text(
-        'Colocar Créditos',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
-      ),
-      backgroundColor: Colors.white,
-    ),
-    resizeToAvoidBottomInset: false, // Evita overflow do teclado
-    body: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.white, Colors.cyan.shade400],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Colocar Créditos',
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
-      child: Center(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildTextField(
-                  controller: _nameController,
-                  labelText: 'Nome do Titular',
-                  validator: (value) {
-                    return value!.isEmpty ? 'Digite o nome do titular' : null;
-                  },
-                  icon: Icons.person,
-                ),
-                const SizedBox(height: 10),
-                _buildTextField(
-                  controller: _valueController,
-                  labelText: 'Valor',
-                  validator: (value) {
-                    return value!.isEmpty ? 'Digite o valor' : null;
-                  },
-                  icon: Icons.attach_money,
-                ),
-                const SizedBox(height: 10),
-                _buildTextField(
-                  controller: _cardNumberController,
-                  labelText: 'Número do Cartão',
-                  validator: (value) {
-                    return value!.isEmpty ? 'Digite o número do cartão' : null;
-                  },
-                  icon: Icons.credit_card,
-                ),
-                const SizedBox(height: 10),
-                _buildTextField(
-                  controller: _expiryDateController,
-                  labelText: 'Data de Validade',
-                  validator: (value) {
-                    return value!.isEmpty ? 'Digite a data de validade' : null;
-                  },
-                  icon: Icons.date_range,
-                ),
-                const SizedBox(height: 10),
-                _buildTextField(
-                  controller: _cvvController,
-                  labelText: 'CVV',
-                  isPassword: true,
-                  validator: (value) {
-                    return value!.isEmpty ? 'Digite o CVV' : null;
-                  },
-                  icon: Icons.lock,
-                ),
-                const SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: _addCredits,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
+      resizeToAvoidBottomInset: false, // Evita overflow do teclado
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.cyan.shade400],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildTextField(
+                    controller: _nameController,
+                    labelText: 'Nome do Titular',
+                    validator: (value) {
+                      return value!.isEmpty ? 'Digite o nome do titular' : null;
+                    },
+                    icon: Icons.person,
                   ),
-                  child: const Text(
-                    'Adicionar',
-                    style: TextStyle(fontSize: 20.0, color: Colors.black),
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _valueController,
+                    labelText: 'Valor',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite o valor';
+                      }
+                      final regex = RegExp(r'[1-9]+');
+                      if (!regex.hasMatch(value)) {
+                        return 'Digite um valor inteiro';
+                      }
+                      return null;
+                    },
+                    icon: Icons.attach_money,
                   ),
-                ),
-                const SizedBox(height: 20.0), // Espaço opcional no final
-              ],
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _cardNumberController,
+                    labelText: 'Número do Cartão',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite o número do cartão';
+                      }
+                      String cleanedValue = value.replaceAll(' ', '');
+                      if (cleanedValue.length != 16 || int.tryParse(cleanedValue) == null) {
+                        return 'Número do cartão deve ter 16 dígitos';
+                      }
+                      return null;
+                    },
+                    icon: Icons.credit_card,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _expiryDateController,
+                    labelText: 'Data de Validade',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite a data de validade';
+                      }
+                      final regex = RegExp(r'^\d{2}/\d{2}$');
+                      if (!regex.hasMatch(value)) {
+                        return 'Formato da data deve ser MM/AA';
+                      }
+                      return null;
+                    },
+                    icon: Icons.date_range,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _cvvController,
+                    labelText: 'CVV',
+                    isPassword: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite o CVV';
+                      }
+                      if (value.length != 3 || int.tryParse(value) == null) {
+                        return 'CVV deve ter 3 dígitos';
+                      }
+                      return null;
+                    },
+                    icon: Icons.lock,
+                  ),
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: _addCredits,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
+                    ),
+                    child: const Text(
+                      'Adicionar',
+                      style: TextStyle(fontSize: 20.0, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0), // Espaço opcional no final
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildTextField({
     required TextEditingController controller,
