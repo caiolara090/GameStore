@@ -16,10 +16,10 @@ export class UserServices implements IUserServices {
     return await userRepository.searchUsersLibrary(userId, gameTitle);
   }
 
-  async toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void> {
+  async toggleUsersGameFavorite(userId: string, gameId: string): Promise<void> {
     const userRepository: IUserRepository = new UserRepository();
 
-    return await userRepository.toggleUsersGameFavorite(userId, gameId, isFavorite);
+    return await userRepository.toggleUsersGameFavorite(userId, gameId);
   }
 
   async findById(userId: string): Promise<IUser | null> {

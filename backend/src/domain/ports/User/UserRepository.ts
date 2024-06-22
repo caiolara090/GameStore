@@ -20,5 +20,5 @@ export interface IUserRepository {
   getGames(_id: string): Promise<IUserRepositoryGame[]>;
   searchUsers(username: string, fields: string): Promise<IUser[] | null>;
   searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]>;
-  toggleUsersGameFavorite(userId: string, gameId: string, isFavorite: boolean): Promise<void>;
+  toggleUsersGameFavorite(userId: string, gameId: string): Promise<void>;
 };

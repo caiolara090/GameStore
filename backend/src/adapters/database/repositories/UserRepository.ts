@@ -147,8 +147,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async toggleUsersGameFavorite(userId: string, gameId: string, 
-    isFavorite: boolean): Promise<void> {
+  async toggleUsersGameFavorite(userId: string, gameId: string): Promise<void> {
     try {
       const user = await UserModel.findById(userId);
 
@@ -161,9 +160,10 @@ export class UserRepository implements IUserRepository {
         throw new Error("Game not found in user's library");
       }
       const game = user.games[gameIndex].game;
+      const favorite = !user.games[gameIndex].favorite;
 
       user?.games?.splice(gameIndex, 1);
-      user?.games?.push({ game: game, favorite: isFavorite });
+      user?.games?.push({ game: game, favorite: favorite });
       await user.save();
     } catch (error: any) {
       throw new Error("Error toggling game favorite: " + error.message);

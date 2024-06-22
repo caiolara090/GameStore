@@ -39,10 +39,10 @@ export const searchUsersLibrary = async (req: Request, res: Response) => {
 
 export const toggleUsersGameFavorite = async (req: Request, res: Response) => {
   const userService: IUserServices = new UserServices();
-  const { userId, gameId, isFavorite } = req.body;
+  const { userId, gameId } = req.body;
 
   try {
-    await userService.toggleUsersGameFavorite(userId, gameId, isFavorite);
+    await userService.toggleUsersGameFavorite(userId, gameId);
 
     return res.status(StatusCodes.OK).json({
       message: "Favorite status updated",
