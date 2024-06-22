@@ -51,6 +51,7 @@ class Jogo {
   String link;
   String descricao;
   bool isFavorite;
+  String id;
 
   Jogo({
     required this.nome,
@@ -58,6 +59,7 @@ class Jogo {
     required this.link,
     required this.descricao,
     this.isFavorite = false,
+    required this.id
   });
 
   factory Jogo.fromJson(Map<String, dynamic> json) {
@@ -67,6 +69,19 @@ class Jogo {
       link: json['image'] as String,
       descricao: json['description'] as String,
       isFavorite: json['isFavorite'] != null ? json['isFavorite'] as bool : false,
+      id : json['_id'] as String
     );
   }
+
+ factory Jogo.fromApiResponse(Map<String, dynamic> json, bool favourite) {
+return Jogo(
+      nome: json['name'] as String,
+      preco: (json['price'] as num).toDouble(),
+      link: json['image'] as String,
+      descricao: json['description'] as String,
+      isFavorite: favourite,
+      id : json['_id'] as String
+    );
+  }
+
 }

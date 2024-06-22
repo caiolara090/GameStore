@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if (biscoito != null && biscoito.isNotEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.cyan.shade400,
                   content: Text('Login bem-sucedido para $email!', style: const TextStyle(color: Colors.white)),
                 ),
               );
@@ -215,14 +215,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
                   content: Text('Falha no login. ID não encontrado nos cookies.'),
                 ),
               );
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
                 content: Text('Falha no login. Por favor, verifique suas credenciais.'),
               ),
             );
@@ -230,13 +232,15 @@ class _LoginScreenState extends State<LoginScreen> {
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
               content: Text('Erro de rede: $e'),
             ),
           );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
             content: Text('Por favor, insira um e-mail e senha válidos.'),
           ),
         );
