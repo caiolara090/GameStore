@@ -296,6 +296,7 @@ class _JogoPaginaState extends State<JogoPagina> {
     double mediaNotas = calcularMediaNotas(avaliacoes);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: true,
         flexibleSpace: Padding(
@@ -510,23 +511,20 @@ class _JogoPaginaState extends State<JogoPagina> {
             ],
           ),
         ),
-      ],
-    ),
-  ),
-),
-
-bottomNavigationBar: BottomAppBar(
-  child: Container(
-    height: 60, // Altura desejada do BottomNavigationBar
-    padding: EdgeInsets.symmetric(horizontal: 16),
+        SizedBox(height: 20),
+       Container(
+  height: 60,
+  padding: EdgeInsets.symmetric(horizontal: 16),
+  child: Center(
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ou outro alinhamento horizontal desejado
       children: [
         Expanded(
           child: TextField(
             controller: _avaliacaoController,
-            maxLines: null, // Permite múltiplas linhas conforme necessário
-            expands: true, // Expande para ocupar todo o espaço disponível
-            textAlignVertical: TextAlignVertical.center, // Centraliza o texto verticalmente
+            maxLines: null,
+            expands: true,
+            textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               hintText: 'Digite sua avaliação aqui',
               filled: true,
@@ -534,8 +532,8 @@ bottomNavigationBar: BottomAppBar(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide(
-                  width: 3.0, // Espessura da borda aumentada para 2.0 pixels
-                  color: Colors.black, // Cor da borda
+                  width: 3.0,
+                  color: Colors.black,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -547,87 +545,90 @@ bottomNavigationBar: BottomAppBar(
         ),
         SizedBox(width: 10),
         IconButton(
-  onPressed: () async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text('Avaliar'),
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(5, (index) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        for (int i = 0; i <= index; i++) {
-                          selectedStars[i] = true;
-                        }
-                        for (int i = index + 1; i < 5; i++) {
-                          selectedStars[i] = false;
-                        }
-                      });
-                    },
-                    child: Icon(
-                      selectedStars[index] ? Icons.star : Icons.star_border,
-                      color: selectedStars[index] ? Colors.yellow : null,
-                    ),
-                  );
-                }),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                  onPressed: () async {
-                    String avaliacaoTexto = _avaliacaoController.text;
-                    int notaAvaliacao = selectedStars.where((star) => star).length;
-
-                    // Chamada para enviar avaliação
-                    await enviarAvaliacao(notaAvaliacao, avaliacaoTexto);
-
-                    // Adicionar nova avaliação localmente (opcional)
-                    Avaliacao novaAvaliacao = Avaliacao(
-                      nome: nome,
-                      nota: notaAvaliacao,
-                      comentario: avaliacaoTexto,
-                      data: DateTime.now(),
-                    );
-
-                    setState(() {
-                      avaliacoes.add(novaAvaliacao);
-                      mediaNotas = calcularMediaNotas(avaliacoes); // Recalcular média
-                    });
-
-                    _avaliacaoController.clear(); // Limpar campo de texto
-                    Navigator.of(context).pop(); // Fechar o AlertDialog
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Avaliação inserida com sucesso!'),
-                        duration: Duration(seconds: 1),
-                        behavior: SnackBarBehavior.fixed,
-                        backgroundColor: Colors.cyan.shade400,
+          onPressed: () async {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      title: Text('Avaliar'),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(5, (index) {
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                for (int i = 0; i <= index; i++) {
+                                  selectedStars[i] = true;
+                                }
+                                for (int i = index + 1; i < 5; i++) {
+                                  selectedStars[i] = false;
+                                }
+                              });
+                            },
+                            child: Icon(
+                              selectedStars[index] ? Icons.star : Icons.star_border,
+                              color: selectedStars[index] ? Colors.yellow : null,
+                            ),
+                          );
+                        }),
                       ),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          onPressed: () async {
+                            String avaliacaoTexto = _avaliacaoController.text;
+                            int notaAvaliacao = selectedStars.where((star) => star).length;
+
+                            // Chamada para enviar avaliação
+                            await enviarAvaliacao(notaAvaliacao, avaliacaoTexto);
+
+                            // Adicionar nova avaliação localmente (opcional)
+                            Avaliacao novaAvaliacao = Avaliacao(
+                              nome: nome,
+                              nota: notaAvaliacao,
+                              comentario: avaliacaoTexto,
+                              data: DateTime.now(),
+                            );
+
+                            setState(() {
+                              avaliacoes.add(novaAvaliacao);
+                              mediaNotas = calcularMediaNotas(avaliacoes);
+                            });
+
+                            _avaliacaoController.clear();
+                            Navigator.of(context).pop();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Avaliação inserida com sucesso!'),
+                                duration: Duration(seconds: 1),
+                                behavior: SnackBarBehavior.fixed,
+                                backgroundColor: Colors.cyan.shade400,
+                              ),
+                            );
+                            await _loadGame();
+                          },
+                          child: Text('Enviar'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade400,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ],
                     );
-                    await _loadGame();
                   },
-                  child: Text('Enviar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyan.shade400,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-              ],
+                );
+              },
             );
           },
-        );
-      },
-    );
-  },
-  icon: Icon(Icons.send),
-  color: Colors.cyan.shade400,
+          icon: Icon(Icons.send),
+          color: Colors.cyan.shade400,
+        ),
+      ],
+    ),
+  ),
 ),
-
       ],
     ),
   ),
