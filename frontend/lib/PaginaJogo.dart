@@ -5,6 +5,7 @@ import 'PaginaDados.dart';
 import 'PaginaJogo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class Avaliacao {
   final String nome;
@@ -134,6 +135,40 @@ class _JogoPaginaState extends State<JogoPagina> {
     });
   }
 }
+Future<void> _buyGame() async {
+  final baseUrl = '10.0.2.2:3000';
+  final endPointUrl = '/buyGame';
+
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "gameId": _gameId,
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': 'access_token=$_cookie', // Inclui o cookie no cabeçalho da requisição
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 202 || response.statusCode == 203 || response.statusCode == 204) {
+      // Operação concluída com sucesso
+      print('Jogo comprado com sucesso!');
+      // Aqui você pode adicionar qualquer lógica adicional após a compra do jogo
+    } else {
+      throw Exception('Falha ao comprar o jogo');
+    }
+  } catch (e) {
+    print('Erro ao comprar o jogo: $e');
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     // Calcular a média das notas
@@ -223,34 +258,38 @@ class _JogoPaginaState extends State<JogoPagina> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        '${widget.jogo.nome} adicionado à sua lista',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      duration: Duration(seconds: 1),
-                      behavior: SnackBarBehavior.fixed,
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.cyan.shade400,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 50,
-                  ),
-                ),
-                child: const Text(
-                  'Comprar',
-                  style: TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+  onPressed: () {
+    _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
+    print(_gameId);
+    print(_userId);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '${widget.jogo.nome} adicionado à sua lista',
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 1),
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Colors.red,
+      ),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.cyan.shade400,
+    padding: const EdgeInsets.symmetric(
+      vertical: 10.0,
+      horizontal: 50,
+    ),
+  ),
+  child: const Text(
+    'Comprar',
+    style: TextStyle(
+      fontSize: 17.0,
+      color: Colors.white,
+    ),
+  ),
+),
+
             ],
           ),
         ),
