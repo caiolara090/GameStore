@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { GameModel } from '../adapters/database/models';
 import mongoose from 'mongoose';
+import { htmlToText } from 'html-to-text';
 
 const loadData = async () => {
   try {
@@ -12,7 +13,7 @@ const loadData = async () => {
     
     let games: any = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 1; i++) {
       console.log(`Loading page ${i + 1}`);
       await new Promise(resolve => setTimeout(resolve, 1000));
       const res = await fetch(`${apiurl}?api_key=${apiKey}&offset=${i * 100}`);
@@ -23,7 +24,7 @@ const loadData = async () => {
     games = games.map((game: any) => 
       ({ 
         name: game.title, 
-        description: game.description,
+        description: htmlToText(game.description, { wordwrap: null }),
         image: game.sample_cover?.image ?? null,
         price: Math.floor(Math.random() * 250) + 1
       })
@@ -32,6 +33,7 @@ const loadData = async () => {
     games = games.filter((game: any) => game.image !== null).filter((game: any) => game.description !== null);
 
     console.log(`Loading ${games.length} games to the database...`);
+    // console.log(games);
     await GameModel.insertMany(games); // Use await aqui
     console.log('Games loaded successfully');
   } catch (error) {
