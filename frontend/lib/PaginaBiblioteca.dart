@@ -74,7 +74,7 @@ Future<void> _fetchUserGames(String userId) async {
     // Atualiza o estado do widget
     setState(() {
       allGames = loadedGames;
-      //filteredGames = loadedGames;
+      filteredGames = loadedGames;
     });
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -184,8 +184,8 @@ Future<void> setFavorite(String gameId, bool star) async {
 
   @override
   Widget build(BuildContext context) {
-    List<Jogo> favoriteGames = allGames.where((game) => game.isFavorite).toList();
-    List<Jogo> otherGames = allGames.where((game) => !game.isFavorite).toList();
+    List<Jogo> favoriteGames = filteredGames.where((game) => game.isFavorite).toList();
+    List<Jogo> otherGames = filteredGames.where((game) => !game.isFavorite).toList();
 
     return Scaffold(
       appBar: AppBar(
