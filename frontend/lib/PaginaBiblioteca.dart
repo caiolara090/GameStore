@@ -247,7 +247,7 @@ Widget build(BuildContext context) {
               childrenPadding: EdgeInsets.zero,
               children: favoriteGames.map((game) {
                 return Card(
-                  color: const Color.fromARGB(255, 169, 214, 254),
+                  color:  Colors.cyan.shade100,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -294,7 +294,7 @@ Widget build(BuildContext context) {
               childrenPadding: EdgeInsets.zero,
               children: otherGames.map((game) {
                 return Card(
-                  color: const Color.fromARGB(255, 169, 214, 254),
+                  color: Colors.cyan.shade100,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

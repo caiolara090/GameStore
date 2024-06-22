@@ -123,7 +123,7 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
           },
         ),
       ),
-      resizeToAvoidBottomInset: false, // Evita overflow do teclado
+      resizeToAvoidBottomInset: true, // Evita overflow do teclado
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

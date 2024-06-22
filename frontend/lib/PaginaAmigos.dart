@@ -500,7 +500,7 @@ void removeFriend(String friendId) async {
                   children: users.map((user) {
                     int index = users.indexOf(user);
                     return Card(
-                      color: const Color.fromARGB(255, 169, 214, 254),
+                      color: Colors.cyan.shade100,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
