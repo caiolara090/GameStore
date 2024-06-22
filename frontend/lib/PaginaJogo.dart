@@ -201,7 +201,7 @@ class _JogoPaginaState extends State<JogoPagina> {
                             ),
                             duration: Duration(seconds: 1),
                             behavior: SnackBarBehavior.fixed,
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.cyan.shade400,
                           ),
                         );
       // Aqui você pode adicionar qualquer lógica adicional após a compra do jogo
