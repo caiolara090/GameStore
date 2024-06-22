@@ -20,40 +20,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   backgroundColor: Colors.cyan.shade400,
-      //   // title: const Text(
-      //   //   'GameStore',
-      //   //   style: TextStyle(fontSize: 40.0),
-      //   // ),
-      //   centerTitle: true,
-      // ),
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.cyan.shade400,
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus(); // Close keyboard when tapping outside of a field
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.cyan.shade400,
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.all(30.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: CircleAvatar(
+                  CircleAvatar(
                     radius: 120,
                     backgroundImage: AssetImage("assets/GS.jpg"),
                   ),
-                ),
-                  const SizedBox(height: 40.0),
+                  SizedBox(height: 40.0),
                   Form(
                     key: _formKey,
                     child: Column(
@@ -63,14 +53,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelText: 'E-mail',
                           validator: (value) {
                             return value!.isEmpty ||
-                                    !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                                        .hasMatch(value)
+                                !RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                ).hasMatch(value)
                                 ? 'Digite um e-mail válido'
                                 : null;
                           },
                           icon: Icons.email,
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         _buildTextField(
                           controller: _passwordController,
                           labelText: 'Senha',
@@ -80,14 +71,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           icon: Icons.lock,
                         ),
-                        const SizedBox(height: 20.0),
+                        SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: _login,
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15.0, horizontal: 50),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 15.0,
+                              horizontal: 50,
+                            ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Login',
                             style: TextStyle(
                               fontSize: 20.0,
@@ -95,23 +88,24 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                         TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RegistrationScreen()),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 20),
+                        SizedBox(height: 10),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegistrationScreen(),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 20),
+                          ),
+                          child: Text(
+                            'Não tem uma conta? Registre-se',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                        child: const Text(
-                          'Não tem uma conta? Registre-se',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
                       ],
                     ),
                   ),
