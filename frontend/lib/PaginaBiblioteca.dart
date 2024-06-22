@@ -19,18 +19,27 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
   final FocusNode _focusNode = FocusNode();
   OverlayEntry? _overlayEntry;
   String? _userId;
+  String? _cookie;
 
   @override
   void initState() {
     super.initState();
-    _loadUserId();
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        _showOverlay();
-      } else {
-        _removeOverlay();
-      }
-    });
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _loadUserId();
+    await _loadUserCookie();
+    if (_userId != null && _cookie != null) {
+      await _fetchUserGames(_userId!);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.cyan.shade400,
+          content: Text('Erro ao carregar dados do usuário', style: TextStyle(color: Colors.white)),
+        ),
+      );
+    }
   }
 
   Future<void> _loadUserId() async {
@@ -38,9 +47,13 @@ class _GameLibraryPageState extends State<GameLibraryPage> {
     setState(() {
       _userId = id;
     });
-    if (_userId != null) {
-      await _fetchUserGames(_userId!);
-    }
+  }
+
+    Future<void> _loadUserCookie() async {
+    String? cookie = await CookieManager.loadCookie();
+    setState(() {
+      _cookie = cookie;
+    });
   }
 
 Future<void> _fetchUserGames(String userId) async {
@@ -48,15 +61,20 @@ Future<void> _fetchUserGames(String userId) async {
     Uri.parse('http://10.0.2.2:3000/userGames?userId=$userId'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Cookie': 'access_token=$_cookie'
     },
   );
 
   if (response.statusCode == 200) {
-    List<dynamic> gamesData = jsonDecode(response.body);
-    List<Jogo> loadedGames = gamesData.map((gameData) => Jogo.fromJson(gameData)).toList();
+    List<dynamic> data = jsonDecode(response.body);
+
+    // Mapeia a lista de jogos
+    List<Jogo> loadedGames = data.map((item) => Jogo.fromApiResponse(item['game'], item['favorite'])).toList();
+
+    // Atualiza o estado do widget
     setState(() {
       allGames = loadedGames;
-      filteredGames = loadedGames;
+      //filteredGames = loadedGames;
     });
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -65,6 +83,41 @@ Future<void> _fetchUserGames(String userId) async {
         content: Text('Erro ao carregar jogos: ${response.body}', style: TextStyle(color: Colors.white)),
       ),
     );
+  }
+}
+
+Future<void> setFavorite(String gameId, bool star) async {
+  final baseUrl = '10.0.2.2:3000';
+  final endPointUrl = '/setFavorite';
+  
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    
+    "userId": "$_userId",
+    "gameId": "$gameId",
+    
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': 'access_token=$_cookie'
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      await _fetchUserGames(_userId!);
+      setState(() {
+      });
+    } else {
+      throw Exception('Falha em favoritar jogo!');
+    }
+  } catch (e) {
+    print('Error: $e');
   }
 }
 
@@ -210,7 +263,7 @@ Future<void> _fetchUserGames(String userId) async {
                           icon: const Icon(Icons.star, color: Colors.yellow),
                           onPressed: () {
                             setState(() {
-                              game.isFavorite = !game.isFavorite;
+                              setFavorite(game.id, !game.isFavorite);
                             });
                           },
                         ),
@@ -251,7 +304,7 @@ Future<void> _fetchUserGames(String userId) async {
                           icon: const Icon(Icons.star_border, color: Colors.black),
                           onPressed: () {
                             setState(() {
-                              game.isFavorite = !game.isFavorite;
+                              setFavorite(game.id, !game.isFavorite);
                             });
                           },
                         ),
