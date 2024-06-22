@@ -37,6 +37,7 @@ class _JogoPaginaState extends State<JogoPagina> {
   late String idade = "";
   late String? _userId;
   List<User> allUsers = [];
+  bool _hasUserGame = false;
   //bool isLoading = true;
   String? _cookie;
   List<Avaliacao> avaliacoes = [
@@ -64,9 +65,42 @@ class _JogoPaginaState extends State<JogoPagina> {
     await _loadUserId();
     await _loadUserCookie();
     await _loadGame();
+    await _checkHasGame();
     setState(() {
       //isLoading = false; // Define isLoading como falso após carregar os dados
     });
+  }
+  Future<void> _checkHasGame() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/hasGame';
+
+    final queryParameters = {
+      'userId': _userId,
+      'gameId': _gameId,
+    };
+
+    final uri = Uri.http(baseUrl, endPointUrl, queryParameters);
+
+    try {
+      final response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': 'access_token=$_cookie', // Inclui o cookie no cabeçalho da requisição
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        setState(() {
+          _hasUserGame = data['hasGame'];
+        });
+      } else {
+        throw Exception('Falha ao verificar se o usuário possui o jogo');
+      }
+    } catch (e) {
+      print('Erro ao verificar se o usuário possui o jogo: $e');
+    }
   }
 
   Future<void> _loadUserId() async {
@@ -159,6 +193,18 @@ Future<void> _buyGame() async {
     if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 202 || response.statusCode == 203 || response.statusCode == 204) {
       // Operação concluída com sucesso
       print('Jogo comprado com sucesso!');
+      _checkHasGame();
+      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '${widget.jogo.nome} adicionado à sua lista',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            duration: Duration(seconds: 1),
+                            behavior: SnackBarBehavior.fixed,
+                            backgroundColor: Colors.red,
+                          ),
+                        );
       // Aqui você pode adicionar qualquer lógica adicional após a compra do jogo
     } else {
       throw Exception('Falha ao comprar o jogo');
@@ -167,6 +213,7 @@ Future<void> _buyGame() async {
     print('Erro ao comprar o jogo: $e');
   }
 }
+
 
 
   @override
@@ -258,37 +305,27 @@ Future<void> _buyGame() async {
                 ),
               ),
               ElevatedButton(
-  onPressed: () {
-    _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
-    print(_gameId);
-    print(_userId);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '${widget.jogo.nome} adicionado à sua lista',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 1),
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Colors.red,
-      ),
-    );
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.cyan.shade400,
-    padding: const EdgeInsets.symmetric(
-      vertical: 10.0,
-      horizontal: 50,
-    ),
-  ),
-  child: const Text(
-    'Comprar',
-    style: TextStyle(
-      fontSize: 17.0,
-      color: Colors.white,
-    ),
-  ),
-),
+                      onPressed: _hasUserGame ? null : () async {
+                        await _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
+                        print(_gameId);
+                        print(_userId);
+                        
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.cyan.shade400,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 50,
+                        ),
+                      ),
+                      child: const Text(
+                        'Comprar',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
 
             ],
           ),
@@ -524,3 +561,5 @@ bottomNavigationBar: BottomAppBar(
     );
   }
 }
+
+                  
