@@ -307,7 +307,7 @@ class _JogoPaginaState extends State<JogoPagina> {
                 widget.jogo.nome,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 25.0,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
