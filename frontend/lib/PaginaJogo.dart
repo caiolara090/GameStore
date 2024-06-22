@@ -609,6 +609,7 @@ bottomNavigationBar: BottomAppBar(
                         backgroundColor: Colors.cyan.shade400,
                       ),
                     );
+                    await _loadGame();
                   },
                   child: Text('Enviar'),
                   style: ElevatedButton.styleFrom(

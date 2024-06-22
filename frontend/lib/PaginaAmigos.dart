@@ -255,6 +255,12 @@ void sendFriendRequest(String friendId) async {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       print('Friend request sent successfully');
+      ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
+                  content: Text('Pedido enviado com sucesso!'),
+                ),
+              );
     } else {
       print('Failed to send friend request: ${response.statusCode}');
     }
