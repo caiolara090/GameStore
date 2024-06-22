@@ -196,7 +196,7 @@ class _JogoPaginaState extends State<JogoPagina> {
       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              '${widget.jogo.nome} adicionado à sua lista',
+                              'Parabéns! ${widget.jogo.nome} foi comprado!',
                               style: TextStyle(color: Colors.white),
                             ),
                             duration: Duration(seconds: 1),
@@ -513,7 +513,7 @@ class _JogoPaginaState extends State<JogoPagina> {
         ),
         SizedBox(height: 20),
        Container(
-  height: 60,
+  height: 80,
   padding: EdgeInsets.symmetric(horizontal: 16),
   child: Center(
     child: Row(
@@ -522,8 +522,8 @@ class _JogoPaginaState extends State<JogoPagina> {
         Expanded(
           child: TextField(
             controller: _avaliacaoController,
-            maxLines: null,
-            expands: true,
+            maxLines: 1,
+            //expands: true,
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
               hintText: 'Digite sua avaliação aqui',
