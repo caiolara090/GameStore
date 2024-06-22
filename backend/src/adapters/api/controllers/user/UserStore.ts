@@ -37,7 +37,7 @@ export const hasGame = async (req: Request, res: Response) => {
   try {
     const user = await userServices.findById(userId as string);
     for (const game of user!.games!) {
-      if (game.game._id === gameId) {
+      if (game.game._id?.toString() === gameId) {
         res.status(200).json({ hasGame: true });
         return;
       }
