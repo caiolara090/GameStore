@@ -9,7 +9,7 @@ import {
   getUserGames 
 } from "../controllers/user/UserLibrary";
 import { searchUsers } from "../controllers/user/User";
-import { buyGame, addCredits } from "../controllers/user/UserStore";
+import { buyGame, addCredits, hasGame } from "../controllers/user/UserStore";
 import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
 
 const router = Router();
