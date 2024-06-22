@@ -37,6 +37,7 @@ class _JogoPaginaState extends State<JogoPagina> {
   late String idade = "";
   late String? _userId;
   List<User> allUsers = [];
+  bool _hasUserGame = false;
   //bool isLoading = true;
   String? _cookie;
   List<Avaliacao> avaliacoes = [
@@ -64,9 +65,41 @@ class _JogoPaginaState extends State<JogoPagina> {
     await _loadUserId();
     await _loadUserCookie();
     await _loadGame();
-    setState(() {
-      //isLoading = false; // Define isLoading como falso após carregar os dados
-    });
+    await _checkHasGame();
+    await _loadAllUsers();
+    await _getUserNameById(_userId!);
+  }
+  Future<void> _checkHasGame() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/hasGame';
+
+    final queryParameters = {
+      'userId': _userId,
+      'gameId': _gameId,
+    };
+
+    final uri = Uri.http(baseUrl, endPointUrl, queryParameters);
+
+    try {
+      final response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': 'access_token=$_cookie', // Inclui o cookie no cabeçalho da requisição
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        setState(() {
+          _hasUserGame = data['hasGame'];
+        });
+      } else {
+        throw Exception('Falha ao verificar se o usuário possui o jogo');
+      }
+    } catch (e) {
+      print('Erro ao verificar se o usuário possui o jogo: $e');
+    }
   }
 
   Future<void> _loadUserId() async {
@@ -81,7 +114,7 @@ class _JogoPaginaState extends State<JogoPagina> {
       _cookie = cookie;
     });
   }
-    Future<void> _loadGame() async {
+  Future<void> _loadGame() async {
   final baseUrl = '10.0.2.2:3000'; // Altere conforme o seu servidor
   final endPointUrl = '/searchGame';
 
@@ -135,7 +168,7 @@ class _JogoPaginaState extends State<JogoPagina> {
     });
   }
 }
-Future<void> _buyGame() async {
+  Future<void> _buyGame() async {
   final baseUrl = '10.0.2.2:3000';
   final endPointUrl = '/buyGame';
 
@@ -159,6 +192,18 @@ Future<void> _buyGame() async {
     if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 202 || response.statusCode == 203 || response.statusCode == 204) {
       // Operação concluída com sucesso
       print('Jogo comprado com sucesso!');
+      _checkHasGame();
+      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '${widget.jogo.nome} adicionado à sua lista',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            duration: Duration(seconds: 1),
+                            behavior: SnackBarBehavior.fixed,
+                            backgroundColor: Colors.red,
+                          ),
+                        );
       // Aqui você pode adicionar qualquer lógica adicional após a compra do jogo
     } else {
       throw Exception('Falha ao comprar o jogo');
@@ -167,7 +212,83 @@ Future<void> _buyGame() async {
     print('Erro ao comprar o jogo: $e');
   }
 }
+  Future<void> enviarAvaliacao(int nota, String comentario) async {
+  final baseUrl = '10.0.2.2:3000'; // Altere conforme seu servidor
+  final endPointUrl = '/review';
 
+  final uri = Uri.http(baseUrl, endPointUrl);
+
+  final body = jsonEncode({
+    "userId": _userId,
+    "gameId": _gameId,
+    "rating": nota,
+    "description": comentario,
+  });
+
+  try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': 'access_token=$_cookie', // Inclui o cookie no cabeçalho da requisição
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Avaliação enviada com sucesso
+      print('Avaliação enviada com sucesso!');
+      // Aqui você pode adicionar qualquer lógica adicional após enviar a avaliação
+    } else {
+      throw Exception('Falha ao enviar a avaliação');
+    }
+  } catch (e) {
+    print('Erro ao enviar a avaliação: $e');
+  }
+}
+  Future<void> _loadAllUsers() async {
+    final baseUrl = '10.0.2.2:3000';
+    final endPointUrl = '/searchUser';
+
+    final uri = Uri.http(baseUrl, endPointUrl);
+
+    final body = jsonEncode({
+      "username": "^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+"
+    });
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> usersData = data['users'];
+        setState(() {
+          allUsers = usersData.map((userData) => User.fromJson(userData)).toList();
+        });
+      } else {
+        throw Exception('Failed to load users');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<String?> _getUserNameById(String userId) async {
+    for (var user in allUsers) {
+      if (user.id == userId) {
+        setState(() {
+          nome = user.name;
+        });
+      }
+    }
+    return null; // Retorna null se o usuário não for encontrado
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,37 +379,27 @@ Future<void> _buyGame() async {
                 ),
               ),
               ElevatedButton(
-  onPressed: () {
-    _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
-    print(_gameId);
-    print(_userId);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '${widget.jogo.nome} adicionado à sua lista',
-          style: TextStyle(color: Colors.white),
-        ),
-        duration: Duration(seconds: 1),
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Colors.red,
-      ),
-    );
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.cyan.shade400,
-    padding: const EdgeInsets.symmetric(
-      vertical: 10.0,
-      horizontal: 50,
-    ),
-  ),
-  child: const Text(
-    'Comprar',
-    style: TextStyle(
-      fontSize: 17.0,
-      color: Colors.white,
-    ),
-  ),
-),
+                      onPressed: _hasUserGame ? null : () async {
+                        await _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
+                        print(_gameId);
+                        print(_userId);
+                        
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.cyan.shade400,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 50,
+                        ),
+                      ),
+                      child: const Text(
+                        'Comprar',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
 
             ],
           ),
@@ -436,91 +547,92 @@ bottomNavigationBar: BottomAppBar(
         ),
         SizedBox(width: 10),
         IconButton(
-          onPressed: () async {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return StatefulBuilder(
-                  builder: (context, setState) {
-                    return AlertDialog(
-                      title: Text('Avaliar'),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List.generate(5, (index) {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                for (int i = 0; i <= index; i++) {
-                                  selectedStars[i] = true;
-                                }
-                                for (int i = index + 1; i < 5; i++) {
-                                  selectedStars[i] = false;
-                                }
-                              });
-                            },
-                            child: Icon(
-                              selectedStars[index] ? Icons.star : Icons.star_border,
-                              color: selectedStars[index] ? Colors.yellow : null,
-                            ),
-                          );
-                        }),
+  onPressed: () async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Avaliar'),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(5, (index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        for (int i = 0; i <= index; i++) {
+                          selectedStars[i] = true;
+                        }
+                        for (int i = index + 1; i < 5; i++) {
+                          selectedStars[i] = false;
+                        }
+                      });
+                    },
+                    child: Icon(
+                      selectedStars[index] ? Icons.star : Icons.star_border,
+                      color: selectedStars[index] ? Colors.yellow : null,
+                    ),
+                  );
+                }),
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    String avaliacaoTexto = _avaliacaoController.text;
+                    int notaAvaliacao = selectedStars.where((star) => star).length;
+
+                    // Chamada para enviar avaliação
+                    await enviarAvaliacao(notaAvaliacao, avaliacaoTexto);
+
+                    // Adicionar nova avaliação localmente (opcional)
+                    Avaliacao novaAvaliacao = Avaliacao(
+                      nome: nome,
+                      nota: notaAvaliacao,
+                      comentario: avaliacaoTexto,
+                      data: DateTime.now(),
+                    );
+
+                    setState(() {
+                      avaliacoes.add(novaAvaliacao);
+                      mediaNotas = calcularMediaNotas(avaliacoes); // Recalcular média
+                    });
+
+                    _avaliacaoController.clear(); // Limpar campo de texto
+                    Navigator.of(context).pop(); // Fechar o AlertDialog
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Avaliação inserida com sucesso!'),
+                        duration: Duration(seconds: 1),
+                        behavior: SnackBarBehavior.fixed,
+                        backgroundColor: Colors.cyan.shade400,
                       ),
-                      actions: <Widget>[
-                        ElevatedButton(
-                          onPressed: () async {
-                            String avaliacaoTexto = _avaliacaoController.text;
-                            int notaAvaliacao = selectedStars.where((star) => star).length;
-                            // Simular envio para o backend
-                            // await Future.delayed(Duration(seconds: 2)); // Simulação de envio
-
-                            // Adicionar nova avaliação localmente
-                            Avaliacao novaAvaliacao = Avaliacao(
-                              nome: 'Usuário', // Aqui você pode definir o nome do usuário, se tiver uma autenticação
-                              nota: notaAvaliacao,
-                              comentario: avaliacaoTexto,
-                              data: DateTime.now(),
-                            );
-
-                            setState(() {
-                              avaliacoes.add(novaAvaliacao);
-                              mediaNotas = calcularMediaNotas(avaliacoes); // Recalcular média
-                            });
-
-                            _avaliacaoController.clear(); // Limpar campo de texto
-                            Navigator.of(context).pop(); // Fechar o AlertDialog
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Avaliação inserida com sucesso!'),
-                                duration: Duration(seconds: 1),
-                                behavior: SnackBarBehavior.fixed,
-                                backgroundColor: Colors.cyan.shade400,
-                              ),
-                            );
-                          },
-                          child: Text('Enviar'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.cyan.shade400,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ],
                     );
                   },
-                );
-              },
+                  child: Text('Enviar'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan.shade400,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
             );
           },
-          icon: Icon(Icons.send),
-          color: Colors.cyan.shade400,
-        ),
+        );
+      },
+    );
+  },
+  icon: Icon(Icons.send),
+  color: Colors.cyan.shade400,
+),
+
       ],
     ),
   ),
 ),
-
-
-
     );
   }
 }
+
+                  
