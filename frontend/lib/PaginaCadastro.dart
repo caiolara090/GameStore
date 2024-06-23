@@ -42,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan.shade400, Colors.cyan.shade400],
+                colors: [Colors.cyan.shade200, Colors.cyan.shade200],
               ),
             ),
             child: const SizedBox.expand(),
@@ -247,7 +247,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.cyan.shade400,
               content: Text('Registro bem-sucedido para $name!'),
             ),
           );

@@ -83,6 +83,7 @@ Future<void> _loadAllUsers() async {
       
       setState(() {
         allUsers = usersData.map((userData) => User.fromJson(userData)).toList();
+        allUsers.removeWhere((user) => user.id == _userId);
       });
     } else {
       throw Exception('Failed to load users');
@@ -237,6 +238,17 @@ void sendFriendRequest(String friendId) async {
   final baseUrl = '10.0.2.2:3000';
   final endpointUrl = '/createFriendShipRequest';
   final uri = Uri.http(baseUrl, endpointUrl);
+
+  if(friendId == _userId){
+      print('Você quer ser seu amigo? Você já é!');
+      ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
+                  content: Text('Você quer ser seu amigo? Você já é!'),
+                ),
+              );
+    return;
+    }
 
   final body = jsonEncode({
     "userId": _userId,

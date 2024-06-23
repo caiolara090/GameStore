@@ -356,6 +356,10 @@ class _JogoPaginaState extends State<JogoPagina> {
             padding: EdgeInsets.all(16),
             child: Text(
               widget.jogo.descricao,
+              maxLines: 15,
+
+              // Truncar o texto em 15 linhas e adicionar a opção de ver mais
+
               textAlign: TextAlign.justify,
               style: TextStyle(
                 fontSize: 18,
