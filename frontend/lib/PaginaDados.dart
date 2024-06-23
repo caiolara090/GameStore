@@ -90,116 +90,128 @@ class _PaginaDadosState extends State<PaginaDados> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.cyan.shade400,
-        title: Center(
-          child: Text(
-            'Informações da Conta',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.cyan.shade400,
+      title: Center(
+        child: Text(
+          'Informações da Conta',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-              ),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height: 20),
-                    _buildInfoTextField('Nome:', nome),
-                    _buildInfoTextField('Email:', email),
-                    _buildInfoTextField('Idade:', idade),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
+    ),
+    body: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/amigos');
-                    // Adicionar ação para a aba "Amigos"
-                  },
-                  child: Text('Amigos',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black)
+            child: SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 20),
+                  _buildInfoTextField('Nome:', nome),
+                  _buildInfoTextField('Email:', email),
+                  _buildInfoTextField('Idade:', idade),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/amigos');
+                            // Adicionar ação para a aba "Amigos"
+                          },
+                          child: Text(
+                            'Amigos',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade600,
+                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 60),
+                          ),
+                        ),
+                        SizedBox(height: 16), // Espaçamento entre os botões
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/creditos');
+                            // Adicionar ação para a aba "Adicionar Créditos"
+                          },
+                          child: Text(
+                            'Adicionar Créditos',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade600,
+                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/creditos');
-                    // Adicionar ação para a aba "Adicionar Créditos"
-                  },
-                  child: Text('Adicionar Créditos',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black),
-                ),
-                )
-              ],
+                ],
+              ),
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(162, 38, 197, 218),
-        selectedItemColor: Color.fromARGB(255, 0, 0, 0),
-        currentIndex: _currentIndex,
-        unselectedItemColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.videogame_asset),
-            label: 'Loja',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.layers),
-            label: 'Biblioteca',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.format_align_justify),
-            label: 'Dados',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/loja');
-              break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/biblioteca');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/dados');
-              break;
-          }
-        },
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+    bottomNavigationBar: BottomNavigationBar(
+      backgroundColor: Color.fromARGB(162, 38, 197, 218),
+      selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+      currentIndex: _currentIndex,
+      unselectedItemColor: Colors.white,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.videogame_asset),
+          label: 'Loja',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.layers),
+          label: 'Biblioteca',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.format_align_justify),
+          label: 'Dados',
+        ),
+      ],
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+        switch (index) {
+          case 0:
+            Navigator.pushReplacementNamed(context, '/loja');
+            break;
+          case 1:
+            Navigator.pushReplacementNamed(context, '/biblioteca');
+            break;
+          case 2:
+            Navigator.pushReplacementNamed(context, '/dados');
+            break;
+        }
+      },
+    ),
+  );
+}
 
   Widget _buildInfoTextField(String label, String value) {
     return Padding(
@@ -209,13 +221,13 @@ class _PaginaDadosState extends State<PaginaDados> {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
-            fontSize: 25,
+            fontSize: 30,
             color: Colors.cyan.shade400,
           ),
           prefixText: ' ',
         ).applyDefaults(Theme.of(context).inputDecorationTheme),
         style: TextStyle(
-          fontSize: 18,
+          fontSize: 22,
           color: Colors.black,
         ),
         controller: TextEditingController(text: value),
