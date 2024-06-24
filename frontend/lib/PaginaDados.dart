@@ -6,6 +6,7 @@ import 'PaginaDados.dart';
 import 'PaginaJogo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'PaginaLogin.dart';
 
 class PaginaDados extends StatefulWidget {
   PaginaDados({Key? key}) : super(key: key);
@@ -143,7 +144,7 @@ Widget build(BuildContext context) {
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.cyan.shade600,
-                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 60),
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 60),
                           ),
                         ),
                         SizedBox(height: 16), // Espaçamento entre os botões
@@ -161,7 +162,27 @@ Widget build(BuildContext context) {
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.cyan.shade600,
-                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                          ),
+                        ),
+                        SizedBox(height: 16), // Espaçamento entre os botões
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()), // Navegação para a tela de login
+                          );
+                        },
+                          child: Text(
+                            'Sair',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade600,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 75),
                           ),
                         ),
                       ],
