@@ -111,9 +111,10 @@ Tarefas e responsáveis:
 História #1: Como usuário, quero ter uma conta, logar e deslogar dela
 Tarefas e responsáveis:
 
-Criar tabelas no banco de dados. [ Luiz ]
-- Implementar requisição POST para cadastro na API. [ Lucas ]
-- Implementar requisição GET para login na API. [ Lucas ]
+- Criar tabelas no banco de dados. [Luiz]
+- Implementar requisição POST para cadastro na API. [Lucas]
+- Implementar requisição GET para login na API. [Lucas]
+- Implementar lógica de verificação de token. [Lucas]
 - Implementar a versão inicial da tela principal [Caio]
 - Implementar as telas de login e de cadastro [Caio]
 - Enviar requisição POST para a API com os dados de cadastro [Caio]
@@ -124,14 +125,14 @@ Tarefas e responsáveis:
 
 - Implementar a tela com os jogos disponíveis [Thales]
 - Implementar a tela de compra do jogo [Thales]
-- Implementar no backend lógica de listar jogos disponíveis e seus preços. [ Luiz ]
+- Implementar no backend lógica de listar jogos disponíveis e seus preços. [ Lucas ]
 - Implementar no backend lógica de subtrair créditos ao realizar uma compra. [ Luiz ]
-- Implementar no backend lógica de adicionar o jogo comprado à biblioteca do usuário. [ Lucas ]
+- Implementar no backend lógica de adicionar o jogo comprado à biblioteca do usuário. [ Luiz ]
 
 História #3: Como usuário, gostaria de ver quais jogos tenho em minha biblioteca
 Tarefas e responsáveis:
 
-- Listar os jogos na biblioteca do usuário. [ Lucas ]
+- Listar os jogos na biblioteca do usuário. [Luiz]
 - Implementar as telas de bibliotecas [Caio]
 
 História #4: Como usuário, gostaria de adicionar créditos ou saldo à minha conta
@@ -139,32 +140,33 @@ Tarefas e responsáveis:
 
 - Implementar a tela da carteira de créditos do usuário [Thales]
 - Implementar a tela de adicionar créditos [Thales]
-- Implementar a transferência de créditos para o usuário. [ Lucas] 
+- Implementar a transferência de créditos para o usuário. [Luiz] 
 
 História #5: Como usuário, eu gostaria de favoritar jogos
 Tarefas e responsáveis:
 
-- Implementar no backend lógica de favoritar o jogo. [ Luiz ]
+- Implementar no backend lógica de favoritar o jogo. [Lucas]
 - Implementar a estrela de favoritos [Caio]
 - Implementar a seção de favoritos na biblioteca [Caio]
 
 História #6: Como usuário, gostaria de fazer avaliações textuais nos jogos que comprei.
 Tarefas e responsáveis:
 
-- Implementar no backend lógica de adicionar avaliação textual a um jogo. [ Luiz ]
+- Implementar no backend lógica de adicionar avaliação textual a um jogo. [Luiz]
 - Implementar os campos de avaliação de texto [Thales]
 - Implementar o botão de enviar avaliação [Thales]
 
 História #7: Como usuário, gostaria de buscar jogos pelo nome
 Tarefas e responsáveis:
 
-- Implementar no backend consulta de jogos por nome. [ Lucas ]
+- Implementar no backend consulta de jogos por nome. [Lucas]
 - Implementar seção de busca na tela de jogos e na biblioteca [Caio e Thales]
 
 História #8: Como usuário, gostaria de adicionar usuários como amigos.
 Tarefas e responsáveis:
 
-- Criar tabela de relação de amigos. [ Luiz ]
+- Criar tabela de relação de amigos. [Luiz]
+- Implementar pesquisa de usuários no backend. [Lucas]
 - Implementar a tela de usuários amigos [Caio]
 - Implementar as solicitações [Caio]
 
