@@ -106,3 +106,23 @@ Tarefas e responsáveis:
 - Implementar a tela de usuários amigos [Caio e Thales]
 - Implementar as solicitações [Caio e Thales]
 
+# Documentação da arquitetura hexagonal
+
+## Motivo da utilização
+
+A arquitetura hexagonal foi utilizada para permitir que o domínio, que contem as entidades e as regras de negócio, ficasse livre de tecnologias, como o banco de dados e a API.
+
+## Forma da implementação
+
+Na implementação dessa arquitetura, foi criada uma pasta para o domínio e uma pasta para os adaptadores no back-end. 
+
+O domínio contém uma pasta de entidades e uma pasta de portas. Nas entidades são definidas as interfaces das entidades, e nas portas são definidas as interfaces das classes de serviços (portas de entrada) e as interfaces dos repositórios (portas de saída), todas separadas em uma pasta para cada entidade. Além disso, temos uma pasta de serviços, que contém as implementações das classes de serviços.
+
+A pasta de adaptadores, por sua vez, possui uma pasta para a API e uma para o banco de dados. Na pasta da API temos toda a implementação da lógica com o Express.js, e na pasta de banco de dados temos as definições das models do Mongoose e a implementação dos repositórios.
+
+Dessa forma, uma chamada do front-end chega pela API, cujo controller chama métodos das classes de serviços, que, por sua vez, chamam métodos dos repositórios para acessar o banco de dados. O diagrama abaixo ilustra essa interação.
+
+![image](https://github.com/caiolara090/GameStore/assets/108113333/866f8f1f-eaa4-4bfa-931a-bf6d1ac06109)
+
+
+
