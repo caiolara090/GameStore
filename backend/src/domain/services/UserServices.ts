@@ -1,6 +1,6 @@
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
 import { IUser } from "../entities/User";
-import { IUserRepository } from "../ports/User";
+import { IUserRepository } from "../ports/User/UserRepository";
 import { IUserServices } from "../ports/User/UserServices";
 
 export class UserServices implements IUserServices {

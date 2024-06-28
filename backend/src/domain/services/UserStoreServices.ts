@@ -1,7 +1,7 @@
 import { IUserStoreServices } from "../ports/User/UserStoreServices";
 import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
-import { IGameRepository } from "../ports/Game";
+import { IGameRepository } from "../ports/Game/GameRepository";
 import { GameRepository } from "../../adapters/database/repositories/GameRepository";
 
 export class UserStoreServices implements IUserStoreServices {

@@ -1,5 +1,5 @@
 import { IUserLibraryServices, ILibrary } from "../ports/User/UserLibraryServices";
-import { IUserRepository } from "../ports/User";
+import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
 import { IUserRepositoryGame } from "../ports/User/UserRepository"; 
 import { IUserGame } from "../entities/User";
