@@ -71,8 +71,20 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
 
       if (response.statusCode == 200) {
         print('Créditos adicionados com sucesso');
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.cyan.shade400,
+              content: Text('Crédidos adicionados! Agora, pode gastar! :p'),
+            ),
+          );
       } else {
         print('Failed to add credits: ${response.statusCode}');
+              ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.cyan.shade400,
+              content: Text('Houve um erro ao processar seu pedido. Tente novamente'),
+            ),
+          );
       }
     } catch (e) {
       print('Error adding credits: $e');

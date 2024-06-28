@@ -42,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan.shade400, Colors.cyan.shade400],
+                colors: [Colors.white, Colors.white],
               ),
             ),
             child: const SizedBox.expand(),
@@ -124,6 +124,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ElevatedButton(
                           onPressed: _register,
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade400,
                             padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50),
                           ),
                           child: const Text(
@@ -161,7 +162,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           borderRadius: BorderRadius.circular(12.0),
         ),
         filled: true,
-        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+        fillColor: Colors.cyan.shade100.withOpacity(0.5),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: const BorderSide(color: Colors.blue, width: 2.0),
@@ -196,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           borderRadius: BorderRadius.circular(12.0),
         ),
         filled: true,
-        fillColor: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+        fillColor: Colors.cyan.shade100.withOpacity(0.5),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: const BorderSide(color: Colors.blue, width: 2.0),
@@ -247,7 +248,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.cyan.shade400,
               content: Text('Registro bem-sucedido para $name!'),
             ),
           );
