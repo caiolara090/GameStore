@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import { IFriendshipServices } from "../../../../domain/ports/Friendship/FriendshipServices";
 import { FriendshipServices } from "../../../../domain/services/FriendshipServices";
 
-// todo revisar, decidir se vai fazer tudo com dois id
 export const createFriendshipRequest = async (
   req: Request<{}, {}, IFriendshipRequest>,res: Response) => {
   const friendshipServices: IFriendshipServices = new FriendshipServices();

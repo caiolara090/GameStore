@@ -1,4 +1,4 @@
-import { searchUsersLibrary, toggleUsersGameFavorite } from './../controllers/user/User';
+import { searchUsersLibrary, setGameFavorite } from './../controllers/user/User';
 import { login } from "../controllers/Auth/Login";
 import { loginValidation } from "./../middlewares/Auth/LoginValidation";
 import { Router } from "express";
@@ -29,7 +29,7 @@ router.post("/buyGame", checkJwtToken, buyGame);
 
 router.post("/addCredits", checkJwtToken, addCredits);
 
-router.post("/setFavorite", checkJwtToken, toggleUsersGameFavorite);
+router.post("/setFavorite", checkJwtToken, setGameFavorite);
 
 router.get("/hasGame", hasGame);
 
