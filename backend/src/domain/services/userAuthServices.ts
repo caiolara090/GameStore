@@ -8,6 +8,12 @@ import bcrypt from "bcryptjs";
 import { SignUpRequest } from "../../adapters/api/middlewares/Auth/SignupValidation";
 
 export class UserAuthServices implements IUserAuthServices {
+  private userRepository: IUserRepository;
+
+  constructor() {
+    this.userRepository = new UserRepository();
+  }
+
   signToken = (userId: ObjectId): string => {
     const accessToken = sign({ uid: userId });
 
@@ -18,21 +24,15 @@ export class UserAuthServices implements IUserAuthServices {
   };
 
   async createUser(body: SignUpRequest): Promise<IUser> {
-    const userRepository: IUserRepository = new UserRepository();
-
     body.password = bcrypt.hashSync(body.password);
-    return await userRepository.create(body);
+    return await this.userRepository.create(body);
   }
 
   async findByEmail(email: string): Promise<IUser | IUser[] | null> {
-    const userRepository: IUserRepository = new UserRepository();
-
-    return await userRepository.find({ email: email });
+    return await this.userRepository.find({ email: email });
   }
 
   async findByUsername(username: string): Promise<IUser | IUser[] | null> {
-    const userRepository: IUserRepository = new UserRepository();
-
-    return await userRepository.find({ username: username });
+    return await this.userRepository.find({ username: username });
   }
 }

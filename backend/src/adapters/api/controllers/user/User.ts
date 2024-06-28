@@ -2,6 +2,8 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { UserServices } from "../../../../domain/services/UserServices";
 import { IUserServices } from "../../../../domain/ports/User/UserServices";
+import { UserLibraryServices } from "../../../../domain/services/UserLibraryServices";
+import { IUserLibraryServices } from "../../../../domain/ports/User/UserLibraryServices";
 
 export const searchUsers = async (req: Request, res: Response) => {
   const userService: IUserServices = new UserServices();
@@ -21,11 +23,11 @@ export const searchUsers = async (req: Request, res: Response) => {
 };
 
 export const searchUsersLibrary = async (req: Request, res: Response) => {
-  const userService: IUserServices = new UserServices();
+  const userLibraryService: IUserLibraryServices = new UserLibraryServices();
   const { userId, gameTitle } = req.body;
 
   try {
-    const library = await userService.searchUsersLibrary(userId, gameTitle);
+    const library = await userLibraryService.searchUsersLibrary(userId, gameTitle);
 
     return res.status(StatusCodes.OK).json({
       library: library,
@@ -37,12 +39,12 @@ export const searchUsersLibrary = async (req: Request, res: Response) => {
   }
 };
 
-export const toggleUsersGameFavorite = async (req: Request, res: Response) => {
-  const userService: IUserServices = new UserServices();
+export const setGameFavorite = async (req: Request, res: Response) => {
+  const userLibraryService: IUserLibraryServices = new UserLibraryServices();
   const { userId, gameId } = req.body;
 
   try {
-    await userService.toggleUsersGameFavorite(userId, gameId);
+    await userLibraryService.setGameFavorite(userId, gameId);
 
     return res.status(StatusCodes.OK).json({
       message: "Favorite status updated",

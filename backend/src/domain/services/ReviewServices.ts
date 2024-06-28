@@ -7,17 +7,18 @@ import { GameRepository } from "../../adapters/database/repositories/GameReposit
 
 export class ReviewServices implements IReviewServices {
   private reviewRepository: IReviewRepository;
+  private gameRepository: IGameRepository;
 
   constructor() {
     this.reviewRepository = new ReviewRepository();
+    this.gameRepository = new GameRepository();
   }
 
   async createReview(review: IReview): Promise<IReview> {
     try {
       const createdReview = await this.reviewRepository.create(review);
 
-      const gameRepository: IGameRepository = new GameRepository();
-      await gameRepository.insertReview(review.gameId, createdReview as IReview);
+      await this.gameRepository.insertReview(review.gameId, createdReview as IReview);
 
       return createdReview;
     } catch (error: any) {
@@ -29,8 +30,7 @@ export class ReviewServices implements IReviewServices {
     try {
       const review = await this.reviewRepository.find({ _id }) as IReview;
 
-      const gameRepository: IGameRepository = new GameRepository();
-      await gameRepository.removeReview(review.gameId, review as IReview);
+      await this.gameRepository.removeReview(review.gameId, review as IReview);
 
       return this.reviewRepository.delete(_id);
     } catch (error: any) {

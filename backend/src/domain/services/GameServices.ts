@@ -4,15 +4,15 @@ import { IGameRepository } from "../ports/Game/GameRepository";
 import { IGameServices } from "../ports/Game/GameServices";
 
 export class GameServices implements IGameServices {
+  private gameRepository: IGameRepository;
+  constructor() {
+    this.gameRepository = new GameRepository();
+  }
   async searchGames(gameTitle: string, fields: string): Promise<IGame[] | null> {
-    const gameRepository: IGameRepository = new GameRepository();
-
-    return await gameRepository.searchGames(gameTitle, fields);
+    return await this.gameRepository.searchGames(gameTitle, fields);
   }
 
   async getPopularGames(): Promise<IGame[] | null> {
-    const gameRepository: IGameRepository = new GameRepository();
-
-    return await gameRepository.getPopularGames();
+    return await this.gameRepository.getPopularGames();
   }
 }

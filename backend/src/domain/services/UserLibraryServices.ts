@@ -2,6 +2,7 @@ import { IUserLibraryServices, ILibrary } from "../ports/User/UserLibraryService
 import { IUserRepository } from "../ports/User";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
 import { IUserRepositoryGame } from "../ports/User/UserRepository"; 
+import { IUserGame } from "../entities/User";
 
 export class UserLibraryServices implements IUserLibraryServices{
   private userRepository: IUserRepository;
@@ -27,5 +28,13 @@ export class UserLibraryServices implements IUserLibraryServices{
     } catch (error: any) {
       throw new Error("Error getting user games: " + error.message);
     }
+  }
+
+  async searchUsersLibrary(userId: string, gameTitle: string): Promise<IUserGame[]>{
+    return await this.userRepository.searchUsersLibrary(userId, gameTitle);
+  }
+
+  async setGameFavorite(userId: string, gameId: string): Promise<void> {
+    return await this.userRepository.setGameFavorite(userId, gameId);
   }
 }

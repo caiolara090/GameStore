@@ -6,9 +6,11 @@ import { GameRepository } from "../../adapters/database/repositories/GameReposit
 
 export class UserStoreServices implements IUserStoreServices {
   private userRepository: IUserRepository;
+  private gameRepository: IGameRepository;
 
   constructor() {
     this.userRepository = new UserRepository();
+    this.gameRepository = new GameRepository();
   }
 
   async buyGame(userId: string, gameId: string): Promise<void> {
@@ -17,9 +19,8 @@ export class UserStoreServices implements IUserStoreServices {
       if (user === null) {
         throw new Error("User not found");
       }
-      
-      const gameRepository: IGameRepository = new GameRepository();
-      const game = await gameRepository.findById(gameId);
+
+      const game = await this.gameRepository.findById(gameId);
       if (game === null) {
         throw new Error("Game not found");
       }
