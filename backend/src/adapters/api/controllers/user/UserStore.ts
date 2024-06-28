@@ -1,8 +1,9 @@
 import { UserStoreServices } from "../../../../domain/services/UserStoreServices";
 import { Request, Response } from "express";
 import { IUserStoreServices } from "../../../../domain/ports/User/UserStoreServices";
-import { IUserServices } from "../../../../domain/ports/User";
+import { IUserServices } from "../../../../domain/ports/User/UserServices";
 import { UserServices } from "../../../../domain/services/UserServices";
+import { StatusCodes } from "http-status-codes";
 
 export const buyGame = async (req: Request, res: Response) => {
   const userStoreServices: IUserStoreServices = new UserStoreServices();
@@ -10,9 +11,9 @@ export const buyGame = async (req: Request, res: Response) => {
   const { userId, gameId } = req.body;
   try {
     await userStoreServices.buyGame(userId, gameId);
-    res.status(201).send();
+    res.status(StatusCodes.CREATED).send();
   } catch (error: any) {
-    res.status(400).send("Error buying game: " + error.message);
+    res.status(StatusCodes.BAD_REQUEST).send("Error buying game: " + error.message);
   }
 }
 
@@ -22,9 +23,9 @@ export const addCredits = async (req: Request, res: Response) => {
   const { userId, credits } = req.body;
   try {
     await userStoreServices.addCredits(userId, credits);
-    res.status(200).send();
+    res.status(StatusCodes.OK).send();
   } catch (error: any) {
-    res.status(400).send("Error adding credits: " + error.message);
+    res.status(StatusCodes.BAD_REQUEST).send("Error adding credits: " + error.message);
   }
 }
 
