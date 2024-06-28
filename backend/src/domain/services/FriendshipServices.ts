@@ -45,7 +45,6 @@ export class FriendshipServices implements IFriendshipServices {
       status: 2,
     };
     try {
-      // todo Talvez reduzir a quantidade de consultas mexendo no repositório
       const friendship1Data = await this.friendshipRepository.findByUsers(userId, friendId);
       if (friendship1Data?.status != 1) {
         throw new Error("Friendship request not found");
