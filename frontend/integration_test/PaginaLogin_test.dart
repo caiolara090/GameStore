@@ -79,11 +79,12 @@ void main() {
 
       await tester.enterText(find.byType(TextFormField).at(0), 'wrong@example.com');
       await tester.enterText(find.byType(TextFormField).at(1), 'wrongpassword');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
       // Dê tempo suficiente para a resposta HTTP
-      await tester.pumpAndSettle(Duration(seconds: 5));
+      await tester.pumpAndSettle(Duration(seconds: 1));
 
       expect(find.text('Falha no login. Por favor, verifique suas credenciais.'), findsOneWidget);
     });
