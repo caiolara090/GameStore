@@ -6,7 +6,6 @@ import 'PaginaDados.dart';
 import 'PaginaJogo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 class PaginaLoja extends StatefulWidget {
   @override
@@ -172,7 +171,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
   @override
 
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,##0.00', 'pt_BR');
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -199,76 +198,76 @@ class _PaginaLojaState extends State<PaginaLoja> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  child: Row(
-    children: [
-      Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextField(
-            controller: _searchController,
-            onChanged: (value) {
-              setState(() {
-                _filteredJogos = allGames
-                    .where((jogo) =>
-                        jogo.nome.toLowerCase().contains(value.toLowerCase()))
-                    .toList();
-                _filteredJogos2 = popularGames
-                    .where((jogo) =>
-                        jogo.nome.toLowerCase().contains(value.toLowerCase()))
-                    .toList();
-              });
-            },
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              hintText: 'Pesquisar...',
-              hintStyle: TextStyle(color: Colors.black),
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search, color: Colors.black),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            _filteredJogos = allGames
+                                .where((jogo) =>
+                                    jogo.nome.toLowerCase().contains(value.toLowerCase()))
+                                .toList();
+                            _filteredJogos2 = popularGames
+                                .where((jogo) =>
+                                    jogo.nome.toLowerCase().contains(value.toLowerCase()))
+                                .toList();
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          hintText: 'Pesquisar...',
+                          hintStyle: TextStyle(color: Colors.black),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Center(
+                      child: Text(
+                        'R\$${_userCredits ?? 0},00',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-      ),
-      SizedBox(width: 16),
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.1),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        child: Center(
-          child: Text(
-            'R\$${formatter.format(_userCredits ?? 0)}',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-    ],
-  ),
-),
-              const SizedBox(height: 10),
+              const SizedBox(height: 0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    color: Colors.cyan.shade400, // Cor de fundo da caixa
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), // Sombra
                         spreadRadius: 2,
                         blurRadius: 7,
-                        offset: Offset(0, 3), // Deslocamento da sombra
+                        offset: const Offset(0, 3), // Deslocamento da sombra
                       ),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
                   child: Center(
                     child: Text(
                       'TOP 10 Jogos',
@@ -280,7 +279,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           Shadow(
                             blurRadius: 2,
                             color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
-                            offset: Offset(1, 1),
+                            offset: const Offset(1, 1),
                           ),
                         ],
                       ),
@@ -290,7 +289,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                   const SizedBox(height: 10),
                   ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: _filteredJogos2.length,
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
@@ -309,12 +308,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 2,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-                        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                        padding: EdgeInsets.all(12),
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        padding: const EdgeInsets.all(12),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -327,7 +326,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,24 +334,23 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                   Text(
                                     _filteredJogos2[index].nome,
                                     maxLines: 1,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
                                     _filteredJogos2[index].descricao,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
-                                    
-                                    'R\$${formatter.format(_filteredJogos2[index].preco ?? 0)}',
-                                    style: TextStyle(
+                                    'R\$${_filteredJogos2[index].preco.toStringAsFixed(2)}',
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
@@ -376,17 +374,17 @@ class _PaginaLojaState extends State<PaginaLoja> {
                 children: [
                   Container(
                   decoration: BoxDecoration(
-                    color: Colors.cyan.shade400.withOpacity(0.5), // Cor de fundo da caixa
+                    color: Colors.cyan.shade400, // Cor de fundo da caixa
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), // Sombra
                         spreadRadius: 2,
                         blurRadius: 7,
-                        offset: Offset(0, 3), // Deslocamento da sombra
+                        offset: const Offset(0, 3), // Deslocamento da sombra
                       ),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Ajustando o padding dentro da caixa
                   child: Center(
                     child: Text(
                       'Todos os Jogos',
@@ -398,7 +396,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                           Shadow(
                             blurRadius: 2,
                             color: Colors.black.withOpacity(0.3), // Sombra do texto para destacar em fundos claros
-                            offset: Offset(1, 1),
+                            offset: const Offset(1, 1),
                           ),
                         ],
                       ),
@@ -408,7 +406,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                   const SizedBox(height: 10),
                  ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: _filteredJogos.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
@@ -427,12 +425,12 @@ class _PaginaLojaState extends State<PaginaLoja> {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 7,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                      padding: EdgeInsets.all(12),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      padding: const EdgeInsets.all(12),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -445,7 +443,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,23 +451,23 @@ class _PaginaLojaState extends State<PaginaLoja> {
                                 Text(
                                   _filteredJogos[index].nome,
                                   maxLines: 1,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
                                   _filteredJogos[index].descricao,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
-                                  'R\$${formatter.format(_filteredJogos[index].preco ?? 0)}',
-                                  style: TextStyle(
+                                  'R\$${_filteredJogos[index].preco.toStringAsFixed(2)}',
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -491,7 +489,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(162, 38, 197, 218),
+        backgroundColor: Colors.cyan.shade400,
         selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
         currentIndex: _currentIndex,
         unselectedItemColor: Colors.white,

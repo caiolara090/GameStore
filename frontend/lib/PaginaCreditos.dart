@@ -73,15 +73,15 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
         print('Créditos adicionados com sucesso');
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.cyan.shade400,
-              content: Text('Crédidos adicionados! Agora, pode gastar! :p'),
+              backgroundColor: Colors.cyan.shade600,
+              content: Text('Crédidos adicionados! Agora você pode gastar!      :P'),
             ),
           );
       } else {
         print('Failed to add credits: ${response.statusCode}');
               ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.cyan.shade400,
+              backgroundColor: Colors.cyan.shade600,
               content: Text('Houve um erro ao processar seu pedido. Tente novamente'),
             ),
           );
@@ -105,13 +105,15 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.cyan.shade600,
             content: Text('Erro: Token de usuário não encontrado.'),
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
+          backgroundColor: Colors.cyan.shade600,
           content: Text('Por favor, preencha todos os campos corretamente.'),
         ),
       );
@@ -164,19 +166,19 @@ class _AddCreditsScreenState extends State<AddCreditsScreen> {
                   ),
                   const SizedBox(height: 10),
                   _buildTextField(
-                    controller: _valueController,
-                    labelText: 'Valor',
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Digite o valor';
-                      }
-                      final regex = RegExp(r'[1-9]+');
-                      if (!regex.hasMatch(value)) {
-                        return 'Digite um valor inteiro';
-                      }
-                      return null;
-                    },
-                    icon: Icons.attach_money,
+                  controller: _valueController,
+                  labelText: 'Valor',
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Digite o valor';
+                    }
+                    final regex = RegExp(r'^[0-9]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Digite um valor inteiro';
+                    }
+                    return null;
+                  },
+                  icon: Icons.attach_money,
                   ),
                   const SizedBox(height: 10),
                   _buildTextField(
