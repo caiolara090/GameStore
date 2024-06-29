@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:validators/validators.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+  final http.Client? client;
+  const RegistrationScreen({Key? key, this.client}) : super(key: key);
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -59,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       children: [
                         _buildTextField(
                           controller: _nameController,
-                          labelText: 'Nome do Usuário',
+                          labelText: 'Nome',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Campo não pode estar vazio';
@@ -153,6 +154,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     IconData? icon,
   }) {
     return TextFormField(
+      key: Key('${labelText.toLowerCase()}Field'),
       controller: controller,
       keyboardType: inputType,
       decoration: InputDecoration(
@@ -188,6 +190,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     IconData? icon,
   }) {
     return TextFormField(
+      key: Key('idadeField'),
       controller: controller,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
@@ -235,8 +238,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       // Enviando a requisição POST para a API
       Uri url = Uri.parse('http://10.0.2.2:3000/signup');
+      final client = widget.client ?? http.Client();
       try {
-        final response = await http.post(
+        final response = await client.post(
           url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -244,10 +248,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           body: jsonData,
         );
 
-        // Verificando o status da resposta
         if (response.statusCode == 200 || response.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              duration: Duration(seconds: 2),
               backgroundColor: Colors.cyan.shade400,
               content: Text('Registro bem-sucedido para $name!'),
             ),
@@ -255,16 +259,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              duration: Duration(seconds: 2),
               backgroundColor: Colors.grey,
               content: Text('Falha no registro. Tente novamente.'),
             ),
           );
-          print(response.statusCode);
-          print(response.body);
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            duration: Duration(seconds: 2),
             backgroundColor: Colors.grey,
             content: Text('Erro ao conectar com o servidor.'),
           ),

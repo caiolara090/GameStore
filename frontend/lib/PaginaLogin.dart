@@ -90,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 10),
                         TextButton(
+                          key: Key('BotaoCadastro'),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -218,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                  duration: Duration(seconds: 2),
                   backgroundColor: Colors.cyan.shade400,
                 content: Text('Falha no login. Por favor, verifique suas credenciais.'),
               ),
