@@ -1,4 +1,4 @@
-import { searchUsersLibrary, setGameFavorite } from './../controllers/user/User';
+import { searchUsersLibrary, setGameFavorite } from './../controllers/user/UserLibrary';
 import { login } from "../controllers/Auth/Login";
 import { loginValidation } from "./../middlewares/Auth/LoginValidation";
 import { Router } from "express";

@@ -1,4 +1,4 @@
-import { IGameRepository } from "../../../domain/ports/Game";
+import { IGameRepository } from "../../../domain/ports/Game/GameRepository";
 import { IGame } from "../../../domain/entities/Game";
 import { GameModel } from "../models/Game";
 import { IReview } from "../../../domain/entities/Review";

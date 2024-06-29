@@ -1,7 +1,6 @@
-import { IUserRepository } from "../../../domain/ports/User";
+import { IUserRepository, IUserRepositoryGame } from "../../../domain/ports/User/UserRepository";
 import { UserModel } from "../models/User";
 import { IUser, IUserGame } from "../../../domain/entities/User";
-import { IUserRepositoryGame } from "../../../domain/ports/User/UserRepository";
 
 export class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<IUser> {
