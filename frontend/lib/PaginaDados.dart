@@ -127,7 +127,7 @@ Widget build(BuildContext context) {
                   _buildInfoTextField('Idade:', idade),
                   SizedBox(height: 20),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
                     child: Column(
                       children: [
                         ElevatedButton(
