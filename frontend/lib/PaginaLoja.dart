@@ -495,14 +495,17 @@ class _PaginaLojaState extends State<PaginaLoja> {
         unselectedItemColor: Colors.white,
         items: [
           const BottomNavigationBarItem(
+            key: Key("Loja"),
             icon: Icon(Icons.videogame_asset),
             label: 'Loja',
           ),
           const BottomNavigationBarItem(
+            key: Key("Biblioteca"),
             icon: Icon(Icons.layers),
             label: 'Biblioteca',
           ),
           const BottomNavigationBarItem(
+            key: Key("Dados"),
             icon: Icon(Icons.format_align_justify),
             label: 'Dados',
           ),
