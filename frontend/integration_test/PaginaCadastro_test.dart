@@ -9,28 +9,6 @@ void main() {
 
   group('RegistrationScreen E2E Tests', () {
 
-    //  testWidgets('Should display widget tree', (WidgetTester tester) async {
-    //   await tester.pumpWidget(
-    //     MaterialApp(
-    //       home: RegistrationScreen(),
-    //     ),
-    //   );
-
-    //   //debugDumpApp(); // Esta linha imprime a árvore de widgets no console
-
-    //   // Find the widgets by key and enter text
-    //   await tester.enterText(find.byKey(Key('nomeField')), 'Teste Nome');
-    //   await tester.enterText(find.byKey(Key('idadeField')), '20');
-    //   await tester.enterText(find.byKey(Key('e-mailField')), 'teste email invalido');
-    //   await tester.enterText(find.byKey(Key('senhaField')), 'Testesenha');
-
-    //   // Ensure the text has been entered correctly
-    //   expect(find.text('Teste Nome'), findsOneWidget);
-    //   expect(find.text('20'), findsOneWidget);
-    //   expect(find.text('teste email invalido'), findsOneWidget);
-    //   expect(find.text('Testesenha'), findsOneWidget);
-    // });
-
     testWidgets('Should display error messages when fields are empty', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: RegistrationScreen()));
 

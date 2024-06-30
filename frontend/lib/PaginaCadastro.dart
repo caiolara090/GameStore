@@ -123,6 +123,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         const SizedBox(height: 50), // Espaço adicional
                         ElevatedButton(
+                          key: Key("Botao"),
                           onPressed: _register,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.cyan.shade400,
