@@ -40,7 +40,7 @@ export const searchUsersLibrary = async (req: Request, res: Response) => {
   const { userId, gameTitle } = req.body;
 
   try {
-    const library = await userLibraryService.searchUsersLibrary(userId, gameTitle);
+    const library = await userLibraryService.searchUserLibrary(userId, gameTitle);
 
     return res.status(StatusCodes.OK).json({
       library: library,
