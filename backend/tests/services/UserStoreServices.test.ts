@@ -18,10 +18,10 @@ describe("UserStoreServices", () => {
       findById: jest.fn(),
       addGame: jest
         .fn()
-        .mockImplementation(async (userId: string, gameId: string) => {}),
+        .mockImplementation(async (_userId: string, _gameId: string) => {}),
       addCredits: jest
         .fn()
-        .mockImplementation(async (userId: string, credits: number) => {}),
+        .mockImplementation(async (_userId: string, _credits: number) => {}),
     };
 
     mockGameRepository = {
@@ -43,16 +43,16 @@ describe("UserStoreServices", () => {
       games: [],
     };
 
-    mockUserRepository.findById!.mockResolvedValue(user);
-    mockGameRepository.findById!.mockResolvedValue(game);
+    mockUserRepository.findById.mockResolvedValue(user);
+    mockGameRepository.findById.mockResolvedValue(game);
 
-    mockUserRepository.addGame!.mockImplementation(
+    mockUserRepository.addGame.mockImplementation(
       async (_userId: string, _gameId: string) => {
         user.games.push(game);
       }
     );
 
-    mockUserRepository.addCredits!.mockImplementation(
+    mockUserRepository.addCredits.mockImplementation(
       async (_userId: string, credits: number) => {
         user.credits += credits;
       }
@@ -120,7 +120,7 @@ describe("UserStoreServices", () => {
     const credits = 100;
     const user = { _id: userId, credits: 0 };
 
-    mockUserRepository.addCredits!.mockImplementation(
+    mockUserRepository.addCredits.mockImplementation(
       async (_userId: string, credits: number) => {
         user.credits += credits;
       }
@@ -132,7 +132,7 @@ describe("UserStoreServices", () => {
   });
 
   it("should throw an error when adding credits fails", async () => {
-    mockUserRepository.addCredits!.mockImplementation(
+    mockUserRepository.addCredits.mockImplementation(
       async (_userId: string, _credits: number) => {
         throw new Error("Failed to add credits");
       }

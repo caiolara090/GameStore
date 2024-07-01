@@ -1,5 +1,3 @@
-import { searchUsers } from "./../../src/adapters/api/controllers/user/User";
-import { searchGames } from "./../../src/adapters/api/controllers/game/Game";
 import { UserServices } from "../../src/domain/services/UserServices";
 import { IUserRepository } from "../../src/domain/ports/User/UserRepository";
 
@@ -7,46 +5,43 @@ describe("UserServices", () => {
   let userServices: UserServices;
   let mockUserRepository: jest.Mocked<Partial<IUserRepository>> & {
     findById: jest.Mock;
-    searchUsers: jest.Mock;
+    find: jest.Mock;
   };
 
   beforeEach(() => {
     mockUserRepository = {
       findById: jest.fn(),
-      searchUsers: jest.fn().mockImplementation(),
+      find: jest.fn().mockImplementation(),
     };
     userServices = new UserServices();
     (userServices as any).userRepository = mockUserRepository;
   });
 
   it("should search users by username", async () => {
-    const usernames = ["user1", "user2", "test"];
-    const user = "user";
+    const usersList = ["user1", "user2", "test"];
+    const username = "user";
 
-    mockUserRepository.searchUsers!.mockImplementation(() => {
-      return usernames.filter((u) => u.includes(user));
+    mockUserRepository.find.mockImplementation(async (query: any) => {
+      return usersList.filter((u) => u.includes(query.username.$regex));
     });
 
-    const result = await userServices.searchUsers(user);
+    const result = await userServices.searchUsers(username);
 
-    expect(result!.length).toBe(2);
     expect(result).toStrictEqual(["user1", "user2"]);
   });
 
   it("should return null when no users found by username", async () => {
-    const usernames = ["user1", "user2", "test"];
-    const user = "nonexistinguser";
+    const usersList = ["user1", "user2", "test"];
+    const username = "nonexistinguser";
 
-    mockUserRepository.searchUsers!.mockImplementation(
-      async (username: string) => {
-        const users = usernames.filter((u) => u.includes(username));
+    mockUserRepository.find.mockImplementation(async (user: any) => {
+      const users = usersList.filter((u) => u.includes(user.username.$regex));
 
-        if (!users.length) return null;
-        return users;
-      }
-    );
+      if (!users.length) return null;
+      return users;
+    });
 
-    const result = await userServices.searchUsers(user);
+    const result = await userServices.searchUsers(username);
 
     expect(result).toBeNull();
   });
