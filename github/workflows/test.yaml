@@ -1,0 +1,29 @@
+name: Automated tests
+
+on:
+  push:
+    branches:
+      - developer
+      - main
+  pull_request:
+    branches:
+      - developer
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Running tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies in backend
+        if: github.ref == 'refs/heads/main' && contains(github.event_name, 'push')
+        run: cd backend && npm install
+
+      - name: Run tests in backend
+        if: github.ref == 'refs/heads/main' && contains(github.event_name, 'push')
+        run: cd backend && npm test
