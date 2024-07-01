@@ -131,6 +131,7 @@ Widget build(BuildContext context) {
                     child: Column(
                       children: [
                         ElevatedButton(
+                          key: Key("Amigos"),
                           onPressed: () {
                             Navigator.pushNamed(context, '/amigos');
                             // Adicionar ação para a aba "Amigos"
