@@ -9,8 +9,9 @@ export class UserServices implements IUserServices {
   constructor() {
     this.userRepository = new UserRepository();
   }
-  async searchUsers(username: string, fields: string): Promise<IUser[] | null> {
-    return await this.userRepository.searchUsers(username, fields);
+
+  async searchUsers(username: string): Promise<IUser[] | null> {
+    return await this.userRepository.searchUsers(username);
   }
 
   async findById(userId: string): Promise<IUser | null> {
