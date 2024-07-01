@@ -5,12 +5,14 @@ import 'package:gamestore/PaginaCadastro.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  WidgetController.hitTestWarningShouldBeFatal;
 
   group('RegistrationScreen E2E Tests', () {
+
     testWidgets('Should display error messages when fields are empty', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: RegistrationScreen()));
 
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.tap(find.byKey(Key("Botao")));
       await tester.pumpAndSettle();
 
       expect(find.text('Campo não pode estar vazio'), findsAtLeastNWidgets(2));
@@ -25,9 +27,9 @@ void main() {
       await tester.enterText(find.byKey(Key("e-mailField")), 'teste email invalido');
       await tester.enterText(find.byKey(Key("senhaField")), 'Testesenha');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.ensureVisible(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle(Duration(seconds: 5));
+      await tester.tap(find.byKey(Key("Botao")));
+      await tester.pumpAndSettle(Duration(seconds: 1));
 
       expect(find.text('Digite um e-mail válido'), findsOneWidget);
     });
@@ -40,9 +42,11 @@ void main() {
       await tester.enterText(find.byType(TextFormField).at(2), 'teste@hotmail.com');
       await tester.enterText(find.byType(TextFormField).at(3), '123');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.ensureVisible(find.byType(ElevatedButton));
       await tester.pump();
-      await tester.tap(find.byType(ElevatedButton));
+      await tester.ensureVisible(find.byKey(Key("Botao")));
+      await tester.pumpAndSettle(Duration(seconds: 5));
+      await tester.tap(find.byKey(Key("Botao")));
+      await tester.pumpAndSettle(Duration(seconds: 1));
 
       expect(find.text('A senha deve ter pelo menos 6 caracteres'), findsOneWidget);
     });
@@ -50,17 +54,17 @@ void main() {
     testWidgets('Should show success message on valid form submission', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: RegistrationScreen()));
 
-      String nomeuser = "Testeaaa";
-      String email = "emailtesteaa" + "@hotmail.com";
+      String nomeuser = "Pedro Teste";
+      String email = "pedroteste" + "@hotmail.com";
 
       await tester.enterText(find.byType(TextFormField).at(0), nomeuser);
       await tester.enterText(find.byType(TextFormField).at(1), '20');
       await tester.enterText(find.byType(TextFormField).at(2), email);
-      await tester.enterText(find.byType(TextFormField).at(3), 'Testesenha');
+      await tester.enterText(find.byType(TextFormField).at(3), '123456');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.ensureVisible(find.byType(ElevatedButton));
+      await tester.pumpAndSettle(Duration(seconds: 5));
+      await tester.tap(find.byKey(Key("Botao")));
       await tester.pumpAndSettle(Duration(seconds: 1));
-      await tester.tap(find.byType(ElevatedButton));
 
       expect(find.text('Registro bem-sucedido para $nomeuser!'), findsOneWidget);
     });
