@@ -46,22 +46,27 @@ describe("UserServices", () => {
   });
 
   it("should return null when no users found by username", async () => {
-    const users = [
-      {
-        _id: "userId",
-        credits: 100,
-        games: [],
-        username: "example",
-        age: 25,
-        email: "example@example.com",
-        password: "password",
-      },
-    ];
-
     mockUserRepository.find.mockResolvedValue(null);
 
     const result = await userServices.searchUsers("nonexistinguser");
 
     expect(result).toBeNull();
+  });
+
+  it("should find user by id", async () => {
+    const user = {
+      _id: "userId",
+      credits: 100,
+      games: [],
+      username: "example",
+      age: 25,
+      email: "example@example.com",
+      password: "password",
+    };
+    mockUserRepository.findById.mockResolvedValue(user);
+
+    const result = await userServices.findById("userId");
+
+    expect(result).toBe(user);
   });
 });

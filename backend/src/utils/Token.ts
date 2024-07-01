@@ -19,8 +19,6 @@ export const verify = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (typeof decoded === "string") return "INVALID_TOKEN";
-
     return decoded as IJwtData;
   } catch (error: any) {
     return "INVALID_TOKEN";

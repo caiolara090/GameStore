@@ -54,4 +54,12 @@ describe("verify", () => {
 
     expect(verify(invalidToken)).toEqual("INVALID_TOKEN");
   });
+
+  test("Try to verify an invalid token", () => {
+    process.env.JWT_SECRET = "test";
+
+    const decodedData = verify("invalid_token");
+
+    expect(typeof decodedData).toBe("string");
+  });
 });
