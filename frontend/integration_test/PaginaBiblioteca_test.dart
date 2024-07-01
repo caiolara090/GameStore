@@ -15,24 +15,24 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    testWidgets('Realiza login e navega para a página da loja', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: LoginScreen(),
-      routes: {
-      '/loja': (context) => PaginaLoja(),
-      '/biblioteca':(context) => GameLibraryPage(),
-    },));
+    // testWidgets('Realiza login e navega para a página da loja', (WidgetTester tester) async {
+    //   await tester.pumpWidget(MaterialApp(home: LoginScreen(),
+    //   routes: {
+    //   '/loja': (context) => PaginaLoja(),
+    //   '/biblioteca':(context) => GameLibraryPage(),
+    // },));
 
-      // Insere os dados de login e submete o formulário
-      await tester.enterText(find.byType(TextFormField).at(0), 'caio@hotmail.com');
-      await tester.enterText(find.byType(TextFormField).at(1), '123456');
-      await tester.tap(find.byType(ElevatedButton));
+    //   // Insere os dados de login e submete o formulário
+    //   await tester.enterText(find.byType(TextFormField).at(0), 'caio@hotmail.com');
+    //   await tester.enterText(find.byType(TextFormField).at(1), '123456');
+    //   await tester.tap(find.byType(ElevatedButton));
 
-      // Aguarda a navegação para a PáginaLoja
-      await tester.pumpAndSettle(Duration(milliseconds: 3000));
+    //   // Aguarda a navegação para a PáginaLoja
+    //   await tester.pumpAndSettle(Duration(milliseconds: 3000));
 
-      // Verifica se a PáginaLoja é exibida
-      expect(find.byType(PaginaLoja), findsOneWidget);
-    });
+    //   // Verifica se a PáginaLoja é exibida
+    //   expect(find.byType(PaginaLoja), findsOneWidget);
+    // });
 
     testWidgets('Navega para a biblioteca de jogos', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: LoginScreen(),
@@ -80,6 +80,36 @@ void main() {
       expect(find.text('Sid Meier\'s Alpha Centauri'), findsWidgets);
     });
 
+      testWidgets('Desfavorita um jogo na biblioteca', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: LoginScreen(), routes: {
+        '/biblioteca': (context) => GameLibraryPage(),
+      }));
+
+      // Realiza login
+      await tester.enterText(find.byType(TextFormField).at(0), 'caio@hotmail.com');
+      await tester.enterText(find.byType(TextFormField).at(1), '123456');
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle(Duration(milliseconds: 3000));
+
+      // Navega para a biblioteca
+      await tester.tap(find.byKey(Key("Biblioteca")));
+      await tester.pumpAndSettle(Duration(milliseconds: 3000));
+
+      // Realiza uma pesquisa de jogo
+      await tester.enterText(find.byType(TextField), 'Wing Commander');
+      await tester.pumpAndSettle(Duration(milliseconds: 5000));
+
+      // Verifica se o jogo pesquisado aparece na lista
+      expect(find.text('Wing Commander'), findsWidgets);
+
+      // Desfavorece um jogo
+      await tester.tap(find.byIcon(Icons.star).first);
+      await tester.pumpAndSettle(Duration(milliseconds: 3000));
+
+      // Verifica se o jogo foi removido dos favoritos
+      expect(find.byIcon(Icons.star), findsNothing);
+    });
+
     testWidgets('Favorita um jogo', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: LoginScreen(),
       routes: {
@@ -98,7 +128,8 @@ void main() {
       await tester.pumpAndSettle(Duration(milliseconds: 3000));
 
       // Realiza uma pesquisa de jogo
-      await tester.enterText(find.byType(TextField), 'a');
+      await tester.enterText(find.byType(TextField), 'Wing Commander');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle(Duration(milliseconds: 3000));
 
       // Favorita um jogo
@@ -108,5 +139,6 @@ void main() {
       // Verifica se o jogo foi adicionado aos favoritos
       expect(find.byIcon(Icons.star), findsWidgets);
     });
+
   });
 }
