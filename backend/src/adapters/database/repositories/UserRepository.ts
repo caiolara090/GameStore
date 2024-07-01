@@ -5,8 +5,7 @@ import { IUser, IUserGame } from "../../../domain/entities/User";
 export class UserRepository implements IUserRepository {
   async create(user: IUser): Promise<IUser> {
     try {
-      const createdUser = await UserModel.create(user);
-      return createdUser;
+      return await UserModel.create(user);
     } catch (error: any) {
       throw new Error("Error creating user: " + error.message);
     }
@@ -27,8 +26,7 @@ export class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<IUser | null> {
     try {
-      const foundUser = await UserModel.findOne({ email });
-      return foundUser;
+      return await UserModel.findOne({ email });
     } catch (error: any) {
       throw new Error("Error finding user by email: " + error.message);
     }
@@ -36,8 +34,7 @@ export class UserRepository implements IUserRepository {
 
   async findByUsername(username: string): Promise<IUser | null> {
     try {
-      const foundUser = await UserModel.findOne({ username });
-      return foundUser;
+      return await UserModel.findOne({ username });
     } catch (error: any) {
       throw new Error("Error finding user by username: " + error.message);
     }
@@ -45,8 +42,7 @@ export class UserRepository implements IUserRepository {
 
   async findById(_id: string): Promise<IUser | null> {
     try {
-      const foundUser = await UserModel.findById(_id);
-      return foundUser;
+      return await UserModel.findById(_id);
     } catch (error: any) {
       throw new Error("Error finding user by id: " + error.message);
     }
@@ -71,29 +67,13 @@ export class UserRepository implements IUserRepository {
   async getGames(_id: string): Promise<IUserRepositoryGame[]> {
     try {
       const user = await UserModel.findById(_id).populate("games.game");
-      let games = [] as IUserRepositoryGame[];
-      if (user?.games !== undefined) {
-        games = user.games as unknown as IUserRepositoryGame[];
-      }
-      return games;
+      return user?.games as unknown as IUserRepositoryGame[] || [];
     } catch (error: any) {
       throw new Error("Error getting games from user: " + error.message);
     }
-  }
+  }  
   
-  async searchUsers(username: string): Promise<IUser[] | null> {
-    try {
-      const query = {} as any;
-      query.username = { $regex: username, $options: "iu" };
-
-      const users = await UserModel.find(query)
-      return users;
-    } catch (error: any) {
-      throw new Error("Error searching for users: " + error.message);
-    }
-  }
-
-  async searchUsersLibrary(userId: string, title: string): Promise<IUserGame[]> {
+  async retrieveUserLibrary(userId: string): Promise<IUserGame[]> {
     try {
       const user = await UserModel.findById(userId)
         .populate({
@@ -104,40 +84,17 @@ export class UserRepository implements IUserRepository {
   
       if (!user) throw new Error('User not found');
   
-      const userGames = user?.games?.filter(gameEntry => gameEntry.game.name.toLowerCase()
-      .includes(title.toLowerCase())).map(gameEntry => ({
-        game: {
-          name: gameEntry.game.name,
-          description: gameEntry.game.description,
-          image: gameEntry.game.image,
-        },
-        favorite: gameEntry.favorite,
-      }));
-  
-      return userGames as IUserGame[];
+      return user.games as IUserGame[];
     } catch (error: any) {
       throw new Error("Error retrieving user's games:" +  error.message);
     }
   }
 
-  async setGameFavorite(userId: string, gameId: string): Promise<void> {
+  async update(user: IUser): Promise<void> {
     try {
-      const user = await UserModel.findById(userId);
-
-      if (!user) throw new Error("User not found");
-      if(user.games === undefined) throw new Error("User has no games");
-
-      const gameIndex = user.games.findIndex((game) => game.game._id == gameId);
-      if (gameIndex < 0) throw new Error("Game not found in user's library");
-      
-      const game = user.games[gameIndex].game;
-      const favorite = !user.games[gameIndex].favorite;
-
-      user?.games?.splice(gameIndex, 1);
-      user?.games?.push({ game: game, favorite: favorite });
-      await user.save();
+      await UserModel.updateOne({ _id: user.userId }, { $set: user });
     } catch (error: any) {
-      throw new Error("Error toggling game favorite: " + error.message);
+      throw new Error("Error saving user: " + error.message);
     }
   }
 }

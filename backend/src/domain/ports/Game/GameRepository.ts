@@ -7,8 +7,6 @@ export interface IGameRepository {
   delete(_id: string): Promise<void>;
   find(game: Partial<IGame>): Promise<IGame | IGame[] | null>;
   findById(_id: string): Promise<IGame | null>;
-  searchGames(gameTitle: string, fields: string): Promise<IGame[] | null>;
+  retrieveGames(query: any, fields: string): Promise<IGame[] | null>;
   getPopularGames(): Promise<IGame[] | null>;
-  insertReview(gameId: string, review: IReview): Promise<void>;
-  removeReview(gameId: string, review: IReview): Promise<void>;
 }

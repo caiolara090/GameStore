@@ -22,9 +22,9 @@ export class FriendshipRepository implements IFriendshipRepository {
   async find(friendship: Partial<IFriendship>): Promise<IFriendship | IFriendship[] | null> {
     try {
       const foundFriendship = await FriendshipModel.find(friendship).populate("userId friendId");
-      // Se a lista tiver só um elemento, retorna apenas ele
+
       if (foundFriendship.length === 1) return foundFriendship[0];
-      // Caso contrário, retorna a lista
+
       return foundFriendship;
     } catch (error: any) {
       throw new Error("Error finding friendship: " + error.message);
@@ -33,8 +33,7 @@ export class FriendshipRepository implements IFriendshipRepository {
 
   async findByUsers(userId: string, friendId: string): Promise<IFriendship | null> {
     try {
-      const friendship = await FriendshipModel.findOne({ userId, friendId }).populate("userId friendId");
-      return friendship;
+      return await FriendshipModel.findOne({ userId, friendId }).populate("userId friendId");
     } catch (error: any) {
       throw new Error("Error finding friendship: " + error.message);
     }

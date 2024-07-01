@@ -1,10 +1,13 @@
-import { IUserLibraryServices, ILibrary } from "../ports/User/UserLibraryServices";
+import {
+  IUserLibraryServices,
+  ILibrary,
+} from "../ports/User/UserLibraryServices";
 import { IUserRepository } from "../ports/User/UserRepository";
 import { UserRepository } from "../../adapters/database/repositories/UserRepository";
-import { IUserRepositoryGame } from "../ports/User/UserRepository"; 
+import { IUserRepositoryGame } from "../ports/User/UserRepository";
 import { IUserGame } from "../entities/User";
 
-export class UserLibraryServices implements IUserLibraryServices{
+export class UserLibraryServices implements IUserLibraryServices {
   private userRepository: IUserRepository;
 
   constructor() {
@@ -14,8 +17,8 @@ export class UserLibraryServices implements IUserLibraryServices{
   async getUserLibrary(userId: string): Promise<ILibrary> {
     try {
       const games = await this.userRepository.getGames(userId);
-      const favorites = games.filter(game => game.favorite)
-      const notFavorites = games.filter(game => !game.favorite)
+      const favorites = games.filter((game) => game.favorite);
+      const notFavorites = games.filter((game) => !game.favorite);
       return { favorites, notFavorites };
     } catch (error: any) {
       throw new Error("Error getting user library: " + error.message);
@@ -30,11 +33,41 @@ export class UserLibraryServices implements IUserLibraryServices{
     }
   }
 
-  async searchUsersLibrary(userId: string, gameTitle: string): Promise<IUserGame[]>{
-    return await this.userRepository.searchUsersLibrary(userId, gameTitle);
+  async searchUserLibrary(
+    userId: string,
+    gameTitle: string
+  ): Promise<IUserGame[]> {
+    const games = await this.userRepository.retrieveUserLibrary(userId);
+
+    return games
+      .filter((gameEntry) =>
+        gameEntry.game.name.toLowerCase().includes(gameTitle.toLowerCase())
+      )
+      .map((gameEntry) => ({
+        game: {
+          name: gameEntry.game.name,
+          description: gameEntry.game.description,
+          image: gameEntry.game.image,
+        },
+        favorite: gameEntry.favorite,
+      })) as IUserGame[];
   }
 
   async setGameFavorite(userId: string, gameId: string): Promise<void> {
-    return await this.userRepository.setGameFavorite(userId, gameId);
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) throw new Error("User not found");
+    if (user.games === undefined) throw new Error("User has no games");
+
+    const gameIndex = user.games.findIndex((game) => game.game._id == gameId);
+    if (gameIndex < 0) throw new Error("Game not found in user's library");
+
+    const game = user.games[gameIndex].game;
+    const favorite = !user.games[gameIndex].favorite;
+
+    user?.games?.splice(gameIndex, 1);
+    user?.games?.push({ game: game, favorite: favorite });
+
+    return await this.userRepository.update(user);
   }
 }

@@ -33,9 +33,9 @@ export class ReviewRepository implements IReviewRepository {
   async find(review: Partial<IReview>): Promise<IReview | IReview[] | null> {
     try {
       const foundReview = await ReviewModel.find(review);
-      // Se a lista tiver só um elemento, retorna apenas ele
+
       if (foundReview.length === 1) return foundReview[0];
-      // Caso contrário, retorna a lista
+
       return foundReview;
     } catch (error: any) {
       throw new Error('Error finding review: ' + error.message);

@@ -8,8 +8,14 @@ export class GameServices implements IGameServices {
   constructor() {
     this.gameRepository = new GameRepository();
   }
-  async searchGames(gameTitle: string, fields: string): Promise<IGame[] | null> {
-    return await this.gameRepository.searchGames(gameTitle, fields);
+  async searchGames(
+    gameTitle: string,
+    fields: string
+  ): Promise<IGame[] | null> {
+    const query = {} as any;
+    query.name = { $regex: gameTitle, $options: "iu" };
+
+    return await this.gameRepository.retrieveGames(query, fields);
   }
 
   async getPopularGames(): Promise<IGame[] | null> {

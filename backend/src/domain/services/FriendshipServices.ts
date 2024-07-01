@@ -10,7 +10,10 @@ export class FriendshipServices implements IFriendshipServices {
     this.friendshipRepository = new FriendshipRepository();
   }
 
-  async createFriendshipRequest(userId: string, friendId: string): Promise<void> {
+  async createFriendshipRequest(
+    userId: string,
+    friendId: string
+  ): Promise<void> {
     const friendshipSent = {
       userId,
       friendId,
@@ -22,8 +25,7 @@ export class FriendshipServices implements IFriendshipServices {
       status: 1,
     };
     try {
-
-      if (await this.friendshipRepository.findByUsers(userId, friendId)) 
+      if (await this.friendshipRepository.findByUsers(userId, friendId))
         throw new Error("Friendship already exists.");
 
       await this.friendshipRepository.create(friendshipSent);
@@ -33,7 +35,10 @@ export class FriendshipServices implements IFriendshipServices {
     }
   }
 
-  async acceptFriendshipRequest(userId: string, friendId: string): Promise<void> {
+  async acceptFriendshipRequest(
+    userId: string,
+    friendId: string
+  ): Promise<void> {
     const friendship1 = {
       userId,
       friendId,
@@ -45,34 +50,55 @@ export class FriendshipServices implements IFriendshipServices {
       status: 2,
     };
     try {
-      const friendship1Data = await this.friendshipRepository.findByUsers(userId, friendId);
+      const friendship1Data = await this.friendshipRepository.findByUsers(
+        userId,
+        friendId
+      );
       if (friendship1Data?.status != 1) {
         throw new Error("Friendship request not found");
       }
-      const friendship2Data = await this.friendshipRepository.findByUsers(friendId, userId);
+      const friendship2Data = await this.friendshipRepository.findByUsers(
+        friendId,
+        userId
+      );
       if (friendship2Data?.status != 0) {
         throw new Error("Friendship request not found");
       }
-  
+
       if (friendship1Data?._id !== undefined) {
-        await this.friendshipRepository.update(friendship1Data._id, friendship1);
+        await this.friendshipRepository.update(
+          friendship1Data._id,
+          friendship1
+        );
       }
-  
+
       if (friendship2Data?._id !== undefined) {
-        await this.friendshipRepository.update(friendship2Data._id, friendship2);
+        await this.friendshipRepository.update(
+          friendship2Data._id,
+          friendship2
+        );
       }
     } catch (error: any) {
       throw new Error("Error accepting friendship: " + error.message);
     }
   }
 
-  async rejectFriendshipRequest(userId: string, friendId: string): Promise<void> {
+  async rejectFriendshipRequest(
+    userId: string,
+    friendId: string
+  ): Promise<void> {
     try {
-      const friendship1 = await this.friendshipRepository.findByUsers(userId, friendId);
+      const friendship1 = await this.friendshipRepository.findByUsers(
+        userId,
+        friendId
+      );
       if (friendship1?.status != 1) {
         throw new Error("Friendship request not found");
       }
-      const friendship2 = await this.friendshipRepository.findByUsers(friendId, userId);
+      const friendship2 = await this.friendshipRepository.findByUsers(
+        friendId,
+        userId
+      );
       if (friendship2?.status != 0) {
         throw new Error("Friendship request not found");
       }
@@ -89,11 +115,17 @@ export class FriendshipServices implements IFriendshipServices {
 
   async delete(userId: string, friendId: string): Promise<void> {
     try {
-      const friendship = await this.friendshipRepository.findByUsers(userId, friendId);
+      const friendship = await this.friendshipRepository.findByUsers(
+        userId,
+        friendId
+      );
       if (friendship?._id !== undefined) {
         await this.friendshipRepository.delete(friendship._id);
       }
-      const friendship2 = await this.friendshipRepository.findByUsers(friendId, userId);
+      const friendship2 = await this.friendshipRepository.findByUsers(
+        friendId,
+        userId
+      );
       if (friendship2?._id !== undefined) {
         await this.friendshipRepository.delete(friendship2._id);
       }
@@ -102,7 +134,9 @@ export class FriendshipServices implements IFriendshipServices {
     }
   }
 
-  async find(friendship: Partial<IFriendship>): Promise<IFriendship | IFriendship[] | null> {
+  async find(
+    friendship: Partial<IFriendship>
+  ): Promise<IFriendship | IFriendship[] | null> {
     return this.friendshipRepository.find(friendship);
   }
 }

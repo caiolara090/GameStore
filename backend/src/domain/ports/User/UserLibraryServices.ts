@@ -9,6 +9,6 @@ export interface ILibrary {
 export interface IUserLibraryServices {
   getUserLibrary(userId: string): Promise<ILibrary>;
   getUserGames(userId: string): Promise<IUserRepositoryGame[]>;
-  searchUsersLibrary(userId: string, gameTitle: string): Promise<IUserGame[]>;
+  searchUserLibrary(userId: string, gameTitle: string): Promise<IUserGame[]>;
   setGameFavorite(userId: string, gameId: string): Promise<void>;
 }

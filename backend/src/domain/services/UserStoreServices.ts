@@ -26,20 +26,17 @@ export class UserStoreServices implements IUserStoreServices {
       }
 
       if (game._id !== undefined) {
-
         for (const userGame of user.games!)
           if (userGame!.game._id?.toString() === gameId)
             throw new Error("Game already bought");
 
-        if (user.credits! < game.price)
-          throw new Error("Insufficient credits");
-  
+        if (user.credits! < game.price) throw new Error("Insufficient credits");
+
         this.userRepository.addGame(userId, game._id);
         this.userRepository.addCredits(userId, -game.price);
       } else {
         throw new Error("Game not found");
       }
-
     } catch (error: any) {
       throw new Error("Error buying game: " + error.message);
     }
