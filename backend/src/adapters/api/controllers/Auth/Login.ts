@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { UserAuthServices } from "../../../../domain/services/userAuthServices";
+import { UserAuthServices } from "../../../../domain/services/UserAuthServices";
 import { IUserAuthServices } from "../../../../domain/ports/User/UserAuthServices";
 
 export const login = async (_req: Request, res: Response) => {

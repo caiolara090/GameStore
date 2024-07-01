@@ -1,16 +1,19 @@
-import { searchUsersLibrary, setGameFavorite } from './../controllers/user/UserLibrary';
+import {
+  searchUsersLibrary,
+  setGameFavorite,
+} from "./../controllers/user/UserLibrary";
 import { login } from "../controllers/Auth/Login";
 import { loginValidation } from "./../middlewares/Auth/LoginValidation";
 import { Router } from "express";
-import { checkDuplicateEmail, checkDuplicateUsername,} from "../middlewares/Auth/SignupValidation";
+import {
+  checkDuplicateEmail,
+  checkDuplicateUsername,
+} from "../middlewares/Auth/SignupValidation";
 import { signUp } from "../controllers/Auth/SignUp";
-import { 
-  getUserLibrary, 
-  getUserGames 
-} from "../controllers/user/UserLibrary";
+import { getUserLibrary, getUserGames } from "../controllers/user/UserLibrary";
 import { searchUsers } from "../controllers/user/User";
 import { buyGame, addCredits, hasGame } from "../controllers/user/UserStore";
-import { checkJwtToken } from '../middlewares/Auth/CheckJWTToken';
+import { checkJwtToken } from "../middlewares/Auth/CheckToken";
 
 const router = Router();
 
