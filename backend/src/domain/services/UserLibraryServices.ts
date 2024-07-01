@@ -59,15 +59,11 @@ export class UserLibraryServices implements IUserLibraryServices {
     if (!user) throw new Error("User not found");
     if (user.games === undefined) throw new Error("User has no games");
 
-    const gameIndex = user.games.findIndex((game) => game.game._id == gameId);
-    if (gameIndex < 0) throw new Error("Game not found in user's library");
+    const game = user.games.find((game) => game.game._id === gameId);
+    if (!game) throw new Error("Game not found in user's library");
 
-    const game = user.games[gameIndex].game;
-    const favorite = !user.games[gameIndex].favorite;
+    game.favorite = !game.favorite;
 
-    user?.games?.splice(gameIndex, 1);
-    user?.games?.push({ game: game, favorite: favorite });
-
-    return await this.userRepository.update(user);
+    await this.userRepository.update(user);
   }
 }

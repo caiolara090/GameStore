@@ -1,6 +1,6 @@
-import { UserStoreServices } from "../../src/domain/services/UserStoreServices";
-import { IUserRepository } from "../../src/domain/ports/User/UserRepository";
-import { IGameRepository } from "../../src/domain/ports/Game/GameRepository";
+import { UserStoreServices } from "../../../src/domain/services/UserStoreServices";
+import { IUserRepository } from "../../../src/domain/ports/User/UserRepository";
+import { IGameRepository } from "../../../src/domain/ports/Game/GameRepository";
 
 describe("UserStoreServices", () => {
   let userStoreServices: UserStoreServices;
