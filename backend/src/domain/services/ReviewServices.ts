@@ -61,11 +61,13 @@ export class ReviewServices implements IReviewServices {
       game!.reviews = game!.reviews!.filter(
         (gameReview) => gameReview !== (review._id as string)
       );
-      game!.rating =
-        (game!.rating! * (game!.reviews!.length + 1) - review.rating) /
-        game!.reviews!.length;
+      if (game!.reviews!.length === 0) {
+        game!.rating = 0;
+      } else {
+        game!.rating =
+          (game!.rating! * (game!.reviews!.length + 1) - review.rating) /
+          game!.reviews!.length;
+      }
     }
-
-    this.gameRepository.update(game!._id as string, game as IGame);
   }
 }
