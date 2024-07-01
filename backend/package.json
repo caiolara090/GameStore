@@ -6,7 +6,8 @@
     "start": "ts-node src/Server.ts",
     "build": "tsc",
     "serve": "node dist/server.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
