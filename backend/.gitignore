@@ -3,4 +3,5 @@
 /dist
 yarn.lock
 package-lock.json
+coverage
 
