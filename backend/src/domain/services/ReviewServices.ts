@@ -69,5 +69,6 @@ export class ReviewServices implements IReviewServices {
           game!.reviews!.length;
       }
     }
+    this.gameRepository.update(game!._id as string, game as IGame);
   }
 }
