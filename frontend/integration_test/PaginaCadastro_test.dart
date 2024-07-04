@@ -54,8 +54,8 @@ void main() {
     testWidgets('Should show success message on valid form submission', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: RegistrationScreen()));
 
-      String nomeuser = "Pedro Teste";
-      String email = "pedroteste" + "@hotmail.com";
+      String nomeuser = "Pedra Teste";
+      String email = "pedrateste" + "@hotmail.com";
 
       await tester.enterText(find.byType(TextFormField).at(0), nomeuser);
       await tester.enterText(find.byType(TextFormField).at(1), '20');

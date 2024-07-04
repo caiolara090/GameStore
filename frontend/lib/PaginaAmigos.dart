@@ -89,7 +89,7 @@ Future<void> _loadAllUsers() async {
       throw Exception('Failed to load users');
     }
   } catch (e) {
-    print('Error: $e');
+    //print('Error: $e');
   }
 }
 
@@ -110,8 +110,8 @@ Future<void> _loadFriends() async {
       },
     );
 
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
+    //print('Response Status: ${response.statusCode}');
+    //print('Response Body: ${response.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var data = jsonDecode(response.body);
@@ -148,13 +148,13 @@ Future<void> _loadFriends() async {
         users = friends; // Atualizamos a lista de usuários com os amigos
       });
 
-      print('Friendships loaded! Users: $users');
+      //print('Friendships loaded! Users: $users');
     } else {
-      print('Failed to load friendships: ${response.statusCode}');
-      print('Error Body: ${response.body}');
+      //print('Failed to load friendships: ${response.statusCode}');
+      //print('Error Body: ${response.body}');
     }
   } catch (e) {
-    print('Error loading friendships: $e');
+    //print('Error loading friendships: $e');
   }
 }
 
@@ -212,13 +212,13 @@ Future<void> _loadFriendRequests() async {
         pendingRequests = friends; // Atualizamos a lista de usuários com os amigos
       });
 
-      print('Friendships loaded! Users: $users');
+      //print('Friendships loaded! Users: $users');
     } else {
-      print('Failed to load friendships: ${response.statusCode}');
-      print('Error Body: ${response.body}');
+      //print('Failed to load friendships: ${response.statusCode}');
+      //print('Error Body: ${response.body}');
     }
   } catch (e) {
-    print('Error loading friendships: $e');
+    //print('Error loading friendships: $e');
   }
 }
 
@@ -240,7 +240,7 @@ void sendFriendRequest(String friendId) async {
   final uri = Uri.http(baseUrl, endpointUrl);
 
   if(friendId == _userId){
-      print('Você quer ser seu amigo? Você já é!');
+      //print('Você quer ser seu amigo? Você já é!');
       ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.cyan.shade400,
@@ -266,18 +266,19 @@ void sendFriendRequest(String friendId) async {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Friend request sent successfully');
+      //print('Friend request sent successfully');
       ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  duration: Duration(seconds: 2),
                   backgroundColor: Colors.cyan.shade400,
                   content: Text('Pedido enviado com sucesso!'),
                 ),
               );
     } else {
-      print('Failed to send friend request: ${response.statusCode}');
+      //print('Failed to send friend request: ${response.statusCode}');
     }
   } catch (e) {
-    print('Error sending friend request: $e');
+    //print('Error sending friend request: $e');
   }
   _friendNameController.clear();
 }
@@ -304,14 +305,20 @@ void sendFriendRequest(String friendId) async {
     );
 
     if (response.statusCode == 200) {
-      print('Friend request sent successfully');
+      //print('Friend request sent successfully');
       _loadFriendship();
+      ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
+                  content: Text('Pedido aceito com sucesso!'),
+                ),
+              );
     } else {
-      print('Failed to send friend request: ${response.statusCode}');
-      print(response.body);
+      //print('Failed to send friend request: ${response.statusCode}');
+      //print(response.body);
     }
   } catch (e) {
-    print('Error sending friend request: $e');
+    //print('Error sending friend request: $e');
   }
 
   }
@@ -338,14 +345,20 @@ void sendFriendRequest(String friendId) async {
     );
 
     if (response.statusCode == 200) {
-      print('Pedido rejeitado');
+      //print('Pedido rejeitado');
       _loadFriendship();
+      ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
+                  content: Text('Pedido rejeitado com sucesso!'),
+                ),
+              );
     } else {
-      print('Failed to reject friend request: ${response.statusCode}');
-      print(response.body);
+      //print('Failed to reject friend request: ${response.statusCode}');
+      //print(response.body);
     }
   } catch (e) {
-    print('Error sending friend reject: $e');
+    //print('Error sending friend reject: $e');
   }
   }
 
@@ -359,11 +372,6 @@ void removeFriend(String friendId) async {
 
   final uri = Uri.http(baseUrl, endpointUrl, queryParameters);
 
-  print('URI: $uri');
-  print('User ID: $_userId');
-  print('Friend ID: $friendId');
-  print('Cookie: $_cookie');
-
   try {
     final response = await http.delete(
       uri,
@@ -372,18 +380,24 @@ void removeFriend(String friendId) async {
       },
     );
 
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
+    //print('Response Status: ${response.statusCode}');
+    //print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
-      print('Amizade excluída');
-      _loadFriends(); // Atualiza a lista de amizades após a exclusão
+      //print('Amizade excluída');
+      _loadFriends();
+      ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.cyan.shade400,
+                  content: Text('Amizade excluída'),
+                ),
+              );
     } else {
-      print('Failed to delete friendship: ${response.statusCode}');
-      print('Error Body: ${response.body}');
+      //print('Failed to delete friendship: ${response.statusCode}');
+      //print('Error Body: ${response.body}');
     }
   } catch (e) {
-    print('Error deleting friendship: $e');
+    // print('Error deleting friendship: $e');
   }
 }
 
@@ -462,6 +476,7 @@ void removeFriend(String friendId) async {
                           return ListTile(
                             title: Text(filteredUsers[index].name),
                             trailing: ElevatedButton(
+                              key: Key("EnviarPedido"),
                               onPressed: () {
                                 sendFriendRequest(filteredUsers[index].id ?? "");
                                 setState(() {
@@ -542,6 +557,7 @@ void removeFriend(String friendId) async {
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
                         trailing: PopupMenuButton(
+                          key: Key("DesfazerAmizade"),
                           itemBuilder: (context) => [
                             PopupMenuItem(
                               child: Container(
