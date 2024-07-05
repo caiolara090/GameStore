@@ -14,7 +14,7 @@ import 'package:gamestore/PaginaDados.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('FriendPage Integration Test', () {
+  group('PaginaCreditos Integration Test', () {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
     });
@@ -23,7 +23,7 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 2));
     }
 
-    testWidgets('Navigate to FriendPage and send a friend request', (WidgetTester tester) async {
+    testWidgets('Navigate to PaginaCreditos and add credits', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: LoginScreen(),
