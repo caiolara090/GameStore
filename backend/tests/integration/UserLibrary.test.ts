@@ -127,4 +127,23 @@ describe("User Library", () => {
 
     expect(updatedUser?.games?.[0]?.favorite).toBe(true);
   });
+
+  it("should search users library successfully", async () => {
+    const httpRequest = httpMocks.createRequest({
+      method: "GET",
+      url: "/searchUserLibrary",
+      body: {
+        userId: user._id,
+        gameTitle: "game1"
+      }
+    });
+
+    const httpResponse = httpMocks.createResponse();
+
+    await searchUsersLibrary(httpRequest, httpResponse);
+
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse._getJSONData().library).toHaveLength(1);
+    expect(httpResponse._getJSONData().library[0].game.name).toBe("game1");
+  });
 });
