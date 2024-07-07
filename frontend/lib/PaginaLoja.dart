@@ -21,6 +21,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
   int? _userCredits;
   List<Jogo> allGames = [];
   List<Jogo> popularGames = [];
+  //final List<GlobalKey> _itemKeys = [];
 
   TextEditingController _searchController = TextEditingController();
   List<Jogo> _filteredJogos = [];
@@ -38,7 +39,14 @@ class _PaginaLojaState extends State<PaginaLoja> {
         });
       }
     });
+    
   }
+  
+  /*void _initializeItemKeys() {
+    for (int i = 0; i < _filteredJogos.length; i++) {
+      _itemKeys.add(GlobalKey());
+    }
+  }*/
 
   Future<void> _initializeData() async {
     await _loadAllUsers();
@@ -130,6 +138,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
         setState(() {
           allGames = gamesData.map((gameData) => Jogo.fromJson(gameData)).toList();
           _filteredJogos = allGames;
+          //_initializeItemKeys();
         });
       } else {
         throw Exception('Failed to load games');
@@ -417,6 +426,7 @@ class _PaginaLojaState extends State<PaginaLoja> {
                       );
                     },
                     child: Container(
+                      key: Key("Comer"),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(4),
