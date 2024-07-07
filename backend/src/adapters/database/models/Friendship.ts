@@ -8,9 +8,9 @@ const FriendshipSchema = new mongoose.Schema<IFriendship>({
     type: Number, 
     required: true,
     enums: [
-      0,    // Solicitação pendente
-      1,    // Solicitação aceita
-      2    // Solicitação enviada
+      0,    // Solicitação enviada
+      1,    // Solicitação pendente
+      2    // Solicitação aceita
     ],
   },
 });
