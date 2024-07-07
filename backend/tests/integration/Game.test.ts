@@ -63,8 +63,6 @@ describe("Game", () => {
 
     await searchGames(req, res);
 
-    console.log(res._getData());
-
     const data = JSON.parse(res._getData());
 
     expect(res.statusCode).toBe(200);
@@ -86,8 +84,6 @@ describe("Game", () => {
     await getPopularGames(req, res);
 
     const data = JSON.parse(res._getData());
-
-    console.log(data);
 
     expect(res.statusCode).toBe(200);
     expect(data.games).toEqual(
