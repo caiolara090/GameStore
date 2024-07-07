@@ -150,6 +150,7 @@ Widget build(BuildContext context) {
                         ),
                         SizedBox(height: 16), // Espaçamento entre os botões
                         ElevatedButton(
+                          key: Key("Creditos"),
                           onPressed: () {
                             Navigator.pushNamed(context, '/creditos');
                             // Adicionar ação para a aba "Adicionar Créditos"
@@ -203,6 +204,7 @@ Widget build(BuildContext context) {
       unselectedItemColor: Colors.white,
       items: [
         BottomNavigationBarItem(
+          key: Key("Loja"),
           icon: Icon(Icons.videogame_asset),
           label: 'Loja',
         ),
