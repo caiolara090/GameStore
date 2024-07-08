@@ -384,6 +384,7 @@ class _JogoPaginaState extends State<JogoPagina> {
                 ),
               ),
               ElevatedButton(
+                      key: Key("Comprar"),
                       onPressed: _hasUserGame ? null : () async {
                         await _buyGame(); // Chama a função _buyGame ao clicar no botão Comprar
                         print(_gameId);
@@ -521,10 +522,12 @@ class _JogoPaginaState extends State<JogoPagina> {
   padding: EdgeInsets.symmetric(horizontal: 16),
   child: Center(
     child: Row(
+      key: Key('textFieldKey'),
       mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ou outro alinhamento horizontal desejado
       children: [
         Expanded(
           child: TextField(
+            
             controller: _avaliacaoController,
             maxLines: 1,
             //expands: true,
@@ -580,6 +583,7 @@ class _JogoPaginaState extends State<JogoPagina> {
                       ),
                       actions: <Widget>[
                         ElevatedButton(
+                          key: Key('enviarava'),
                           onPressed: () async {
                             String avaliacaoTexto = _avaliacaoController.text;
                             int notaAvaliacao = selectedStars.where((star) => star).length;
