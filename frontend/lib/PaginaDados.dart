@@ -169,6 +169,7 @@ Widget build(BuildContext context) {
                         ),
                         SizedBox(height: 16), // Espaçamento entre os botões
                         ElevatedButton(
+                          key: Key("Sair"),
                           onPressed: () {
                             Navigator.push(
                             context,
