@@ -46,15 +46,9 @@ describe("User Library", () => {
 
     games = await GameModel.insertMany(games);
 
-    games.map(game => {
-      if (!user.games) {
-        user.games = [];
-      }
-      user.games.push({
-        game: game._id,
-        favorite: false
-      });
-    });
+    await UserModel.findByIdAndUpdate(user._id, {$push: {games: {game: games[0]._id, favorites: false}}});
+    await UserModel.findByIdAndUpdate(user._id, {$push: {games: {game: games[1]._id, favorites: false}}});
+    user = await UserModel.findById(user._id);
 
     await user.save();
   });
