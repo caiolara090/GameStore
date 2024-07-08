@@ -59,7 +59,6 @@ export class UserLibraryServices implements IUserLibraryServices {
     if (!user) throw new Error("User not found");
     if (user.games === undefined) throw new Error("User has no games");
 
-    console.log(user.games[0].game._id, '\n', gameId)
     const game = user.games.find((game) => game.game._id?.toString() === gameId.toString());
     if (!game) throw new Error("Game not found in user's library");
 

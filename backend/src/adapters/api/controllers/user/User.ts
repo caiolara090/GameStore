@@ -9,7 +9,6 @@ export const searchUsers = async (req: Request, res: Response) => {
 
   try {
     const users = await userService.searchUsers(username);
-    console.log(users);
     return res.status(StatusCodes.OK).json({
       users: users,
     });

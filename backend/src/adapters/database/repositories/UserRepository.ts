@@ -92,7 +92,6 @@ export class UserRepository implements IUserRepository {
 
   async update(user: IUser): Promise<void> {
     try {
-      console.log(user)
       await UserModel.updateOne({ _id: user._id }, { $set: user });
     } catch (error: any) {
       throw new Error("Error saving user: " + error.message);
