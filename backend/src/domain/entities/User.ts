@@ -6,7 +6,7 @@ export interface IUserGame {
 }
 
 export interface IUser {
-  userId?: string;
+  _id?: string;
   username: string;
   age: number;
   email: string;

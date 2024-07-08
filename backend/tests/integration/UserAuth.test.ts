@@ -62,6 +62,8 @@ describe("Login and signup", () => {
       },
     });
 
+    process.env.JWT_SECRET = "test";
+
     const httpResponse = httpMocks.createResponse();
 
     const next = jest.fn();
