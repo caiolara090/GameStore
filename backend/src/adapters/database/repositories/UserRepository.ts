@@ -58,7 +58,6 @@ export class UserRepository implements IUserRepository {
 
   async addGame(_id: string, game: string): Promise<void> {
     try {
-      await UserModel.findByIdAndUpdate(_id, {$push: {games: {game, favorites: false}}});
     } catch (error: any) {
       throw new Error("Error adding game to user: " + error.message);
     }
